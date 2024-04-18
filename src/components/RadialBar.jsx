@@ -81,7 +81,7 @@ function RadialBarComponent({value, name}){
 
     return (
         <>
-        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" height={180}/>
+        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" />
         </>
     )
 }

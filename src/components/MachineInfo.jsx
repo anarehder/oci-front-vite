@@ -134,12 +134,11 @@ const Info = styled.div`
 
 const OCPU_MEM = styled.div`
     flex-direction: column;
-    justify-content: space-between !important;
     max-width: 30%;
     border: 1px solid gray;
     height: 275px;
     div {
-        padding: 0 !important;
+        margin-top: 10px;
     }
 `
 
