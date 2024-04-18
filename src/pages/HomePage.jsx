@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
+import PricesContext from '../contexts/PricesContext';
 
 function HomePage() {
     const [contracts, setContracts] = useState([]);
-
+    const prices = useContext(PricesContext);
+    console.log(prices);
     useEffect(() => {
         const fetchData = async () => {
             try {

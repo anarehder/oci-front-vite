@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "http://172.16.255.57:4000";
+const BASE_OCI_URL = "https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/";
 
 function getReshape() {
     console.log(BASE_URL);
@@ -12,6 +13,10 @@ function getContracts() {
     return axios.get(`${BASE_URL}/contracts`);
 }
 
-const apiService = { getReshape, getContracts };
+function getOCIPrices() {
+    return axios.get(BASE_OCI_URL);
+}
+
+const apiService = { getReshape, getContracts, getOCIPrices };
 
 export default apiService;
