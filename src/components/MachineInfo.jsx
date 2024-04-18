@@ -21,13 +21,13 @@ function MachineInfo({machine}) {
     return (
         <>
         <CompartmentInfo>
-            {(newMEM !== "-" || newOCPU !== "-")  &&
+            {(machine.reshape !== "-")  &&
             <BotaoReshape>
                 RESHAPE!
             </BotaoReshape>
             }
             <h1>
-                {machine.Name}
+                {machine.Name} {machine.reshape}
             </h1>
             <Info>
                 <div>
@@ -77,15 +77,15 @@ function MachineInfo({machine}) {
             </OCPU_MEM>
             <Prices>
                 <ShapeInfo>
-                    <h1>Custo Atual de Maquina(24x7): R$ {machine.Custo_Atual_de_Maquina_24x7}</h1>
-                    <h2>Custo Atual de OS(24x7): R$ {machine.Custo_Atual_de_OS_24x7}</h2>
-                    <h2>Custo de Disco: R$ {machine.Custo_de_Disco}</h2>
+                    <h1>CUSTOS ATUAIS</h1>
+                    <h2>Maquina(24x7): R$ {machine.Custo_Atual_de_Maquina_24x7}</h2>
+                    <h2>OS(24x7): R$ {machine.Custo_Atual_de_OS_24x7}</h2>
+                    <h2>Disco: R$ {machine.Custo_de_Disco}</h2>
                 </ShapeInfo>
                 <ShapeInfo>
-                    <h2>Ajuste / Tipo de Operacao</h2>
-                    <h1>Custo Estimado (Sem alteracao de shape): R$ XX.XX</h1>
-                    <h1>Recomendacao Accerte (Shape E5.Flex): R$ XX.XX</h1>
-                    <h2>Novo Custo de OS (24x7): R$ XX.XX</h2>
+                    <h1>CUSTOS ESTIMADOS</h1>
+                    <h2>Sem Alteração Shape: R$ XX.XX</h2>
+                    <h2>Alteração Shape (Shape E5.Flex): R$ XX.XX</h2>
                 </ShapeInfo>
             </Prices>
         </CompartmentInfo>
@@ -109,8 +109,8 @@ const CompartmentInfo = styled.div`
 const BotaoReshape = styled.button`
     background-color: green;
     position: absolute;
-    top: 25%;
-    left: 90%;
+    top: 40%;
+    left: 88%;
     z-index:2;
 `
 
@@ -153,18 +153,16 @@ const Prices = styled.div`
 `
 
 const ShapeInfo = styled.div`
-    justify-content: flex-start !important;
-    background-color: red; 
-    text-align: left !important;
+    align-items: flex-start;
+    flex-direction: column;
     flex-wrap: wrap;
-    gap: 5px;
-    padding: 5px !important;
-    h2{
-        width: 80%;
-        font-size: 17px;
-    }
     h1 {
-        font-size: 17px;
+        font-size: 25px;
+        border-bottom: 1px solid gray;
+    }
+    h2 {
+        font-size: 20px;
+        margin-top: 10px;
     }
 `
 

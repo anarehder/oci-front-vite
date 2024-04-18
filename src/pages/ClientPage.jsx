@@ -37,17 +37,19 @@ function ClientPage() {
             </Header>
             
             {(machines && machines.length > 0 && selectedMachine !== "" )&&
-            <>
+                machines.map((machine, index) => (
+                    selectedMachine === index && <MachineInfo key={index} machine={machine} />
+                ))
+            }
+            {selectedMachine !== "" &&
                 <CloseGraphButton onClick={() => setSelectedMachine("")}>
                     Fechar Gráfico
                 </CloseGraphButton>
-                <MachineInfo machine={machines[selectedMachine]} />
-            </>
             }
             <MachinesContainer>
                 {machines && machines.length > 0 && 
                     machines.map((machine, index) => (
-                        <MachineList key={index} color={machine.operation} background={selectedMachine === index && "ok"}>
+                        <MachineList key={index} color={machine.operation} selected={selectedMachine === index ? "yes": "no"}>
                             <h2>
                                 {machine.Name}
                             </h2>
@@ -97,10 +99,9 @@ const MachineList = styled.div`
     align-items: center;
     padding: 10px;
     line-height: 25px;
-    border: 2px solid gray;
     border-radius: 50px;
     gap: 8px;
-    border: ${(props) => (props.background === 'ok' && '5px solid green')}; 
+    border: ${(props) => (props.selected === 'yes' ? '5px solid green': '2px solid gray')}; 
     h2{
         width: 175px;
         word-break: break-all;
