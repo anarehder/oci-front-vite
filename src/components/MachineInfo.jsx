@@ -26,6 +26,9 @@ function MachineInfo({machine}) {
                 RESHAPE!
             </BotaoReshape>
             }
+            <h1>
+                {machine.Name}
+            </h1>
             <Info>
                 <div>
                     <h2>Compartment</h2>
@@ -93,10 +96,11 @@ function MachineInfo({machine}) {
 export default MachineInfo;
 
 const CompartmentInfo = styled.div`
+    padding: 10px 0;
     max-width: 98%;
     gap: 15px;
     flex-wrap: wrap;
-    border: 1px solid gray;
+    border: 2px solid white;
     position: relative;
     z-index:0;
     justify-content: center;

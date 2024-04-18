@@ -25,14 +25,16 @@ function ClientPage() {
     }, []);
     return (
         <PageContainer>
-            <h1>
+            <Header>
                 <Link to="/">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>
                 </Link>
-                PÁGINA DO CLIENTE - TENANCY ACCERTE
-            </h1>
+                <h1>
+                TENANCY ACCERTE
+                </h1>
+            </Header>
             
             {(machines && machines.length > 0 && selectedMachine !== "" )&&
             <>
@@ -45,7 +47,7 @@ function ClientPage() {
             <MachinesContainer>
                 {machines && machines.length > 0 && 
                     machines.map((machine, index) => (
-                        <MachineList key={index} color={machine.operation}>
+                        <MachineList key={index} color={machine.operation} background={selectedMachine === index && "ok"}>
                             <h2>
                                 {machine.Name}
                             </h2>
@@ -73,7 +75,11 @@ const PageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 50px;
+`
 
+const Header = styled.div`
+    justify-content: center;
+    padding: 10px;
 `
 
 const MachinesContainer = styled.div`
@@ -91,9 +97,10 @@ const MachineList = styled.div`
     align-items: center;
     padding: 10px;
     line-height: 25px;
-    border: 2px solid white;
+    border: 2px solid gray;
     border-radius: 50px;
     gap: 8px;
+    border: ${(props) => (props.background === 'ok' && '5px solid green')}; 
     h2{
         width: 175px;
         word-break: break-all;
