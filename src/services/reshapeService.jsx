@@ -8,7 +8,7 @@ function estimateReshapeCPUValues(reshape, OCPU, maxCPU, meanCPU) {
     } else if (reshape.includes("+CPU")) {
       newOCPU = calculateValuesService.estimateCPUincrease(maxCPU, meanCPU, OCPU);
     } else {
-      return {newOCPU: "-"};
+      return {newOCPU: Number(OCPU)};
     }
     return { newOCPU };
 }
@@ -21,7 +21,7 @@ function estimateReshapeMEMValues(reshape, MEM, maxMEM, meanMEM) {
     } else if (reshape.includes("+MEM")) {
       newMEM = calculateValuesService.estimateMEMincrease(meanMEM, MEM);
     } else {
-      return { newMEM: "-" };
+      return { newMEM: Number(MEM) };
     }
     return { newMEM };
 }

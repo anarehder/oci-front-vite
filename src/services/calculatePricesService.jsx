@@ -13,16 +13,10 @@ function estimatePrice(shape, MEM, OCPU) {
     const CPU_objectPrice = prices.find(item => item.partNumber === CPU_PartNumber);
     const CPU_hourValue = CPU_objectPrice.currencyCodeLocalizations[0].prices[0].value;
     const CPU_totalPrice = OCPU*720*CPU_hourValue;
-
+    
     return MEM_totalPrice+CPU_totalPrice;
 }
 
 const calculatePricesService = { estimatePrice };
 
 export default calculatePricesService;
-// [{
-//     partNumber === desejado
-//     -----> pegar ---->
-//     selecionado.currencyCodeLocalizations[0].prices[0].value
-//     ----> se currencyCode:"BRL" e model: "PAY_AS_YOU_GO"
-// }] 

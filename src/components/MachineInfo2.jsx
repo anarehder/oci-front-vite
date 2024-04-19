@@ -1,21 +1,21 @@
 import styled from 'styled-components';
-import RadialBarComponent from './RadialBar';
 import { useEffect, useState } from 'react';
 import reshapeService from '../services/reshapeService';
 import calculatePricesService from '../services/calculatePricesService';
+import RadialBarComponent2 from './RadialBar2';
 
-function MachineInfo({machine}) {
-    const [newMEM, setNewMEM] = useState("-");
-    const [newOCPU, setNewOCPU] = useState("-");
+function MachineInfo2({machine}) {
     const bestShape = 'VM.Standard.E5.Flex';
+    const [newMEM, setNewMEM] = useState(machine.MEMORY_GB);
+    const [newOCPU, setNewOCPU] = useState(machine.OCPU);
 
     useEffect(()=>{
         if (machine.last30.reshape !== "-"){
             const new_Memory = reshapeService.estimateReshapeMEMValues(machine.last30.reshape, machine.MEMORY_GB, machine.last30.MaxMEM, machine.last30.MeanMEM);
-            setNewMEM(new_Memory.newMEM)
+            setNewMEM(new_Memory.newMEM);
             
             const new_OCPU = reshapeService.estimateReshapeCPUValues(machine.last30.reshape, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU);
-            setNewOCPU(new_OCPU.newOCPU)
+            setNewOCPU(new_OCPU.newOCPU);         
         }
     },[machine.last30.reshape, machine.MEMORY_GB, machine.last30.MaxMEM, machine.last30.MeanMEM, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU])
 
@@ -38,7 +38,7 @@ function MachineInfo({machine}) {
                 </BotaoRecreation>
             }
             <h1>
-                {machine.Name} {machine.last30.reshape}
+                {machine.Name}
             </h1>
             <Info>
                 <div>
@@ -72,18 +72,18 @@ function MachineInfo({machine}) {
             </Info> 
             <OCPU_MEM>
                 <h1>OCPU: {machine.OCPU}</h1>
-                <h2>Sugestão newOCPU: {newOCPU} </h2>
+                <h2>Sugestão: {newOCPU} </h2>
                 <div>
-                    <RadialBarComponent value = {machine.last30.MeanCPU} name = {'MeanCPU'} />
-                    <RadialBarComponent value = {machine.last30.MaxCPU} name = {'MaxCPU'} />
+                    <RadialBarComponent2 value = {machine.last30.MeanCPU} name = {'MeanCPU'} />
+                    <RadialBarComponent2 value = {machine.last30.MaxCPU} name = {'MaxCPU'} />
                 </div>
             </OCPU_MEM>
             <OCPU_MEM>
                 <h1>MEMORY: {machine.MEMORY_GB} GB</h1>
-                <h2>Sugestão newMEM: {newMEM !== "-" ? `${newMEM} GB` : newMEM} </h2>
+                <h2>Sugestão: {newMEM !== "-" ? `${newMEM} GB` : newMEM} </h2>
                 <div>
-                    <RadialBarComponent value = {machine.last30.MeanMEM} name = {'MeanMEM'} />
-                    <RadialBarComponent value = {machine.last30.MaxMEM} name = {'MaxMEM'} />
+                    <RadialBarComponent2 value = {machine.last30.MeanMEM} name = {'MeanMEM'} />
+                    <RadialBarComponent2 value = {machine.last30.MaxMEM} name = {'MaxMEM'} />
                 </div>
             </OCPU_MEM>
             <Prices>
@@ -110,7 +110,7 @@ function MachineInfo({machine}) {
     )
 }
 
-export default MachineInfo;
+export default MachineInfo2;
 
 const CompartmentInfo = styled.div`
     padding: 10px 0;
@@ -121,6 +121,7 @@ const CompartmentInfo = styled.div`
     position: relative;
     z-index:0;
     justify-content: center;
+    color: #021121;
 `
 
 const BotaoReshape = styled.button`
