@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import MachineInfo from '../components/MachineInfo';
 import { Link } from 'react-router-dom';
+import { PricesContext } from '../contexts/PricesContext';
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
     const [selectedMachine, setSelectedMachine] = useState("");
-    console.log(selectedMachine);
+    const prices = useContext(PricesContext);
+    console.log(machines);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await apiService.getReshape();
-                    console.log(response.data);
                     if (response.status === 200) {
                         setMachines(response.data);
                     }
@@ -56,9 +57,13 @@ function ClientPage() {
                             <h3>
                                 {machine.Status}
                             </h3>
-                            <button onClick={() => setSelectedMachine(index)}>
-                                {machine.operation !== "-" ? 'Reshape' : "-"}
-                            </button>
+                            { prices.length ===0 ?
+                                <button> Loading... </button> :
+                                <button disabled={prices.length ===0} onClick={() => setSelectedMachine(index) }>
+                                    {machine.operation !== "-" ? 'Reshape' : "-"}
+                                </button>
+                            }
+                            
                         </MachineList>
                     ))
                 }
@@ -109,7 +114,7 @@ const MachineList = styled.div`
     button{
         width: 100px;
         justify-content: center;
-        background-color: ${(props) => (props.color !== '-' && 'green')}; 
+        background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
     }
 `
 
