@@ -11,6 +11,7 @@ function ClientPage() {
     const [selectedMachine, setSelectedMachine] = useState("");
     const [form, setForm] = useState({ compartment: ""});
     const [filteredMachines, setFilteredMachines] = useState([]);
+    const [selectedFilter, setSelectedFilter] = useState("");
     const prices = useContext(PricesContext);
 
     useEffect(() => {
@@ -44,10 +45,38 @@ function ClientPage() {
         setFilteredMachines(compartments);
     }
 
+    const handleClick = ({filterName}) => {
+        if(selectedFilter === filterName){
+            CleanFilter();
+            setSelectedFilter("");
+        } 
+        else {
+            setSelectedFilter(filterName);
+            if(filterName === "OA"){
+                OperationAvailableFilter();
+            }
+            if (filterName === "SM"){
+                StoppedMachinesFilter();
+            }
+        }
+    }
+
     function CleanFilter(){
         setSelectedMachine("");
         setForm({ compartment: ""});
         setFilteredMachines(machines);
+    }
+
+    function OperationAvailableFilter(){
+        const filteredMachines = machines.filter(m => m.last30.reshape !== "-");
+        setSelectedMachine("");
+        setFilteredMachines(filteredMachines);
+    }
+
+    function StoppedMachinesFilter(){
+        const stoppedMachines = machines.filter(m => m.Status === "STOPPED");
+        setSelectedMachine("");
+        setFilteredMachines(stoppedMachines);
     }
 
     return (
@@ -62,7 +91,19 @@ function ClientPage() {
                 TENANCY ACCERTE
                 </h1>
             </Header>
-            <FormContainer>
+            <FilterOptions>
+                <button disabled={selectedFilter !== "" && selectedFilter !== "OA"} onClick={() => handleClick({filterName: "OA"})}>
+                    Máquinas com Alteração Disponível
+                </button>
+                <button disabled={selectedFilter !== "" && selectedFilter !== "SM"} onClick={() => handleClick({filterName: "SM"})}>
+                    Máquinas Paradas
+                </button>
+                <button disabled={selectedFilter !== "" && selectedFilter !== "CF"} onClick={() => handleClick({filterName: "CF"})}>
+                    Filtro de Compartment
+                </button>
+            </FilterOptions>
+            {selectedFilter === "CF" && 
+                <FormContainer>
                 <MainForm>
                     <InputArea>
                         <h2>Selecione um Compartment:</h2>
@@ -83,6 +124,8 @@ function ClientPage() {
                     <p> Limpar Filtro </p>
                 </button>
             </FormContainer>
+        }
+            
                        
             {(filteredMachines && filteredMachines.length > 0 && selectedMachine !== "" )&&
                 filteredMachines.map((machine, index) => (
@@ -104,8 +147,8 @@ function ClientPage() {
                             <h3>
                                 {machine.Status}
                             </h3>
-                            <AvailableButton color={machine.operation}>
-                                {machine.operation !== "-" ? 'DISPONÍVEL' : "OK"}
+                            <AvailableButton color={machine.last30.reshape}>
+                                {machine.last30.reshape !== "-" ? 'DISPONÍVEL' : "OK"}
                             </AvailableButton>
                             { prices.length ===0 ?
                                 <button> Loading... </button> :
@@ -138,6 +181,16 @@ const PageContainer = styled.div`
 const Header = styled.div`
     justify-content: center;
     padding-top: 20px;
+`
+
+const FilterOptions = styled.div`
+    justify-content: center;
+    gap: 25px;
+    button{
+        width: 200px;
+        font-size: 18px;
+        justify-content: center;
+    }
 `
 
 const FormContainer = styled.div`

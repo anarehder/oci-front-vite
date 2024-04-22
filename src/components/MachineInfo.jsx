@@ -98,7 +98,7 @@ function MachineInfo({machine}) {
                     {(machine.last30.reshape !== "-" && machine.Custo_Atual_de_Maquina_24x7 !== '0.0') ?
                     <>
                         <div>
-                            <h2>Shape Atual ({machine.Shape}): R$ {calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2>
+                            <h2>Shape Atual ({machine.Shape}): {(((calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2) } %</h2>
                             <button>
                                 Resizing
                             </button>
@@ -106,14 +106,14 @@ function MachineInfo({machine}) {
                         
                         {machine.Shape !== bestShape &&
                         <div>
-                            <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2> 
+                            <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2> 
                             <button>
                                 Reshape
                             </button>
                         </div>}
                     </> : machine.Custo_Atual_de_Maquina_24x7 !== '0.0' ?
                     <div>
-                        <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2> 
+                        <h2>Alteração Shape (Shape E5.Flex): R$ {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)}</h2> 
                         <button>
                             Reshape
                         </button>
