@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import reshapeService from '../services/reshapeService';
 import calculatePricesService from '../services/calculatePricesService';
 import RadialBarComponent2 from './RadialBar2';
+import { IoMdOptions } from "react-icons/io";
 
 function MachineInfo2({machine}) {
     const bestShape = 'VM.Standard.E5.Flex';
@@ -22,17 +23,12 @@ function MachineInfo2({machine}) {
     return (
         <>
         <CompartmentInfo>
-            {(machine.last30.reshape !== "-")  &&
-                <BotaoReshape>
-                    RESHAPE!
-                </BotaoReshape>
-            }
             {(machine.Shape === bestShape)  &&
                 <BotaoBestShape>
                     BEST SHAPE!
                 </BotaoBestShape>
             }
-            {!machine.Shape?.includes('Flex') &&
+            {(!machine.Shape?.includes('Flex') && machine.Custo_Atual_de_Maquina_24x7 !== "0.0") &&
                 <BotaoRecreation>
                     RECREATE!
                 </BotaoRecreation>
@@ -72,7 +68,9 @@ function MachineInfo2({machine}) {
             </Info> 
             <OCPU_MEM>
                 <h1>OCPU: {machine.OCPU}</h1>
-                <h2>Sugestão: {newOCPU} </h2>
+                <h2>Sugestão: {newOCPU} {Number(newOCPU) !== Number(machine.OCPU) &&
+                    <IoMdOptions  size={30} />}
+                </h2>
                 <div>
                     <RadialBarComponent2 value = {machine.last30.MeanCPU} name = {'MeanCPU'} />
                     <RadialBarComponent2 value = {machine.last30.MaxCPU} name = {'MaxCPU'} />
@@ -80,7 +78,9 @@ function MachineInfo2({machine}) {
             </OCPU_MEM>
             <OCPU_MEM>
                 <h1>MEMORY: {machine.MEMORY_GB} GB</h1>
-                <h2>Sugestão: {newMEM !== "-" ? `${newMEM} GB` : newMEM} </h2>
+                <h2>Sugestão: {newMEM} GB {Number(newMEM) !== Number(machine.MEMORY_GB) &&
+                    <IoMdOptions  size={30} />}
+                </h2>
                 <div>
                     <RadialBarComponent2 value = {machine.last30.MeanMEM} name = {'MeanMEM'} />
                     <RadialBarComponent2 value = {machine.last30.MaxMEM} name = {'MaxMEM'} />
@@ -94,14 +94,34 @@ function MachineInfo2({machine}) {
                     <h2>Disco: R$ {machine.Custo_de_Disco}</h2>
                 </ShapeInfo>
                 <ShapeInfo>
-                    <h1>CUSTOS ESTIMADOS</h1>
-                    {machine.last30.reshape !== "-" ?
+                    <h1>OPERAÇÕES DISPONÍVEIS</h1>
+                    {(machine.last30.reshape !== "-" && machine.Custo_Atual_de_Maquina_24x7 !== '0.0') ?
                     <>
-                        <h2>Sem Alteração Shape: R$ {calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2>
+                        <div>
+                            <h2>Shape Atual ({machine.Shape}): R$ {calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2>
+                            <button>
+                                Resizing
+                            </button>
+                        </div>
+                        
                         {machine.Shape !== bestShape &&
-                        <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2> }
-                    </> :
-                        <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2>
+                        <div>
+                            <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2> 
+                            <button>
+                                Reshape
+                            </button>
+                        </div>}
+                    </> : machine.Custo_Atual_de_Maquina_24x7 !== '0.0' ?
+                    <div>
+                        <h2>Alteração Shape (Shape E5.Flex): R$ {calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU).toFixed(2)}</h2> 
+                        <button>
+                            Reshape
+                        </button>
+                    </div>
+                    :
+                    <div>
+                        <h2>Custo Zerado</h2> 
+                        </div>
                     }                    
                 </ShapeInfo>
             </Prices>
@@ -122,14 +142,6 @@ const CompartmentInfo = styled.div`
     z-index:0;
     justify-content: center;
     color: #021121;
-`
-
-const BotaoReshape = styled.button`
-    background-color: green;
-    position: absolute;
-    top: 40%;
-    left: 87%;
-    z-index:2;
 `
 
 const BotaoBestShape = styled.button`
@@ -172,7 +184,14 @@ const OCPU_MEM = styled.div`
     border: 1px solid gray;
     height: 275px;
     div {
-        margin-top: 10px;
+        margin-top: 5px;
+    }
+    h2 {
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        gap: 20px;
     }
 `
 
@@ -197,5 +216,16 @@ const ShapeInfo = styled.div`
     h2 {
         font-size: 20px;
         margin-top: 10px;
+    }
+    div {
+        max-width: 90%;
+        margin: 2px 0;
+        margin-right: 30px !important;
+        justify-content: space-between;
+    }
+    button{
+        heigth: 20px;
+        padding: 5px !important;
+        background-color: green;
     }
 `

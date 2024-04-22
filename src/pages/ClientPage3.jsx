@@ -12,7 +12,7 @@ function ClientPage3() {
     const [form, setForm] = useState({ compartment: ""});
     const [filteredMachines, setFilteredMachines] = useState([]);
     const prices = useContext(PricesContext);
-    console.log("machines",machines);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -40,7 +40,14 @@ function ClientPage3() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const compartments = machines.filter(m => m.Compartment === form.compartment);
+        setSelectedMachine("");
         setFilteredMachines(compartments);
+    }
+
+    function CleanFilter(){
+        setSelectedMachine("");
+        setForm({ compartment: ""});
+        setFilteredMachines(machines);
     }
 
     return (
@@ -60,7 +67,7 @@ function ClientPage3() {
                     <InputArea>
                         <h2>Selecione um Compartment:</h2>
                         <select onChange={handleForm} id="compartment" value={form.compartment}>
-                            <option value="">Nome do Compartment</option>
+                            {!form.compartment && (<option value="" hidden>Nome do Compartment</option>)}
                             {compartments.map((c, index) => (
                                 <option key={index} value={c}>
                                     {c}
@@ -72,7 +79,7 @@ function ClientPage3() {
                         <p>Filtrar</p>
                     </button>
                 </MainForm>
-                <button onClick={() => setFilteredMachines(machines) }>
+                <button onClick={CleanFilter}>
                     <p> Limpar Filtro </p>
                 </button>
             </FormContainer>
@@ -97,10 +104,13 @@ function ClientPage3() {
                             <h3>
                                 {machine.Status}
                             </h3>
+                            <AvailableButton color={machine.operation}>
+                                {machine.operation !== "-" ? 'DISPONÍVEL' : "OK"}
+                            </AvailableButton>
                             { prices.length ===0 ?
                                 <button> Loading... </button> :
                                 <button disabled={prices.length ===0} onClick={() => setSelectedMachine(index) }>
-                                    {machine.operation !== "-" ? 'RESHAPE' : "OK"}
+                                    Detalhes
                                 </button>
                             }
                             
@@ -189,10 +199,14 @@ const MachineList = styled.div`
         width: 130px;
         font-size: 16px;
         justify-content: center;
-        background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
-        color: ${(props) => (props.color !== '-' ? 'white': '#021121')};
     }
 `
+
+const AvailableButton = styled.button`
+    background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
+    color: ${(props) => (props.color !== '-' ? 'white': '#021121')};
+`
+
 
 const ReturnButton = styled.button`
     position: absolute;
