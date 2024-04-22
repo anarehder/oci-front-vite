@@ -113,7 +113,7 @@ function MachineInfo({machine}) {
                         </div>}
                     </> : machine.Custo_Atual_de_Maquina_24x7 !== '0.0' ?
                     <div>
-                        <h2>Alteração Shape (Shape E5.Flex): R$ {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)}</h2> 
+                        <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2> 
                         <button>
                             Reshape
                         </button>
