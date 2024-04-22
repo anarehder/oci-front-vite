@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
 import apiService from '../services/apiService';
+import MachineInfoDark from '../components/MachineInfoDark';
 import { Link } from 'react-router-dom';
 import { PricesContext } from '../contexts/PricesContext';
-import MachineInfo from '../components/MachineInfo';
 
-function ClientPage2() {
+function ClientPageDark() {
     const [machines, setMachines] = useState([]);
     const [selectedMachine, setSelectedMachine] = useState("");
     const prices = useContext(PricesContext);
@@ -27,7 +27,7 @@ function ClientPage2() {
     return (
         <PageContainer>
             <Header>
-                <Link to="/homepage2">
+                <Link to="/homepagedark">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>
@@ -39,7 +39,7 @@ function ClientPage2() {
             
             {(machines && machines.length > 0 && selectedMachine !== "" )&&
                 machines.map((machine, index) => (
-                    selectedMachine === index && <MachineInfo key={index} machine={machine} />
+                    selectedMachine === index && <MachineInfoDark key={index} machine={machine} />
                 ))
             }
             {selectedMachine !== "" &&
@@ -60,7 +60,7 @@ function ClientPage2() {
                             { prices.length ===0 ?
                                 <button> Loading... </button> :
                                 <button disabled={prices.length ===0} onClick={() => setSelectedMachine(index) }>
-                                    {machine.operation !== "-" ? 'Reshape' : "OK"}
+                                    {machine.operation !== "-" ? 'Reshape' : "-"}
                                 </button>
                             }
                             
@@ -72,13 +72,13 @@ function ClientPage2() {
     );
 }
 
-export default ClientPage2
+export default ClientPageDark;
 
 const PageContainer = styled.div`
     width: 100%;
     min-height: 100vh;
-    background-color: #F0F5F9;
-    color: #021121;
+    background-color: black;
+    color: white;
     flex-direction: column;
     align-items: center;
     gap: 50px;
@@ -86,7 +86,7 @@ const PageContainer = styled.div`
 
 const Header = styled.div`
     justify-content: center;
-    padding-top: 20px;
+    padding: 10px;
 `
 
 const MachinesContainer = styled.div`
@@ -106,7 +106,7 @@ const MachineList = styled.div`
     line-height: 25px;
     border-radius: 50px;
     gap: 8px;
-    border: ${(props) => (props.selected === 'yes' ? '5px solid green': '2px solid #021121')}; 
+    border: ${(props) => (props.selected === 'yes' ? '5px solid green': '2px solid gray')}; 
     h2{
         width: 175px;
         word-break: break-all;
@@ -115,7 +115,6 @@ const MachineList = styled.div`
         width: 100px;
         justify-content: center;
         background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
-        color: ${(props) => (props.color !== '-' ? 'white': '#021121')};
     }
 `
 

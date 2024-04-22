@@ -42,14 +42,14 @@ function RadialBarComponent({value, name}){
                     name: {
                     offsetY: -10,
                     show: true,
-                    color: '#fff',
+                    color: '#021121',
                     fontSize: '16px'
                     },
                     value: {
                     formatter: function(val) {
                         return val + "%";
                     },
-                    color: '#fff',
+                    color: '#021121',
                     fontSize: '18px',
                     show: true,
                     }

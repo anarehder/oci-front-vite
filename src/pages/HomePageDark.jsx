@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 
-function HomePage2() {
+function HomePageDark() {
     const [contracts, setContracts] = useState([]);
     
     useEffect(() => {
@@ -56,7 +56,7 @@ function HomePage2() {
                             <h3>
                                 R$ {new Intl.NumberFormat('pt-BR').format(contract.Valor)}
                             </h3>
-                            <Link to="/client2">
+                            <Link to="/clientdark">
                                 <button>
                                     Ver detalhes    
                                 </button> 
@@ -69,19 +69,16 @@ function HomePage2() {
     )
 }
 
-export default HomePage2;
+export default HomePageDark;
 
 const PageContainer = styled.div`
     min-height: 100vh;
-    background-color: #F0F5F9;
-    color: #021121;
+    background-color: black;
+    color: white;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     gap: 50px;
-    h1{
-        padding-top:30px;
-    }
 `
 
 const ContractsTable = styled.div`
@@ -102,5 +99,5 @@ const ClientInfo = styled.div`
     align-items: center;
     justify-content: flex-start;
     gap: 40px;
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
 `

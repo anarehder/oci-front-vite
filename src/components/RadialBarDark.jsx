@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-function RadialBarComponent2({value, name}){
+function RadialBarComponentDark({value, name}){
 
     const chartData = {
         series: [value],
@@ -42,14 +42,14 @@ function RadialBarComponent2({value, name}){
                     name: {
                     offsetY: -10,
                     show: true,
-                    color: '#021121',
+                    color: '#fff',
                     fontSize: '16px'
                     },
                     value: {
                     formatter: function(val) {
                         return val + "%";
                     },
-                    color: '#021121',
+                    color: '#fff',
                     fontSize: '18px',
                     show: true,
                     }
@@ -86,4 +86,4 @@ function RadialBarComponent2({value, name}){
     )
 }
 
-export default RadialBarComponent2;
+export default RadialBarComponentDark;

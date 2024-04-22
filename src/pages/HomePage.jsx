@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 
@@ -73,12 +73,15 @@ export default HomePage;
 
 const PageContainer = styled.div`
     min-height: 100vh;
-    background-color: black;
-    color: white;
+    background-color: #F0F5F9;
+    color: #021121;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     gap: 50px;
+    h1{
+        padding-top:30px;
+    }
 `
 
 const ContractsTable = styled.div`
@@ -99,5 +102,5 @@ const ClientInfo = styled.div`
     align-items: center;
     justify-content: flex-start;
     gap: 40px;
-    border-bottom: 2px solid white;
+    border-bottom: 3px solid white;
 `
