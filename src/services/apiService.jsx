@@ -12,7 +12,7 @@ function getContracts() {
 }
 
 function getOCIPrices() {
-    return axios.get(BASE_OCI_URL);
+    return axios.get(`${BASE_URL}/price`);
 }
 
 const apiService = { getReshape, getContracts, getOCIPrices };

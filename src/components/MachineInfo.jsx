@@ -99,9 +99,11 @@ function MachineInfo({machine}) {
                     <>
                         <div>
                             <h2>Shape Atual ({machine.Shape}): {(((calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2) } %</h2>
-                            <button>
-                                Resizing
-                            </button>
+                            {(Number(newMEM) !== Number(machine.MEMORY_GB) || Number(newOCPU) !== Number(machine.OCPU)) &&
+                                <button>
+                                    Resizing
+                                </button>
+                            }
                         </div>
                         
                         {machine.Shape !== bestShape &&
@@ -113,10 +115,13 @@ function MachineInfo({machine}) {
                         </div>}
                     </> : machine.Custo_Atual_de_Maquina_24x7 !== '0.0' ?
                     <div>
-                        <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2> 
-                        <button>
-                            Reshape
-                        </button>
+                        <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2>
+                        {(Number(newMEM) !== Number(machine.MEMORY_GB) || Number(newOCPU) !== Number(machine.OCPU)) &&
+                            <button>
+                                Reshape
+                            </button>
+                        } 
+                        
                     </div>
                     :
                     <div>

@@ -82,7 +82,7 @@ function ClientPage() {
     return (
         <PageContainer onSubmit={handleSubmit}>
             <Header>
-                <Link to="/homepage">
+                <Link to="/">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>
@@ -123,10 +123,8 @@ function ClientPage() {
                 <button onClick={CleanFilter}>
                     <p> Limpar Filtro </p>
                 </button>
-            </FormContainer>
-        }
-            
-                       
+                </FormContainer>
+            }
             {(filteredMachines && filteredMachines.length > 0 && selectedMachine !== "" )&&
                 filteredMachines.map((machine, index) => (
                     selectedMachine === index && <MachineInfo key={index} machine={machine} />
