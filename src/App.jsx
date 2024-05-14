@@ -9,6 +9,7 @@ import ClientPageDark from "./pages/ClientPageDark";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import UserProvider from "./contexts/UserContext";
+import TenancyProvider from "./contexts/TenancyContext";
 
 function App() {
 
@@ -17,15 +18,17 @@ function App() {
       <BrowserRouter>
         <UserProvider>
           <PricesProvider>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/contracts" element={<Contracts />} />
-              <Route path="/contractsdark" element={<ContractsDark />} />
-              <Route path="/client" element={<ClientPage />} />
-              <Route path="/client2" element={<ClientPage2 />} />
-              <Route path="/clientdark" element={<ClientPageDark />} />
-            </Routes>
+            <TenancyProvider>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/contracts" element={<Contracts />} />
+                <Route path="/contractsdark" element={<ContractsDark />} />
+                <Route path="/client" element={<ClientPage />} />
+                <Route path="/client2" element={<ClientPage2 />} />
+                <Route path="/clientdark" element={<ClientPageDark />} />
+              </Routes>
+            </TenancyProvider>
           </PricesProvider>
         </UserProvider>
       </BrowserRouter >

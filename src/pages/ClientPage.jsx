@@ -4,6 +4,8 @@ import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 import { PricesContext } from '../contexts/PricesContext';
 import MachineInfo from '../components/MachineInfo';
+import { TenancyContext } from '../contexts/TenancyContext';
+import { UserContext } from '../contexts/UserContext';
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
@@ -13,11 +15,14 @@ function ClientPage() {
     const [filteredMachines, setFilteredMachines] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState("");
     const prices = useContext(PricesContext);
+    const [user] = useContext(UserContext);
+    const [tenancy] = useContext(TenancyContext);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiService.getReshape();
+                const body = {"tenancy": tenancy};
+                const response = await apiService.getReshape2(body, user.token);
                     if (response.status === 200) {
                         setMachines(response.data);
                         setFilteredMachines(response.data);
@@ -88,7 +93,7 @@ function ClientPage() {
                     </ReturnButton>
                 </Link>
                 <h1>
-                TENANCY ACCERTE
+                TENANCY {tenancy}
                 </h1>
             </Header>
             <FilterOptions>

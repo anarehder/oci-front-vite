@@ -4,9 +4,11 @@ import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
 import Logout from '../components/LogoutComponent';
+import { TenancyContext } from '../contexts/TenancyContext';
 
 function Contracts() {
     const [user] = useContext(UserContext);
+    const [, setTenancy] = useContext(TenancyContext);
     const [contracts, setContracts] = useState([]);
     
     useEffect(() => {
@@ -66,7 +68,7 @@ function Contracts() {
                             <h3>
                                 R$ {new Intl.NumberFormat('pt-BR').format(contract.Valor)}
                             </h3>
-                            <Link to="/client">
+                            <Link to="/client" onClick={()=>setTenancy(contract.Tenancy)}>
                                 <button>
                                     Ver detalhes    
                                 </button> 
