@@ -93,6 +93,7 @@ const PageContainer = styled.div`
 
 const Header = styled.div`
     margin-top: 3%;
+    height: 180px;
     width: 70%;
     border-bottom: 2px solid #E6E6E6;
     padding: 10px 25px;

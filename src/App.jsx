@@ -14,9 +14,9 @@ function App() {
 
   return (
     <AppContainer>
-      <UserProvider>
-        <PricesProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <UserProvider>
+          <PricesProvider>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -26,9 +26,9 @@ function App() {
               <Route path="/client2" element={<ClientPage2 />} />
               <Route path="/clientdark" element={<ClientPageDark />} />
             </Routes>
-          </BrowserRouter >
-        </PricesProvider>
-      </UserProvider>
+          </PricesProvider>
+        </UserProvider>
+      </BrowserRouter >
     </AppContainer >
   )
 }
