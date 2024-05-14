@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from 'styled-components';
+import logo from '../assets/logo.svg';
 import { GoArrowRight } from "react-icons/go";
 import { LuUserCircle2 } from "react-icons/lu";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -43,7 +44,10 @@ function LoginPage(){
 
     return (
         <PageContainer onSubmit={handleSubmit}>
-            {/* <HeaderComponent/> */}
+            <Header>
+                <h1>LOGIN</h1>
+                <img src={logo} alt={"logo"} />
+            </Header>
             <FormContainer>
                 <SearchBarForm>
                     <LuUserCircle2 size={30} />
@@ -85,6 +89,31 @@ const PageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 25px;
+`
+
+const Header = styled.div`
+    margin-top: 3%;
+    width: 70%;
+    border-bottom: 2px solid #E6E6E6;
+    padding: 10px 25px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    text-align: center;
+    h1{
+        font-size: 50px;
+        font-weigth: 400;
+    }
+    img {
+        width: 100px;
+    }
+    @media (max-width: 500px) {
+        flex-wrap: wrap;
+        justify-content: center;
+        img {
+            width: 0;
+        }
+    }
 `
 
 const FormContainer = styled.form`
