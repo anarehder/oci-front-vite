@@ -13,7 +13,8 @@ export default function UserProvider({ children}){
             const lsUser = JSON.parse(localStorage.getItem('user'));
             if (lsUser && lsUser.token) {
                 try {
-                    const body = { username: lsUser.username, token: lsUser.token.slice(7), isAdmin: lsUser.isAdmin,  client:lsUser.client};
+                    const body = { userId: lsUser.userId, token: lsUser.token.slice(7)};
+                    console.log(body);
                     const session = await apiService.checkSession(body);
                     if (session.status === 200) {
                         setUser(lsUser);

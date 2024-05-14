@@ -1,15 +1,17 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
+import { UserContext } from "../contexts/UserContext";
 
 function Contracts() {
+    const [user] = useContext(UserContext);
     const [contracts, setContracts] = useState([]);
     
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiService.getContracts();
+                const response = await apiService.getContracts2(user.token);
                     if (response.status === 200) {
                         setContracts(response.data);
                     }

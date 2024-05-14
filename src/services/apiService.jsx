@@ -12,6 +12,18 @@ function getReshape() {
     return axios.get(`${BASE_URL}/reshape`);
 }
 
+function checkSession(body) {
+    return axios.post(`${BASE_URL2}/user/session`, body);
+}
+
+function getReshape2(body, token) {
+    return axios.post(`${BASE_URL2}/reshape`, body, { headers: { Authorization: token } });
+}
+
+function getContracts2(token) {
+    return axios.get(`${BASE_URL2}/contracts`,{ headers: { Authorization: token } });
+}
+
 function getContracts() {
     return axios.get(`${BASE_URL}/contracts`);
 }
@@ -20,6 +32,6 @@ function getOCIPrices() {
     return axios.get(`${BASE_URL}/price`);
 }
 
-const apiService = { login, getReshape, getContracts, getOCIPrices };
+const apiService = { login, checkSession, getReshape, getContracts, getOCIPrices, getReshape2, getContracts2 };
 
 export default apiService;

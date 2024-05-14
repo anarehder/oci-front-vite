@@ -22,17 +22,18 @@ function LoginPage(){
         if (!form.username || !form.password) return alert("Todos os campos devem ser preenchidos");
         try {
             const response = await apiService.login(form);
-            console.log(response);
+            console.log(response.status);
             if (response.status === 200) {
-                const { id, username, isAdmin, client, token } = response.data;
+                console.log(response.data);
+                const { userId, username, isAdmin, client, token } = response.data;
                 const userData = {
-                    id,
+                    userId,
                     username,
                     isAdmin,
                     client,
                     token: `Bearer ${token}`
                 };
-                localStorage.setItem("user", JSON.stringify({id, username, isAdmin, client, token: `Bearer ${token}`}));
+                localStorage.setItem("user", JSON.stringify({userId, username, isAdmin, client, token: `Bearer ${token}`}));
                 setUser(userData);
                 navigate("/contracts");
             }
