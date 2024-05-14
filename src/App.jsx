@@ -7,6 +7,7 @@ import ClientPage from "./pages/ClientPage";
 import ClientPage2 from "./pages/ClientPage2";
 import ClientPageDark from "./pages/ClientPageDark";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/contracts" element={<Contracts />} />
             <Route path="/contractsdark" element={<ContractsDark />} />
             <Route path="/client" element={<ClientPage />} />
