@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from 'styled-components'
 import PricesProvider from "./contexts/PricesContext";
-import Contracts from "./pages/Contracts";
+import Contracts from "./pages/ContractsPage";
 import ContractsDark from "./pages/ContractsDark";
 import ClientPage from "./pages/ClientPage";
 import ClientPage2 from "./pages/ClientPage2";

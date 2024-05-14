@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
+import Logout from '../components/LogoutComponent';
 
 function Contracts() {
     const [user] = useContext(UserContext);
@@ -11,6 +12,10 @@ function Contracts() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const userLocal = localStorage.getItem("user");
+                if (!userLocal) {
+                    return navigate("/");
+                }
                 const response = await apiService.getContracts2(user.token);
                     if (response.status === 200) {
                         setContracts(response.data);
@@ -25,9 +30,12 @@ function Contracts() {
 
     return (
         <PageContainer>
-            <h1>
-                RELATÓRIOS CONTRATOS    
-            </h1>
+            <Header>
+                <h1>
+                    RELATÓRIOS CONTRATOS - {user.client}    
+                </h1>
+                <Logout />
+            </Header>
             <ContractsTable>
                 <ClientInfo>
                     <h2>
@@ -81,6 +89,20 @@ const PageContainer = styled.div`
     gap: 50px;
     h1{
         padding-top:30px;
+    }
+`
+
+const Header = styled.div`
+    height: 130px;
+    width: 70%;
+    border-bottom: 2px solid #E6E6E6;
+    padding: 10px 25px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    h1{
+        font-size: 50px;
+        font-weigth: 400;
     }
 `
 

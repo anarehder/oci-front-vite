@@ -8,6 +8,10 @@ function login(body) {
     return axios.post(`${BASE_URL2}/user/login`, body);
 }
 
+function logout(token) {
+    return axios.post(`${BASE_URL2}/user/logout`, { headers: { Authorization: token } });
+}
+
 function getReshape() {
     return axios.get(`${BASE_URL}/reshape`);
 }
@@ -32,6 +36,6 @@ function getOCIPrices() {
     return axios.get(`${BASE_URL}/price`);
 }
 
-const apiService = { login, checkSession, getReshape, getContracts, getOCIPrices, getReshape2, getContracts2 };
+const apiService = { login, logout, checkSession, getReshape, getContracts, getOCIPrices, getReshape2, getContracts2 };
 
 export default apiService;
