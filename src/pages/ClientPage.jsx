@@ -27,7 +27,7 @@ function ClientPage() {
                     return navigate("/");
                 }
                 const body = {"tenancy": tenancy};
-                const response = await apiService.getReshape2(body, user.token);
+                const response = await apiService.getReshape(body, user.token);
                     if (response.status === 200) {
                         setMachines(response.data);
                         setFilteredMachines(response.data);
@@ -179,7 +179,6 @@ export default ClientPage;
 const PageContainer = styled.div`
     width: 100%;
     min-height: 100vh;
-    background-color: #F0F5F9;
     color: #021121;
     flex-direction: column;
     align-items: center;

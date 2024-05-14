@@ -18,7 +18,7 @@ function Contracts() {
                 if (!userLocal) {
                     return navigate("/");
                 }
-                const response = await apiService.getContracts2(user.token);
+                const response = await apiService.getContracts(user.token);
                     if (response.status === 200) {
                         setContracts(response.data);
                     }
@@ -34,7 +34,7 @@ function Contracts() {
         <PageContainer>
             <Header>
                 <h1>
-                    RELATÓRIOS CONTRATOS - {user.client}    
+                    Relatórios Contratos - {user.client}    
                 </h1>
                 <Logout />
             </Header>
@@ -51,6 +51,9 @@ function Contracts() {
                     </h2>
                     <h2>
                         VALOR DO CONTRATO
+                    </h2>
+                    <h2>
+                        CLIQUE PARA VER MÁQUINAS
                     </h2>
                 </ClientInfo>
                 {contracts && contracts.length > 0 && 
@@ -84,6 +87,7 @@ function Contracts() {
 export default Contracts;
 
 const PageContainer = styled.div`
+    width: 100vw;
     min-height: 100vh;
     color: #021121;
     flex-direction: column;
@@ -98,7 +102,6 @@ const Header = styled.div`
     height: 130px;
     width: 70%;
     border-bottom: 2px solid #E6E6E6;
-    padding: 10px 25px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -110,6 +113,8 @@ const Header = styled.div`
 
 const ContractsTable = styled.div`
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
     h2 { 
         width: 160px;
     }
@@ -119,13 +124,23 @@ const ContractsTable = styled.div`
     button {
         margin-left: 20px;
     }
+    :nth-child(1){
+        border: none !important;
+    }
 `
 
 const ClientInfo = styled.div`
-    line-height: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     align-items: center;
-    justify-content: flex-start;
-    padding-left: 50px;
+    padding: 10px;
+    line-height: 25px;
+    border-radius: 10px;
+    width: 1100px;
     gap: 40px;
-    border-bottom: 3px solid white;
+    border: 2.5px solid #021121;
+    h3{
+        font-size: 23px;
+    }
 `
