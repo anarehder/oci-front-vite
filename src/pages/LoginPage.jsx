@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from 'styled-components';
 import logo from '../assets/logo.svg';
 import { GoArrowRight } from "react-icons/go";
 import { LuUserCircle2 } from "react-icons/lu";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import apiService from "../services/apiService";
 
 function LoginPage(){
     const [form, setForm] = useState({ username: "", password: "" });
+    const [user, setUser] = useContext(UserContext);
     const navigate = useNavigate();
-
+    console.log(form);
     const handleForm = (e) => {
         e.preventDefault();     setForm((prevForm) => ({ ...prevForm, [e.target.id]: e.target.value }));
     };
@@ -18,23 +21,21 @@ function LoginPage(){
         e.preventDefault();
         if (!form.username || !form.password) return alert("Todos os campos devem ser preenchidos");
         try {
-            // const response = await apiService.signIn(form)
-            // if (response.status === 200) {
-            //     const { id, name, token, username } = response.data;
-            //     const userData = {
-            //         id,
-            //         token: `Bearer ${token}`,
-            //         name,
-            //         username,
-            //     };
-            //     localStorage.setItem("user", JSON.stringify({id, token: `Bearer ${token}`, name, username}));
-            //     setUser(userData);
-            //     if (userData.name === "admin" ){
-            //         navigate("/adminsummary");
-            //     } else {
-            //         navigate('/summary');
-            //     }
-            // }
+            const response = await apiService.login(form);
+            console.log(response);
+            if (response.status === 200) {
+                const { id, username, isAdmin, client, token } = response.data;
+                const userData = {
+                    id,
+                    username,
+                    isAdmin,
+                    client,
+                    token: `Bearer ${token}`
+                };
+                localStorage.setItem("user", JSON.stringify({id, username, isAdmin, client, token: `Bearer ${token}`}));
+                setUser(userData);
+                navigate("/contracts");
+            }
         } catch (error) {
             if (error.response.status === 401 || error.response.status === 400 ) alert("Dados incorretos, tente novamente");
         } finally {
@@ -76,7 +77,6 @@ function LoginPage(){
                     <GoArrowRight size={24} />
                 </button>
             </FormContainer>
-
         </PageContainer>
     )
 }
