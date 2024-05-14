@@ -45,7 +45,7 @@ function HomePage() {
                     contracts.map((contract, index) => (
                         <ClientInfo key={index}>
                             <h3>
-                                {contract.Cliente}
+                                {contract.Tenancy}
                             </h3>
                             <h3>
                                 {contract.InicioContrato}
@@ -73,10 +73,8 @@ export default HomePage;
 
 const PageContainer = styled.div`
     min-height: 100vh;
-    background-color: #F0F5F9;
     color: #021121;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
     gap: 50px;
     h1{
@@ -101,6 +99,7 @@ const ClientInfo = styled.div`
     line-height: 35px;
     align-items: center;
     justify-content: flex-start;
+    padding-left: 50px;
     gap: 40px;
     border-bottom: 3px solid white;
 `

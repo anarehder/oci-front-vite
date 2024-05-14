@@ -30,4 +30,6 @@ export default App
 
 const AppContainer = styled.main`
   width: 100vw;
+  padding-bottom: 50px;
+  background-color: #F0F5F9;
 `
