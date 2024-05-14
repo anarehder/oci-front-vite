@@ -12,10 +12,6 @@ export default function PricesProvider ({ children }) {
             const response = await apiService.getOCIPrices();
                 if (response.status === 200) {
                     const data = response.data;
-                    // data.items.forEach((item) => {
-                    //     item.currencyCodeLocalizations = item.currencyCodeLocalizations.filter(localization => localization.currencyCode === "BRL");
-                    // });
-                    // setPrices(data.items);
                     setPrices(data);
                     console.log("SALVEI O PRICES!")
                 }
