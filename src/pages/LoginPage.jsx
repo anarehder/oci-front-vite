@@ -12,7 +12,7 @@ function LoginPage(){
     const [form, setForm] = useState({ username: "", password: "" });
     const [user, setUser] = useContext(UserContext);
     const navigate = useNavigate();
-    console.log(form);
+    
     const handleForm = (e) => {
         e.preventDefault();     setForm((prevForm) => ({ ...prevForm, [e.target.id]: e.target.value }));
     };
@@ -22,9 +22,7 @@ function LoginPage(){
         if (!form.username || !form.password) return alert("Todos os campos devem ser preenchidos");
         try {
             const response = await apiService.login(form);
-            console.log(response.status);
             if (response.status === 200) {
-                console.log(response.data);
                 const { userId, username, isAdmin, client, token } = response.data;
                 const userData = {
                     userId,
