@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from 'styled-components'
 import PricesProvider from "./contexts/PricesContext";
-import HomePage from "./pages/HomePage";
-import HomePageDark from "./pages/HomePageDark";
+import Contracts from "./pages/Contracts";
+import ContractsDark from "./pages/ContractsDark";
 import ClientPage from "./pages/ClientPage";
 import ClientPage2 from "./pages/ClientPage2";
 import ClientPageDark from "./pages/ClientPageDark";
@@ -14,8 +14,8 @@ function App() {
       <PricesProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/homepagedark" element={<HomePageDark />} />
+            <Route path="/contracts" element={<Contracts />} />
+            <Route path="/contractsdark" element={<ContractsDark />} />
             <Route path="/client" element={<ClientPage />} />
             <Route path="/client2" element={<ClientPage2 />} />
             <Route path="/clientdark" element={<ClientPageDark />} />

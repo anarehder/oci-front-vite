@@ -82,7 +82,7 @@ function ClientPage() {
     return (
         <PageContainer onSubmit={handleSubmit}>
             <Header>
-                <Link to="/">
+                <Link to="/contracts">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>

@@ -27,7 +27,7 @@ function ClientPageDark() {
     return (
         <PageContainer>
             <Header>
-                <Link to="/homepagedark">
+                <Link to="/contractsdark">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>

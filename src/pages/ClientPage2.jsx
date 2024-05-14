@@ -27,7 +27,7 @@ function ClientPage2() {
     return (
         <PageContainer>
             <Header>
-                <Link to="/homepage2">
+                <Link to="/contractsdark">
                     <ReturnButton>
                         Voltar
                     </ReturnButton>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
 
-function HomePage() {
+function ContractsDark() {
     const [contracts, setContracts] = useState([]);
     
     useEffect(() => {
@@ -45,7 +45,7 @@ function HomePage() {
                     contracts.map((contract, index) => (
                         <ClientInfo key={index}>
                             <h3>
-                                {contract.Tenancy}
+                                {contract.Cliente}
                             </h3>
                             <h3>
                                 {contract.InicioContrato}
@@ -56,7 +56,7 @@ function HomePage() {
                             <h3>
                                 R$ {new Intl.NumberFormat('pt-BR').format(contract.Valor)}
                             </h3>
-                            <Link to="/client">
+                            <Link to="/clientdark">
                                 <button>
                                     Ver detalhes    
                                 </button> 
@@ -69,17 +69,16 @@ function HomePage() {
     )
 }
 
-export default HomePage;
+export default ContractsDark;
 
 const PageContainer = styled.div`
     min-height: 100vh;
-    color: #021121;
+    background-color: black;
+    color: white;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     gap: 50px;
-    h1{
-        padding-top:30px;
-    }
 `
 
 const ContractsTable = styled.div`
@@ -99,7 +98,6 @@ const ClientInfo = styled.div`
     line-height: 35px;
     align-items: center;
     justify-content: flex-start;
-    padding-left: 50px;
     gap: 40px;
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
 `
