@@ -8,24 +8,27 @@ import ClientPage2 from "./pages/ClientPage2";
 import ClientPageDark from "./pages/ClientPageDark";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import UserProvider from "./contexts/UserContext";
 
 function App() {
 
   return (
     <AppContainer>
-      <PricesProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/contractsdark" element={<ContractsDark />} />
-            <Route path="/client" element={<ClientPage />} />
-            <Route path="/client2" element={<ClientPage2 />} />
-            <Route path="/clientdark" element={<ClientPageDark />} />
-          </Routes>
-        </BrowserRouter >
-      </PricesProvider>
+      <UserProvider>
+        <PricesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/contracts" element={<Contracts />} />
+              <Route path="/contractsdark" element={<ContractsDark />} />
+              <Route path="/client" element={<ClientPage />} />
+              <Route path="/client2" element={<ClientPage2 />} />
+              <Route path="/clientdark" element={<ClientPageDark />} />
+            </Routes>
+          </BrowserRouter >
+        </PricesProvider>
+      </UserProvider>
     </AppContainer >
   )
 }
