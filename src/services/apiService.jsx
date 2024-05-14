@@ -9,7 +9,7 @@ function login(body) {
 }
 
 function logout(token) {
-    return axios.post(`${BASE_URL2}/user/logout`, { headers: { Authorization: token } });
+    return axios.delete(`${BASE_URL2}/user/logout`, { headers: { Authorization: token } });
 }
 
 function getReshape() {

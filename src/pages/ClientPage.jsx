@@ -6,6 +6,7 @@ import { PricesContext } from '../contexts/PricesContext';
 import MachineInfo from '../components/MachineInfo';
 import { TenancyContext } from '../contexts/TenancyContext';
 import { UserContext } from '../contexts/UserContext';
+import Logout from '../components/LogoutComponent';
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
@@ -21,6 +22,10 @@ function ClientPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const userLocal = localStorage.getItem("user");
+                if (!userLocal) {
+                    return navigate("/");
+                }
                 const body = {"tenancy": tenancy};
                 const response = await apiService.getReshape2(body, user.token);
                     if (response.status === 200) {
@@ -95,6 +100,7 @@ function ClientPage() {
                 <h1>
                 TENANCY {tenancy}
                 </h1>
+                <Logout />
             </Header>
             <FilterOptions>
                 <button disabled={selectedFilter !== "" && selectedFilter !== "OA"} onClick={() => handleClick({filterName: "OA"})}>
@@ -182,8 +188,17 @@ const PageContainer = styled.div`
 `
 
 const Header = styled.div`
+    height: 130px;
+    width: 70%;
+    border-bottom: 2px solid #E6E6E6;
+    padding: 10px 25px;
+    display: flex;
+    align-items: flex-end;
     justify-content: center;
-    padding-top: 20px;
+    h1{
+        font-size: 50px;
+        font-weigth: 400;
+    }
 `
 
 const FilterOptions = styled.div`
@@ -266,11 +281,12 @@ const AvailableButton = styled.button`
 
 const ReturnButton = styled.button`
     position: absolute;
-    left: 10%;
+    left: 15%;
+    top: 7%;
 `
 
 const CloseGraphButton = styled.button`
     position: absolute;
     left: 90%;
-    top: 13%;
+    top: 25%;
 `
