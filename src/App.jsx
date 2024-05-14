@@ -6,6 +6,7 @@ import ContractsDark from "./pages/ContractsDark";
 import ClientPage from "./pages/ClientPage";
 import ClientPage2 from "./pages/ClientPage2";
 import ClientPageDark from "./pages/ClientPageDark";
+import HomePage from "./pages/HomePage";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <PricesProvider>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<HomePage />} />
             <Route path="/contracts" element={<Contracts />} />
             <Route path="/contractsdark" element={<ContractsDark />} />
             <Route path="/client" element={<ClientPage />} />
@@ -30,6 +32,5 @@ export default App
 
 const AppContainer = styled.main`
   width: 100vw;
-  padding-bottom: 50px;
   background-color: #F0F5F9;
 `
