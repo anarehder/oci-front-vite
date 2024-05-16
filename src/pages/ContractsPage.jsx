@@ -87,12 +87,13 @@ function Contracts() {
 export default Contracts;
 
 const PageContainer = styled.div`
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     color: #021121;
     flex-direction: column;
     align-items: center;
     gap: 50px;
+    margin-bottom: 20px;
     h1{
         padding-top:30px;
     }
