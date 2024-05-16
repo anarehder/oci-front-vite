@@ -7,6 +7,7 @@ import MachineInfo from '../components/MachineInfo';
 import { TenancyContext } from '../contexts/TenancyContext';
 import { UserContext } from '../contexts/UserContext';
 import Logout from '../components/LogoutComponent';
+import { GoArrowRight } from "react-icons/go";
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
@@ -101,6 +102,7 @@ function ClientPage() {
                 <Link to="/contracts">
                     <ReturnButton>
                         Voltar
+                        <GoArrowRight size={24} />
                     </ReturnButton>
                 </Link>
                 <h1>
@@ -204,6 +206,15 @@ const Header = styled.div`
         font-size: 50px;
         font-weigth: 400;
     }
+    a {
+        margin: 20px;
+        position: absolute;
+        left: 14%;
+        top: 5%;
+    }
+`
+const ReturnButton = styled.button`
+    width: 150px;
 `
 
 const FilterOptions = styled.div`
@@ -281,13 +292,6 @@ const MachineList = styled.div`
 const AvailableButton = styled.button`
     background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
     color: ${(props) => (props.color !== '-' ? 'white': '#021121')};
-`
-
-
-const ReturnButton = styled.button`
-    position: absolute;
-    left: 15%;
-    top: 7%;
 `
 
 const CloseGraphButton = styled.button`
