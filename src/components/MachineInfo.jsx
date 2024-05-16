@@ -18,8 +18,11 @@ function MachineInfo({machine}) {
             const new_OCPU = reshapeService.estimateReshapeCPUValues(machine.last30.reshape, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU);
             setNewOCPU(new_OCPU.newOCPU);
         }
-    },[machine.last30.reshape, machine.MEMORY_GB, machine.last30.MaxMEM, machine.last30.MeanMEM, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU])
+    },[machine.last30.reshape, machine.MEMORY_GB, machine.last30.MaxMEM, machine.last30.MeanMEM, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU]);
 
+    function handleOperation(name){
+        alert(`Operação selecionada ${name}`);
+    }
     return (
         <>
         <CompartmentInfo>
@@ -103,7 +106,7 @@ function MachineInfo({machine}) {
                         <div>
                             <h2>Shape Atual ({machine.Shape}): {(((calculatePricesService.estimatePrice(machine.Shape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2) } %</h2>
                             {(Number(newMEM) !== Number(machine.MEMORY_GB) || Number(newOCPU) !== Number(machine.OCPU)) &&
-                                <button>
+                                <button onClick={()=>handleOperation("Resizing")}>
                                     Resizing
                                 </button>
                             }
@@ -112,7 +115,7 @@ function MachineInfo({machine}) {
                         {machine.Shape !== bestShape &&
                         <div>
                             <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2> 
-                            <button>
+                            <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
                         </div>}
@@ -120,7 +123,7 @@ function MachineInfo({machine}) {
                     <div>
                         <h2>Alteração Shape (Shape E5.Flex): {(((calculatePricesService.estimatePrice(bestShape, newMEM !== "-" ? newMEM : machine.MEMORY_GB, newOCPU !== "-" ? newOCPU :machine.OCPU) / machine.Custo_Atual_de_Maquina_24x7)-1)*100).toFixed(2)} %</h2>
                         {(Number(newMEM) !== Number(machine.MEMORY_GB) || Number(newOCPU) !== Number(machine.OCPU)) &&
-                            <button>
+                            <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
                         } 
