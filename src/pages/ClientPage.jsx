@@ -70,6 +70,12 @@ function ClientPage() {
             }
         }
     }
+    
+
+    function SelectMachine(index){
+        setSelectedMachine(index);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     function CleanFilter(){
         setSelectedMachine("");
@@ -161,7 +167,7 @@ function ClientPage() {
                             </AvailableButton>
                             { prices.length ===0 ?
                                 <button> Loading... </button> :
-                                <button disabled={prices.length ===0} onClick={() => setSelectedMachine(index) }>
+                                <button disabled={prices.length ===0} onClick={() => SelectMachine(index)}>
                                     Detalhes
                                 </button>
                             }

@@ -16,7 +16,7 @@ function MachineInfo({machine}) {
             setNewMEM(new_Memory.newMEM);
             
             const new_OCPU = reshapeService.estimateReshapeCPUValues(machine.last30.reshape, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU);
-            setNewOCPU(new_OCPU.newOCPU);         
+            setNewOCPU(new_OCPU.newOCPU);
         }
     },[machine.last30.reshape, machine.MEMORY_GB, machine.last30.MaxMEM, machine.last30.MeanMEM, machine.OCPU, machine.last30.MaxCPU, machine.last30.MeanCPU])
 
@@ -34,7 +34,10 @@ function MachineInfo({machine}) {
                 </BotaoRecreation>
             }
             <h1>
-                {machine.Name}
+                {machine.Name}  
+                <h2>
+                ({machine.last30?.DaysCount} dias analisados)
+                </h2>
             </h1>
             <Info>
                 <div>
