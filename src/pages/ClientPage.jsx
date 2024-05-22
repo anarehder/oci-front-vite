@@ -167,17 +167,15 @@ function ClientPage() {
                             <AvailableButton color={machine.last30.reshape}>
                                 {machine.last30.reshape !== "-" ? 'DISPONÍVEL' : "OK"}
                             </AvailableButton>
-                            { prices.length ===0 ?
-                                <button> Loading... </button> :
-                                <button disabled={prices.length ===0} onClick={() => SelectMachine(index)}>
-                                    Detalhes
-                                </button>
-                            }
+                            <button onClick={() => SelectMachine(index)}>
+                                Detalhes
+                            </button>
                             
                         </MachineList>
                     ))
                 }
             </MachinesContainer>
+            {machines.length === 0 && <h1> Loading...</h1>}
         </PageContainer>
     );
 }
