@@ -195,7 +195,7 @@ const OCPU_MEM = styled.div`
 
 const Prices = styled.div`
     flex-direction: column;
-    max-width: 30%;
+    max-width: 35%;
     gap: 10px;
     flex-wrap: wrap;
     height: 300px;
