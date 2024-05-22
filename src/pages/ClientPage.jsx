@@ -209,7 +209,7 @@ const Header = styled.div`
     a {
         margin: 20px;
         position: absolute;
-        left: 14%;
+        left: 15%;
         top: 5%;
     }
 `
