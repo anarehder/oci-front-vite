@@ -20,7 +20,7 @@ function ClientPage() {
     const prices = useContext(PricesContext);
     const [user] = useContext(UserContext);
     const [tenancy] = useContext(TenancyContext);
-    console.log(filteredMachines);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
