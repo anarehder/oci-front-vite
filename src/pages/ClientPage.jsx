@@ -8,6 +8,7 @@ import { TenancyContext } from '../contexts/TenancyContext';
 import { UserContext } from '../contexts/UserContext';
 import Logout from '../components/LogoutComponent';
 import { GoArrowRight } from "react-icons/go";
+import ExportToExcelLists from '../services/exportToExcel';
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
@@ -19,7 +20,7 @@ function ClientPage() {
     const prices = useContext(PricesContext);
     const [user] = useContext(UserContext);
     const [tenancy] = useContext(TenancyContext);
-
+    console.log(filteredMachines);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -109,6 +110,7 @@ function ClientPage() {
                 TENANCY {tenancy}
                 </h1>
                 <Logout />
+                {(filteredMachines.length !== 0) && <ExportToExcelLists machines={filteredMachines} />}
             </Header>
             <FilterOptions>
                 <button disabled={selectedFilter !== "" && selectedFilter !== "OA"} onClick={() => handleClick({filterName: "OA"})}>

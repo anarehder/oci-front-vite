@@ -9,7 +9,7 @@ function MachineInfo({machine}) {
     function handleOperation(name){
         alert(`Operação selecionada ${name}`);
     }
-
+    console.log(machine.last30);
     return (
         <>
         <CompartmentInfo>
