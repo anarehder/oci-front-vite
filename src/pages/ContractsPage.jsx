@@ -79,7 +79,7 @@ function Contracts() {
                                 {contract.VencimentoContrato}
                             </h3>
                             <h3>
-                                R$ {new Intl.NumberFormat('pt-BR').format(contract.Valor)}
+                                R$ {new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(contract.Valor)}
                             </h3>
                             <Link to="/client" onClick={()=>setTenancy(contract.Tenancy)}>
                                 <button>
