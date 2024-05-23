@@ -38,12 +38,15 @@ function Contracts() {
                     Relatórios Contratos - {user.client}    
                 </h1>
                 <Logout />
-                <Link to="/createuser">
-                    <CreateUserButton>
-                        Criar Usuário
-                        <GoArrowRight size={24} />
-                    </CreateUserButton>
-                </Link>
+                {
+                    user.isAdmin === 1 &&
+                    <Link to="/createuser">
+                        <CreateUserButton>
+                            Criar Usuário
+                            <GoArrowRight size={24} />
+                        </CreateUserButton>
+                    </Link>
+                }
             </Header>
             <ContractsTable>
                 <ClientInfo>
