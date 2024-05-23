@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
 import Logout from '../components/LogoutComponent';
 import { TenancyContext } from '../contexts/TenancyContext';
+import { GoArrowRight } from "react-icons/go";
 
 function Contracts() {
     const [user] = useContext(UserContext);
@@ -37,6 +38,12 @@ function Contracts() {
                     Relatórios Contratos - {user.client}    
                 </h1>
                 <Logout />
+                <Link to="/createuser">
+                    <CreateUserButton>
+                        Criar Usuário
+                        <GoArrowRight size={24} />
+                    </CreateUserButton>
+                </Link>
             </Header>
             <ContractsTable>
                 <ClientInfo>
@@ -103,6 +110,7 @@ const Header = styled.div`
     height: 130px;
     width: 70%;
     border-bottom: 2px solid #E6E6E6;
+    padding: 10px 25px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -110,6 +118,16 @@ const Header = styled.div`
         font-size: 50px;
         font-weigth: 400;
     }
+    a {
+        margin: 20px;
+        position: absolute;
+        left: 15%;
+        top: 5%;
+    }
+`
+
+const CreateUserButton = styled.button`
+    width: 150px;
 `
 
 const ContractsTable = styled.div`

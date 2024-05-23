@@ -22,10 +22,15 @@ function getContracts(token) {
     return axios.get(`${BASE_URL}/contracts`,{ headers: { Authorization: token } });
 }
 
+function getClientsList(token) {
+    return axios.get(`${BASE_URL}/contracts/clientslist`,{ headers: { Authorization: token } });
+}
+
+
 function getOCIPrices() {
     return axios.get(`${BASE_URL}/price`);
 }
 
-const apiService = { login, logout, checkSession, getReshape, getContracts, getOCIPrices };
+const apiService = { login, logout, checkSession, getReshape, getContracts, getClientsList, getOCIPrices };
 
 export default apiService;

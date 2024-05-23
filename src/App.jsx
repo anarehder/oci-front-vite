@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import UserProvider from "./contexts/UserContext";
 import TenancyProvider from "./contexts/TenancyContext";
+import CreateUserPage from "./pages/CreateUserPage";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/createuser" element={<CreateUserPage />} />
                 <Route path="/contracts" element={<Contracts />} />
                 <Route path="/contractsdark" element={<ContractsDark />} />
                 <Route path="/client" element={<ClientPage />} />
