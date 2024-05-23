@@ -8,9 +8,10 @@ import apiService from "../services/apiService";
 function CreateUserPage(){
     const navigate = useNavigate();
     const [user ,setUser] = useContext(UserContext);
-    const [form, setForm] = useState({name:"", username: "", password: "" , checkPassword:""});
+    const [form, setForm] = useState({username: "", password: "" , checkPassword:"", client:""});
+    const [isAdmin, setIsAdmin] = useState(false);
     const [clientsList, setClientsList] = useState([]);
-    console.log(clientsList);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -34,23 +35,30 @@ function CreateUserPage(){
     }, []);
     
     const handleForm = (e) => {
-        e.preventDefault();     setForm((prevForm) => ({ ...prevForm, [e.target.id]: e.target.value }));
+        e.preventDefault();     
+        setForm((prevForm) => ({ ...prevForm, [e.target.id]: e.target.value }));
+    };
+
+    const handleCheckboxChange = (event) => {
+        setIsAdmin(event.target.checked);
     };
 
     async function handleSubmit(e) {
         e.preventDefault();
-        if (!form.username || !form.password || !form.name || !form.checkPassword) return alert("Todos os campos devem ser preenchidos");
+        if (!form.username || !form.password || !form.checkPassword || !form.client) return alert("Todos os campos devem ser preenchidos");
         if (form.password !== form.checkPassword) return alert ("As senhas não coincidem");
+        if (isAdmin === true && form.client !== "Accerte Tecnologia") return alert ("Esse cliente não pode ter administrador");
         try {
-            const body = {name: form.name, username: form.username, password: form.password};
+            const body = {username: form.username, password: form.password, isAdmin: isAdmin, client: form.client};
             const response = await apiService.createUser(user.token, body);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert("Usuário criado com sucesso!");
             }
         } catch (error) {
             alert("Ocorreu um erro, tente novamente!");
         } finally {
-            setForm({ name:"", username: "", password: "" , checkPassword:""});
+            setForm({username: "", password: "" , checkPassword:"", client: ""});
+            setIsAdmin(false);
         }
     };
 
@@ -58,7 +66,7 @@ function CreateUserPage(){
         <PageContainer onSubmit={handleSubmit}>
             <Header>
                 <h1>
-                    Criar novo usuário
+                    Criar Novo Usuário
                 </h1>
                 <Link to="/contracts">
                     <ReturnButton>
@@ -68,15 +76,6 @@ function CreateUserPage(){
                 </Link>
             </Header>
             <FormContainer>
-                <SearchBarForm>
-                    <input
-                        placeholder='Nome'
-                        type="text"
-                        id="name"
-                        value={form.name}
-                        onChange={handleForm}
-                    />
-                </SearchBarForm>
                 <SearchBarForm>
                     <input
                         placeholder='Usuário'
@@ -103,6 +102,34 @@ function CreateUserPage(){
                         value={form.checkPassword}
                         onChange={handleForm}
                     />
+                </SearchBarForm>
+                <SearchBarForm>
+                    <div>
+                        <h2>
+                            Usuário Administrador?    
+                        </h2>
+                        <input
+                            type="checkbox"
+                            checked={isAdmin}
+                            onChange={handleCheckboxChange}
+                        />
+                        
+                    </div>
+                </SearchBarForm>
+                <SearchBarForm>
+                    <h2>
+                        Cliente
+                    </h2>
+                    <select value={form.client} onChange={handleForm} id="client">
+                            <option value="">
+                                Selecione um cliente
+                            </option>
+                            {clientsList.map((client, index) => (
+                                <option key={index} value={client.client}>
+                                    {client.client}
+                                </option>
+                            ))}
+                        </select>
                 </SearchBarForm>
                 <button type="submit">
                     <p>Criar usuário</p>
@@ -179,4 +206,8 @@ const SearchBarForm = styled.div`
     padding: 10px;
     width: 725px;
     gap: 15px;
+    div {
+        width: 200px;
+        gap: 25px;
+    }
 `

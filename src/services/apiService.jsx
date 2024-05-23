@@ -26,11 +26,14 @@ function getClientsList(token) {
     return axios.get(`${BASE_URL}/contracts/clientslist`,{ headers: { Authorization: token } });
 }
 
-
 function getOCIPrices() {
     return axios.get(`${BASE_URL}/price`);
 }
 
-const apiService = { login, logout, checkSession, getReshape, getContracts, getClientsList, getOCIPrices };
+function createUser(token, body) {
+    return axios.post(`${BASE_URL}/user`, body, { headers: { Authorization: token } });
+}
+
+const apiService = { login, logout, checkSession, getReshape, getContracts, getClientsList, getOCIPrices, createUser };
 
 export default apiService;
