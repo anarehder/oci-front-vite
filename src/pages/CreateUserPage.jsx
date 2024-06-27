@@ -125,8 +125,8 @@ function CreateUserPage(){
                                 Selecione um cliente
                             </option>
                             {clientsList.map((client, index) => (
-                                <option key={index} value={client.client}>
-                                    {client.client}
+                                <option key={index} value={client.Client}>
+                                    {client.Client}
                                 </option>
                             ))}
                         </select>

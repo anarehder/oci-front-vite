@@ -37,6 +37,6 @@ const ReturnButton = styled.button`
     width: 150px;
     margin: 20px;
     position: absolute;
-    left: 3%;
+    right: 3%;
     top: 5%;
 `

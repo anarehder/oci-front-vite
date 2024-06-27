@@ -26,7 +26,7 @@ function MachineInfo({machine}) {
             <h1>
                 {machine.VM_Name}  
                 <h2>
-                ({machine.last30?.DaysCount} dias analisados)
+                ({machine.last30?.DaysCount} dias analisados / último dia coletado {machine.Day.slice(-2)}/{machine.Day.slice(5,7)})
                 </h2>
             </h1>
             <Info>
@@ -81,13 +81,13 @@ function MachineInfo({machine}) {
             </OCPU_MEM>
             <Prices>
                 <ShapeInfo>
-                    <h1>CUSTOS ATUAIS</h1>
+                    <PricesTitle>CUSTOS ATUAIS</PricesTitle>
                     <h2>Maquina(24x7): R$ {machine.MonthlyMachinePrice}</h2>
                     <h2>OS(24x7): R$ {machine.MonthlyOSPrice}</h2>
                     <h2>Disco: R$ {machine.MonthlyOSPrice}</h2>
                 </ShapeInfo>
                 <ShapeInfo>
-                    <h1>OPERAÇÕES DISPONÍVEIS</h1>
+                    <PricesTitle>OPERAÇÕES DISPONÍVEIS</PricesTitle>
                     {(machine.last30.reshape !== "-" && machine.MonthlyMachinePrice !== '0.0') ?
                     <>
                         <div>
@@ -101,14 +101,14 @@ function MachineInfo({machine}) {
                         
                         {machine.Shape !== bestShape &&
                         <div>
-                            <h2>Alteração Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2> 
+                            <h2>Novo Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2> 
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
                         </div>}
                     </> : machine.MonthlyMachinePrice !== '0.0' ?
                     <div>
-                        <h2>Alteração Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
+                        <h2>Novo Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
                         {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
@@ -119,8 +119,8 @@ function MachineInfo({machine}) {
                     :
                     <div>
                         <h2>Custo Zerado</h2> 
-                        </div>
-                    }                    
+                    </div> 
+                    }                   
                 </ShapeInfo>
             </Prices>
         </CompartmentInfo>
@@ -140,6 +140,9 @@ const CompartmentInfo = styled.div`
     z-index:0;
     justify-content: center;
     color: #021121;
+    h2{
+        margin-top: 4px;
+    }
 `
 
 const BotaoBestShape = styled.button`
@@ -226,4 +229,9 @@ const ShapeInfo = styled.div`
         padding: 5px !important;
         background-color: green;
     }
+`
+
+const PricesTitle = styled.h1`
+    font-size: 25px;
+    border-bottom: 1px solid gray;
 `
