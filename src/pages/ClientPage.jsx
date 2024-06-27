@@ -161,7 +161,7 @@ function ClientPage() {
                     filteredMachines.map((machine, index) => (
                         <MachineList key={index} color={machine.operation} selected={selectedMachine === index ? "yes": "no"}>
                             <h2>
-                                {machine.Name}
+                                {machine.VM_Name}
                             </h2>
                             <h3>
                                 {machine.Status}

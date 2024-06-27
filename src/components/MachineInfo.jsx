@@ -4,8 +4,8 @@ import { IoMdOptions } from "react-icons/io";
 
 function MachineInfo({machine}) {
     const bestShape = 'VM.Standard.E5.Flex';
-    const percentageBestShape = ((machine.last30.BestShapePrice/machine.Custo_Atual_de_Maquina_24x7)-1)*100;
-    const percentageResize = ((machine.last30.newPrice/machine.Custo_Atual_de_Maquina_24x7)-1)*100;
+    const percentageBestShape = ((machine.last30.BestShapePrice/machine.MonthlyMachinePrice)-1)*100;
+    const percentageResize = ((machine.last30.newPrice/machine.MonthlyMachinePrice)-1)*100;
     function handleOperation(name){
         alert(`Operação selecionada ${name}`);
     }
@@ -18,13 +18,13 @@ function MachineInfo({machine}) {
                     BEST SHAPE!
                 </BotaoBestShape>
             }
-            {(!machine.Shape?.includes('Flex') && machine.Custo_Atual_de_Maquina_24x7 !== "0.0") &&
+            {(!machine.Shape?.includes('Flex') && machine.MonthlyMachinePrice !== "0.0") &&
                 <BotaoRecreation>
                     RECREATE!
                 </BotaoRecreation>
             }
             <h1>
-                {machine.Name}  
+                {machine.VM_Name}  
                 <h2>
                 ({machine.last30?.DaysCount} dias analisados)
                 </h2>
@@ -56,22 +56,22 @@ function MachineInfo({machine}) {
                 </div>
                 <div>
                     <h2>Armazenamento(GB)</h2>
-                    <h3> {machine.Armazenamento_GB} </h3>
+                    <h3> {machine.Storage} </h3>
                 </div>
             </Info> 
             <OCPU_MEM>
                 <h1>OCPU: {machine.OCPU}</h1>
-                <h2>Sugestão: {machine.last30.newCPU} {Number(machine.last30.newCPU) !== Number(machine.OCPU) &&
+                <h2>Sugestão: {machine.last30.newOCPU} {Number(machine.last30.newOCPU) !== Number(machine.OCPU) &&
                     <IoMdOptions  size={30} />}
                 </h2>
                 <div>
-                    <RadialBarComponent value = {machine.last30.MeanCPU} name = {'MeanCPU'} />
-                    <RadialBarComponent value = {machine.last30.MaxCPU} name = {'MaxCPU'} />
+                    <RadialBarComponent value = {machine.last30.MeanOCPU} name = {'MeanOCPU'} />
+                    <RadialBarComponent value = {machine.last30.MaxOCPU} name = {'MaxOCPU'} />
                 </div>
             </OCPU_MEM>
             <OCPU_MEM>
-                <h1>MEMORY: {machine.MEMORY_GB} GB</h1>
-                <h2>Sugestão: {machine.last30.newMEM} GB {Number(machine.last30.newMEM) !== Number(machine.MEMORY_GB) &&
+                <h1>MEMORY: {machine.Memory} GB</h1>
+                <h2>Sugestão: {machine.last30.newMEM} GB {Number(machine.last30.newMEM) !== Number(machine.Memory) &&
                     <IoMdOptions  size={30} />}
                 </h2>
                 <div>
@@ -82,17 +82,17 @@ function MachineInfo({machine}) {
             <Prices>
                 <ShapeInfo>
                     <h1>CUSTOS ATUAIS</h1>
-                    <h2>Maquina(24x7): R$ {machine.Custo_Atual_de_Maquina_24x7}</h2>
-                    <h2>OS(24x7): R$ {machine.Custo_Atual_de_OS_24x7}</h2>
-                    <h2>Disco: R$ {machine.Custo_de_Disco}</h2>
+                    <h2>Maquina(24x7): R$ {machine.MonthlyMachinePrice}</h2>
+                    <h2>OS(24x7): R$ {machine.MonthlyOSPrice}</h2>
+                    <h2>Disco: R$ {machine.MonthlyOSPrice}</h2>
                 </ShapeInfo>
                 <ShapeInfo>
                     <h1>OPERAÇÕES DISPONÍVEIS</h1>
-                    {(machine.last30.reshape !== "-" && machine.Custo_Atual_de_Maquina_24x7 !== '0.0') ?
+                    {(machine.last30.reshape !== "-" && machine.MonthlyMachinePrice !== '0.0') ?
                     <>
                         <div>
                             <h2>Shape Atual ({machine.Shape}): R$ {machine.last30.newPrice.toFixed(2)} / {percentageResize.toFixed(2)}%</h2>
-                            {(Number(machine.newMEM) !== Number(machine.MEMORY_GB) || Number(machine.newCPU) !== Number(machine.OCPU)) &&
+                            {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
                                 <button onClick={()=>handleOperation("Resizing")}>
                                     Resizing
                                 </button>
@@ -106,10 +106,10 @@ function MachineInfo({machine}) {
                                 Reshape
                             </button>
                         </div>}
-                    </> : machine.Custo_Atual_de_Maquina_24x7 !== '0.0' ?
+                    </> : machine.MonthlyMachinePrice !== '0.0' ?
                     <div>
                         <h2>Alteração Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
-                        {(Number(machine.newMEM) !== Number(machine.MEMORY_GB) || Number(machine.newCPU) !== Number(machine.OCPU)) &&
+                        {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
