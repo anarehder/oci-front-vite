@@ -332,6 +332,7 @@ const DashboardItem = styled.div`
     border: ${(props) => (props.selected === 'yes' ? '4px solid green': '2px solid #021121')}; 
     align-items: center;
     h2{
+        max-width: 90px;
         text-overflow: ellipsis;
         overflow: hidden;
         max-height: 16px;
