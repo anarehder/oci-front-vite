@@ -20,6 +20,9 @@ function ClientPage() {
     const prices = useContext(PricesContext);
     const [user] = useContext(UserContext);
     const [tenancy] = useContext(TenancyContext);
+    const [showDashboard, setShowDashboard] = useState(true);
+
+    console.log(showDashboard);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,6 +125,9 @@ function ClientPage() {
                 <button disabled={selectedFilter !== "" && selectedFilter !== "CF"} onClick={() => handleClick({filterName: "CF"})}>
                     Filtro de Compartment
                 </button>
+                <button onClick={() => setShowDashboard(!showDashboard)}>
+                    {showDashboard === true ? "Exibir Lista" : "Exibir Dashboard"}
+                </button>
             </FilterOptions>
             {selectedFilter === "CF" && 
                 <FormContainer>
@@ -157,7 +163,7 @@ function ClientPage() {
                 </CloseGraphButton>
             }
             <MachinesContainer>
-                {filteredMachines && filteredMachines.length > 0 && 
+                {filteredMachines && filteredMachines.length > 0 && showDashboard === false && 
                     filteredMachines.map((machine, index) => (
                         <MachineList key={index} color={machine.operation} selected={selectedMachine === index ? "yes": "no"}>
                             <h2>
@@ -172,10 +178,29 @@ function ClientPage() {
                             <button onClick={() => SelectMachine(index)}>
                                 Detalhes
                             </button>
-                            
                         </MachineList>
                     ))
                 }
+                <MachineDashboard>
+                {filteredMachines && filteredMachines.length > 0 && showDashboard === true && 
+                    filteredMachines.map((machine, index) => (
+                        <DashboardItem key={index} color={machine.operation} selected={selectedMachine === index ? "yes": "no"}>
+                            <h2>
+                                {machine.VM_Name}
+                            </h2>
+                            <h3>
+                                {machine.Status}
+                            </h3>
+                            <AvailableButton color={machine.last30.reshape}>
+                                {machine.last30.reshape !== "-" ? 'DISPONÍVEL' : "OK"}
+                            </AvailableButton>
+                            <button onClick={() => SelectMachine(index)}>
+                                Detalhes
+                            </button>
+                        </DashboardItem>
+                    ))
+                }
+                </MachineDashboard>
             </MachinesContainer>
             {machines.length === 0 && <h1> Loading...</h1>}
         </PageContainer>
@@ -289,9 +314,46 @@ const MachineList = styled.div`
     }
 `
 
+const MachineDashboard = styled.div`
+    gap: 7px;    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+`
+
+const DashboardItem = styled.div`
+    padding: 2px;
+    width: 130px;
+    heigth: 100px;
+    display: flex;
+    gap: 3px;
+    flex-direction: column;
+    border-radius: 15px;
+    border: ${(props) => (props.selected === 'yes' ? '4px solid green': '2px solid #021121')}; 
+    align-items: center;
+    h2{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-height: 16px;
+        font-size: 15px;
+        word-break: break-all;
+    }
+    h3{
+        font-size: 13px;
+        word-break: break-all;
+    }
+    button{
+        width: 100px;
+        font-size: 11px;
+        justify-content: center;
+        padding: 3px;
+    }
+`
+
 const AvailableButton = styled.button`
     background-color: ${(props) => (props.color !== '-' ? 'green': 'inherit')};
     color: ${(props) => (props.color !== '-' ? 'white': '#021121')};
+    pointer-events: none;
 `
 
 const CloseGraphButton = styled.button`
