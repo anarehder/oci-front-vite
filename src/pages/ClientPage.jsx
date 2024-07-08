@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { Link } from 'react-router-dom';
-import { PricesContext } from '../contexts/PricesContext';
 import MachineInfo from '../components/MachineInfo';
 import { TenancyContext } from '../contexts/TenancyContext';
 import { UserContext } from '../contexts/UserContext';
@@ -17,12 +16,13 @@ function ClientPage() {
     const [form, setForm] = useState({ compartment: ""});
     const [filteredMachines, setFilteredMachines] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState("");
-    const prices = useContext(PricesContext);
     const [user] = useContext(UserContext);
     const [tenancy] = useContext(TenancyContext);
     const [showDashboard, setShowDashboard] = useState(true);
+    const [totalPrices, setTotalPrices] = useState({});
 
-    console.log(showDashboard);
+    console.log(machines);
+    console.log(totalPrices);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +39,13 @@ function ClientPage() {
                         const compartments = response.data.map(objeto => objeto.Compartment);
                         const uniqueCompartments = Array.from(new Set(compartments));
                         setCompartments(uniqueCompartments);
+                        let totalActualPrice = 0;
+                        let totalResizedPrice = 0;
+                        let totalReshapePrice = 0;
+                        response.data.forEach(objeto => totalActualPrice += Number(objeto.MonthlyMachinePrice));
+                        response.data.forEach(objeto => totalResizedPrice += Number(objeto.last30.newPrice));
+                        response.data.forEach(objeto => totalReshapePrice += Number(objeto.last30.BestShapePrice));
+                        setTotalPrices({totalActualPrice, totalResizedPrice, totalReshapePrice});
                     }
             } catch (error) {
                 console.log(error);
@@ -115,6 +122,20 @@ function ClientPage() {
                 <Logout />
                 {(filteredMachines.length !== 0) && <ExportToExcelLists machines={filteredMachines} />}
             </Header>
+            {(machines && machines.length > 0) &&
+            <TotalPrice>
+                <div>
+                    <div>CUSTO ATUAL</div>
+                    <div>CUSTO REDIMENSIONADO</div>
+                    <div>CUSTO RESHAPE</div>
+                </div>
+                <div>
+                    <div> R$ {totalPrices.totalActualPrice.toFixed(2)} </div>
+                    <div> R$ {totalPrices.totalResizedPrice.toFixed(2)} </div>
+                    <div> R$ {totalPrices.totalReshapePrice.toFixed(2)} </div>
+                </div>
+            </TotalPrice>
+            }
             <FilterOptions>
                 <button disabled={selectedFilter !== "" && selectedFilter !== "OA"} onClick={() => handleClick({filterName: "OA"})}>
                     Máquinas com Alteração Disponível
@@ -215,7 +236,7 @@ const PageContainer = styled.div`
     color: #021121;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: 40px;
     margin-bottom: 20px;
 `
 
@@ -248,6 +269,19 @@ const FilterOptions = styled.div`
     button{
         width: 200px;
         font-size: 18px;
+        justify-content: center;
+    }
+`
+
+const TotalPrice = styled.div`
+    font-size: 22px;
+    flex-direction: column;
+    width: 40%;
+    gap: 10px;
+    border-radius: 50px;
+    padding: 10px;
+    border: 3px solid #021121;
+    div { 
         justify-content: center;
     }
 `

@@ -91,7 +91,7 @@ function MachineInfo({machine}) {
                     {(machine.last30.reshape !== "-" && machine.MonthlyMachinePrice !== '0.0') ?
                     <>
                         <div>
-                            <h2>Shape Atual ({machine.Shape}): R$ {machine.last30.newPrice.toFixed(2)} / {percentageResize.toFixed(2)}%</h2>
+                            <h2>Redimensionar ({machine.Shape}): R$ {machine.last30.newPrice.toFixed(2)} / {percentageResize.toFixed(2)}%</h2>
                             {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
                                 <button onClick={()=>handleOperation("Resizing")}>
                                     Resizing
@@ -101,14 +101,14 @@ function MachineInfo({machine}) {
                         
                         {machine.Shape !== bestShape &&
                         <div>
-                            <h2>Novo Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2> 
+                            <h2>Alterar Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2> 
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
                         </div>}
                     </> : machine.MonthlyMachinePrice !== '0.0' ?
                     <div>
-                        <h2>Novo Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
+                        <h2>Alterar Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
                         {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
