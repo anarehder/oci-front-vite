@@ -125,14 +125,13 @@ function ClientPage() {
             {(machines && machines.length > 0) &&
             <TotalPrice>
                 <div>
-                    <div>CUSTO ATUAL</div>
-                    <div>CUSTO REDIMENSIONADO</div>
-                    <div>CUSTO RESHAPE</div>
+                    <div> REDIMENSIONAR</div>
+                    <div> {(100*(totalPrices.totalResizedPrice-totalPrices.totalActualPrice)/totalPrices.totalActualPrice).toFixed(2) } % </div>
+                    
                 </div>
                 <div>
-                    <div> R$ {totalPrices.totalActualPrice.toFixed(2)} </div>
-                    <div> R$ {totalPrices.totalResizedPrice.toFixed(2)} </div>
-                    <div> R$ {totalPrices.totalReshapePrice.toFixed(2)} </div>
+                     <div> ALTERAR SHAPE</div>
+                    <div> {(100*(totalPrices.totalReshapePrice-totalPrices.totalActualPrice)/totalPrices.totalActualPrice).toFixed(2)} % </div>
                 </div>
             </TotalPrice>
             }
@@ -259,6 +258,7 @@ const Header = styled.div`
         top: 5%;
     }
 `
+
 const ReturnButton = styled.button`
     width: 150px;
 `
@@ -275,14 +275,17 @@ const FilterOptions = styled.div`
 
 const TotalPrice = styled.div`
     font-size: 22px;
-    flex-direction: column;
-    width: 40%;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 30%;
     gap: 10px;
     border-radius: 50px;
-    padding: 10px;
     border: 3px solid #021121;
-    div { 
-        justify-content: center;
+    div {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
     }
 `
 
