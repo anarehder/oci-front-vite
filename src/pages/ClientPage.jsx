@@ -8,6 +8,7 @@ import { UserContext } from '../contexts/UserContext';
 import Logout from '../components/LogoutComponent';
 import { GoArrowRight } from "react-icons/go";
 import ExportToExcelLists from '../services/exportToExcel';
+import { FaStar } from "react-icons/fa";
 
 function ClientPage() {
     const [machines, setMachines] = useState([]);
@@ -211,6 +212,7 @@ function ClientPage() {
                             <h3>
                                 {machine.Status}
                             </h3>
+                            {((machine.MonthlyMachinePrice-machine.last30.newPrice)/machine.MonthlyMachinePrice) >= 0.4 && <Star> <FaStar color="green" size={18} /> </Star>}
                             <AvailableButton color={machine.last30.reshape}>
                                 {machine.last30.reshape !== "-" ? 'DISPONÍVEL' : "OK"}
                             </AvailableButton>
@@ -235,7 +237,7 @@ const PageContainer = styled.div`
     color: #021121;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
     margin-bottom: 20px;
 `
 
@@ -278,7 +280,7 @@ const TotalPrice = styled.div`
     align-items: center;
     justify-content: center;
     padding: 5px;
-    width: 30%;
+    width: 25%;
     gap: 10px;
     border-radius: 50px;
     border: 3px solid #021121;
@@ -359,8 +361,9 @@ const MachineDashboard = styled.div`
 `
 
 const DashboardItem = styled.div`
+    position: relative; 
     padding: 2px;
-    width: 130px;
+    width: 140px;
     heigth: 100px;
     display: flex;
     gap: 3px;
@@ -386,6 +389,13 @@ const DashboardItem = styled.div`
         justify-content: center;
         padding: 3px;
     }
+`
+
+const Star = styled.div`
+    position: absolute;
+    width: 20px;
+    right: 5px;
+    top: 0px;
 `
 
 const AvailableButton = styled.button`
