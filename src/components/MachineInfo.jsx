@@ -81,32 +81,49 @@ function MachineInfo({machine}) {
             </OCPU_MEM>
             <Prices>
                 <ShapeInfo>
-                    <PricesTitle>CUSTOS ATUAIS</PricesTitle>
+                    <PricesTitle>CUSTOS ATUAIS - TABELA ORACLE</PricesTitle>
                     <h2>Maquina(24x7): R$ {machine.MonthlyMachinePrice}</h2>
-                    <h2>OS(24x7): R$ {machine.MonthlyOSPrice}</h2>
-                    <h2>Disco: R$ {machine.MonthlyOSPrice}</h2>
+                    {/* <h2>OS(24x7): R$ {machine.MonthlyOSPrice}</h2>
+                    <h2>Disco: R$ {machine.MonthlyOSPrice}</h2> */}
                 </ShapeInfo>
                 <ShapeInfo>
                     <PricesTitle>OPERAÇÕES DISPONÍVEIS</PricesTitle>
                     {(machine.last30.reshape !== "-" && machine.MonthlyMachinePrice !== '0.0') ?
                     <>
-                        <div>
-                            <h2>Redimensionar ({machine.Shape}): R$ {machine.last30.newPrice.toFixed(2)} / {percentageResize.toFixed(2)}%</h2>
-                            {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
-                                <button onClick={()=>handleOperation("Resizing")}>
-                                    Resizing
-                                </button>
-                            }
-                        </div>
-                        
+                                <Operations>
+                                    <div>
+                                        <h2>Redimensionar</h2>
+                                        <h2>({machine.Shape})</h2>
+                                    </div>
+                                    <div>
+                                        <h2>{percentageResize.toFixed(2)} % </h2>
+                                    </div>
+                                        {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
+                                            <button onClick={() => handleOperation("Resizing")}>
+                                                Resizing
+                                            </button>
+                                        }
+                                </Operations>
+                                                
                         {machine.Shape !== bestShape &&
-                        <div>
-                            <h2>Alterar Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2> 
+                        <Operations>
+                            <div>
+                            <h2>Alterar Shape </h2>
+                            <h2>({bestShape})</h2>
+                            </div>
+                            <div>
+                                <h2>
+                                {percentageBestShape.toFixed(2)}%
+                                </h2>
+                            
+                                </div>
                             <button onClick={()=>handleOperation("Reshape")}>
                                 Reshape
                             </button>
-                        </div>}
-                    </> : machine.MonthlyMachinePrice !== '0.0' ?
+                        </Operations>}
+                        
+                    </> 
+                    : machine.MonthlyMachinePrice !== '0.0' ?
                     <div>
                         <h2>Alterar Shape ({bestShape}): R$ {machine.last30.BestShapePrice.toFixed(2)} / {percentageBestShape.toFixed(2)}%</h2>
                         {(Number(machine.newMEM) !== Number(machine.Memory) || Number(machine.newOCPU) !== Number(machine.OCPU)) &&
@@ -144,7 +161,6 @@ const CompartmentInfo = styled.div`
         margin-top: 4px;
     }
 `
-
 const BotaoBestShape = styled.button`
     background-color: green;
     position: absolute;
@@ -152,7 +168,6 @@ const BotaoBestShape = styled.button`
     left: 87%;
     z-index:2;
 `
-
 const BotaoRecreation = styled.button`
     background-color: red;
     position: absolute;
@@ -160,7 +175,6 @@ const BotaoRecreation = styled.button`
     left: 87%;
     z-index:2;
 `
-
 const Info = styled.div`
     gap:5px;
     margin-top: 5px;
@@ -178,7 +192,6 @@ const Info = styled.div`
     }
     
 `
-
 const OCPU_MEM = styled.div`
     flex-direction: column;
     max-width: 30%;
@@ -195,11 +208,10 @@ const OCPU_MEM = styled.div`
         gap: 20px;
     }
 `
-
 const Prices = styled.div`
     flex-direction: column;
     max-width: 35%;
-    gap: 10px;
+    gap: 30px;
     flex-wrap: wrap;
     height: 300px;
     border: 1px solid gray;
@@ -215,20 +227,34 @@ const ShapeInfo = styled.div`
         border-bottom: 1px solid gray;
     }
     h2 {
-        font-size: 20px;
         margin-top: 10px;
+        font-size: 20px;
     }
+`
+const Operations = styled.div`
+    height: 75px;
+    width: 500px;
+    gap: 25px;
+    justify-content: flex-start;
     div {
-        max-width: 98%;
-        margin: 2px 0;
-        margin-right: 30px !important;
-        justify-content: space-between;
+    background-color: red;}
+    div:nth-child(1) {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 225px;
+    }
+    div:nth-child(2) {
+        flex-direction: column;
+        width: 100px;
     }
     button{
-        heigth: 20px;
-        padding: 5px !important;
+        margin: 0;
+        padding: 0;
+        height: 45px;
+        width: 125px;
         background-color: green;
-    }
+        justify-content: center;
+    }    
 `
 
 const PricesTitle = styled.h1`
