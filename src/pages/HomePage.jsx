@@ -6,6 +6,7 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import FixedMenuComponent from "../components/FixedMenuComponent";
 import DashComponent from "../components/DashComponent";
+import HeaderComponent from "../components/HeaderComponent";
 
 function HomePage() {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function HomePage() {
     return (
         <PageContainer>
             <FixedMenuComponent />
+            <HeaderComponent title={"DASHBOARD"} />
             <DashComponent />
         </PageContainer>
     )
@@ -34,4 +36,5 @@ export default HomePage;
 const PageContainer = styled.div`
     width: 100%;
     min-height: 100vh;
+    flex-direction: column;
 `

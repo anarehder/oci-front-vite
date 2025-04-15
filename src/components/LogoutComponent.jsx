@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
-import { GoArrowRight } from "react-icons/go";
+import { MdLogout } from "react-icons/md";
 import { useContext } from 'react';
 import { UserContext } from "../contexts/UserContext";
 import apiService from '../services/apiService';
 
-export default function Logout() {
+export default function LogoutComponent() {
 
     const [user, setUser] = useContext(UserContext);
     const navigate = useNavigate();
@@ -27,16 +27,12 @@ export default function Logout() {
 
     return (
         <ReturnButton onClick={() => removeUser()}>
-            Logout
-            <GoArrowRight size={24} />
+            <MdLogout size={30} />
         </ReturnButton>
     );
 }
 
-const ReturnButton = styled.button`
+const ReturnButton = styled.div`
     width: 150px;
-    margin: 20px;
-    position: absolute;
-    right: 3%;
-    top: 5%;
+
 `

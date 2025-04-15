@@ -7,22 +7,58 @@ function PieGraphComponent({ data }){
   const values = data.data.map((d) => d.valor);
 
   const chartOptions = {
+    plotOptions: {
+      pie: {
+        expandOnClick: true,
+        donut: {
+          size: '35%'
+        },
+      },
+    },
     labels: labels,
     dataLabels: {
       enabled: true,
+      textAnchor: 'middle',
+      fontSize: '25px',
+      offsetX: 20,
       formatter: function (val) {
         return `${val.toFixed(1)}%`;
+      },
+      dropShadow: {
+        enabled: false,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#000',
+        opacity: 0.45
       },
     },
     legend: {
       show: true, // Exibe a legenda
       position: "bottom", // Coloca a legenda embaixo
-      itemWidth: 30, // Ajusta o tamanho da legenda
-      itemHeight: 15, // Ajusta a altura dos itens da legenda
+      fontSize: '14px',
       horizontalAlign: "center", // Centraliza os itens da legenda
       floating: false, // Não permite que a legenda flutue
+      markers: {
+        size: 7,
+        shape: 'line',
+        strokeWidth: 1
+      },
+      itemMargin: {
+        horizontal: 20,
+        vertical: 0
+      },
     },
     tooltip: {
+      style: {
+        fontSize: '16px',
+      },
+      fixed: {
+        enabled: true,
+        position: 'topLeft',
+        offsetX: 0,
+        offsetY: 100,
+      },
       y: {
         formatter: (val) => `R$ ${val.toLocaleString()}`,
       },
@@ -33,7 +69,7 @@ function PieGraphComponent({ data }){
   return (
     <Container>
       <Title>{data.nome}</Title>
-      <Chart options={chartOptions} series={values} type="pie" height={400} />
+      <Chart options={chartOptions} series={values} type="donut" height={400} />
     </Container>
   );
 };

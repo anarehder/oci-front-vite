@@ -87,7 +87,9 @@ const PageContainer = styled.div`
     height: 100vh;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 25px;
+    
 `
 
 const Header = styled.div`
@@ -118,6 +120,7 @@ const Header = styled.div`
 
 const FormContainer = styled.form`
     display: flex;
+    
     flex-direction: column;
     align-items: flex-start;
     gap: 25px;

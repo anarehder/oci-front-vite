@@ -39,7 +39,6 @@ function DashComponent() {
       
     return (
         <ComponentContainer>
-            <Title>DASHBOARD</Title>
             <BlocksContainer>
                 <Users>
                     <div>Usuarios da Conta: 10</div>
@@ -63,6 +62,7 @@ export default DashComponent;
 const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     margin-left: 200px;
+    margin-top: 150px;
 
     flex-direction: column;
     justify-content: flex-start;
@@ -73,14 +73,7 @@ const ComponentContainer = styled.div`
     overflow-x: hidden;
 `;
 
-const Title = styled.div `
-    font-size: 30px;
-    font-weight: 700;
-    align-items: center;
-    height: 70px;
-    width: 95%;
-    margin-top: 32px;
-`
+
 
 const BlocksContainer = styled.div `
     width: 95%;
