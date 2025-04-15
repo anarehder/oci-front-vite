@@ -53,11 +53,14 @@ const ComponentContainer = styled.div`
     width: 200px;
     height: 100vh;
     position: fixed;
+    top: 0;
+    left: 0;
     flex-direction: column;
     background-color: #021121;
     color: white;
     align-items: center;
     justify-content: flex-start;
+    z-index: 999;
     img{
         width: 150px;
         margin: 45px 0;

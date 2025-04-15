@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import FixedMenuComponent from "../components/FixedMenuComponent";
+import DashComponent from "../components/DashComponent";
 
 function HomePage() {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ function HomePage() {
     return (
         <PageContainer>
             <FixedMenuComponent />
-            <div> TO NA HOME</div>
+            <DashComponent />
         </PageContainer>
     )
 }
@@ -32,17 +33,5 @@ export default HomePage;
 
 const PageContainer = styled.div`
     width: 100%;
-    height: 100vh;
-    position: relative;
-    button {
-        position: absolute;
-        width: 12%; 
-        top: 82%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 16px;
-        display: flex;
-        padding: 10px 15px;
-        justify-content: space-between;
-    }
+    min-height: 100vh;
 `
