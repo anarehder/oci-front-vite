@@ -33,7 +33,7 @@ function LoginPage(){
                 };
                 localStorage.setItem("user", JSON.stringify({userId, username, isAdmin, client, token: `Bearer ${token}`}));
                 setUser(userData);
-                navigate("/contracts");
+                navigate("/homepage");
             }
         } catch (error) {
             if (error.response.status === 401 || error.response.status === 400 ) alert("Dados incorretos, tente novamente");

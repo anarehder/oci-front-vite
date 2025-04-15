@@ -6,11 +6,12 @@ import ContractsDark from "./pages/ContractsDark";
 import ClientPage from "./pages/ClientPage";
 import ClientPage2 from "./pages/ClientPage2";
 import ClientPageDark from "./pages/ClientPageDark";
-import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import UserProvider from "./contexts/UserContext";
 import TenancyProvider from "./contexts/TenancyContext";
 import CreateUserPage from "./pages/CreateUserPage";
+import AccessPage from "./pages/AccessPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
 
@@ -21,8 +22,9 @@ function App() {
           <PricesProvider>
             <TenancyProvider>
               <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<AccessPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/homepage" element={<HomePage />}/>
                 <Route path="/createuser" element={<CreateUserPage />} />
                 <Route path="/contracts" element={<Contracts />} />
                 <Route path="/contractsdark" element={<ContractsDark />} />

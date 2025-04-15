@@ -1,39 +1,43 @@
 import { Link } from "react-router-dom";
+import ImagemInicial from '../assets/imagem-pag1.jpg';
 import { GoArrowRight } from "react-icons/go";
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
-import FixedMenuComponent from "../components/FixedMenuComponent";
 
-function HomePage() {
+function AccessPage() {
     const navigate = useNavigate();
-    const [user] = useContext(UserContext);
+    const [,setUser] = useContext(UserContext);
     
     useEffect(() => {
-        // const storedUser = JSON.parse(localStorage.getItem('user'));
-        // if (storedUser) {
-        //     setUser(storedUser);
-        //     navigate("/contracts")
-        // }
-        // buscar o usuario e ja filtrar os items que aparecem aqui
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+            setUser(storedUser);
+            navigate("/homepage")
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate]);
 
     return (
         <PageContainer>
-            <FixedMenuComponent />
-            <div> TO NA HOME</div>
+            <Link to={'/login'} >
+                <button>
+                    <p>Acessar</p>
+                    <GoArrowRight size={24} />
+                </button>
+            </Link>
         </PageContainer>
     )
 }
 
-export default HomePage;
+export default AccessPage;
 
 const PageContainer = styled.div`
     width: 100%;
     height: 100vh;
     position: relative;
+    background: url(${ImagemInicial}) center/cover no-repeat;
     button {
         position: absolute;
         width: 12%; 
