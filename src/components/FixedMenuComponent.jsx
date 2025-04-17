@@ -3,7 +3,7 @@ import Logo from '../assets/LOGO-BRANCA.png'
 import { Link } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
-import { useState } from 'react';
+import { useState } from 'react'
 
 
 function FixedMenuComponent() {
@@ -11,13 +11,13 @@ function FixedMenuComponent() {
     const items = [
         { title: "Block Volumes", options: ["Opção 1", "Opção 2", "Opção 3"] },
         { title: "Compartments", options: ["Opção 1"] },
-        { title: "Compute", options: ["Opção 1", "Opção 2"] },
+        { title: "Compute", options: ["Compute Instances", "Opção 2"] },
         { title: "Cost", options: ["Opção 1", "Opção 2"] },
         { title: "Object Storage", options: ["Opção 1", "Opção 2"] },
         { title: "Users", options: ["Opção 1"] },
         { title: "Events", options: ["Opção 1"] }
-      ];
-
+    ];
+    
     return (
         <ComponentContainer>
             <img src={Logo} alt={"accerte"}/>

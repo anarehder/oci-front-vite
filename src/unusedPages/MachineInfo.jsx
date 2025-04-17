@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import RadialBarComponent from './RadialBar';
+import RadialBarComponent from '../components/RadialBar';
 import { IoMdOptions } from "react-icons/io";
 
 function MachineInfo({machine}) {

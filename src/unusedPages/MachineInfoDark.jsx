@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import reshapeService from '../services/reshapeService';
 import calculatePricesService from '../services/calculatePricesService';
-import RadialBarComponentDark from './RadialBarDark';
+import RadialBarComponentDark from '../components/RadialBarDark';
 
 function MachineInfoDark({machine}) {
     const [newMEM, setNewMEM] = useState("-");

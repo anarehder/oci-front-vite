@@ -2,49 +2,54 @@ import React from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 
-function BarGraphComponent({ data }) {
-    const categorias = data.data.map((d) => d.item);
-    const valores = data.data.map((d) => d.valor);
-  
-    const chartOptions = {
-      chart: {
-        type: "bar",
-        toolbar: { show: false }
+function BarGraphComponent({ data, nome }) {
+  const categorias = data.map((d) => d.categoria);
+  const valores = data.map((d) => d.valor);
+  console.log(data);
+  const chartOptions = {
+    chart: {
+      type: "bar",
+      toolbar: { show: false }
+    },
+    xaxis: {
+      categories: categorias,
+    },
+    yaxis:{
+      labels: {
+        decimalsInFloat: 0,
       },
-      xaxis: {
-        categories: categorias,
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 6,
-          columnWidth: "45%",
-        }
-      },
-      dataLabels: {
-        enabled: true
-      },
-      colors: ["#4e73df"],
-    };
-  
-    const chartSeries = [
-      {
-        name: data.nome,
-        data: valores,
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 6,
+        columnWidth: "45%",
       }
-    ];
-  
-    return (
-      <Container>
-        <Title>{data.nome}</Title>
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type="bar"
-          height={350}
-        />
-      </Container>
-    );
+    },
+    dataLabels: {
+      enabled: false
+    },
+    colors: ["#4e73df"],
   };
+
+  const chartSeries = [
+    {
+      name: data.tenancy,
+      data: valores,
+    }
+  ];
+
+  return (
+    <Container>
+      <Title>{nome}</Title>
+      <Chart
+        options={chartOptions}
+        series={chartSeries}
+        type="bar"
+        height={350}
+      />
+    </Container>
+  );
+};
 
 export default BarGraphComponent;
 

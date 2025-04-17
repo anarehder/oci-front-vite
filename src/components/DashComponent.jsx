@@ -2,8 +2,32 @@ import styled from 'styled-components';
 import BarGraphComponent from './BarGraphComponent';
 import LineGraphComponent from './LineGraphComponent';
 import PieGraphComponent from './PieGraphComponent';
+import { useContext, useEffect, useState } from 'react';
+import apiServiceOCI from '../services/apiServiceOCI';
+import { UserContext } from '../contexts/UserContext';
 
 function DashComponent() {
+    const [user] = useContext(UserContext);
+    const [allTenanciesInfo, setAllTenanciesInfo] = useState(null);
+    const [compiledTenanciesInfo, setCompiledTenanciesInfo] = useState('');
+    const [oneTenancyInfo, setOneTenancyIndo] = useState('');
+    // console.log(user);
+    console.log(allTenanciesInfo);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await apiServiceOCI.getDash(user.token);
+                if (response.status === 200) {
+                    setAllTenanciesInfo(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+                alert("Ocorreu um erro", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     const dadosHistorico = {
         nome: "Histórico de Consumo (Custo Total)",
         data: [
@@ -18,11 +42,11 @@ function DashComponent() {
     const dadosTopMaquinas = {
         nome: "Top 5 Máquinas Mais Caras (Custo Diário)",
         data: [
-          { item: "VM1", valor: 275 },
-          { item: "VM2", valor: 130 },
-          { item: "VM3", valor: 90 },
-          { item: "VM4", valor: 300 },
-          { item: "VM5", valor: 210 }
+          { display_name: "VM1", dailyCost: 275 },
+          { display_name: "VM2", dailyCost: 130 },
+          { display_name: "VM3", dailyCost: 90 },
+          { display_name: "VM4", dailyCost: 300 },
+          { display_name: "VM5", dailyCost: 210 }
         ]
     };
 
@@ -39,22 +63,33 @@ function DashComponent() {
       
     return (
         <ComponentContainer>
-            <BlocksContainer>
-                <Users>
-                    <div>Usuarios da Conta: 10</div>
-                    <div>Detalhes</div>
-                </Users>
-                <VMsOFF><div>VMs Desligadas: 7</div><div>Detalhes</div></VMsOFF>
-                <VMsON><div>VMs Ligadas: 25</div><div>Detalhes</div></VMsON>
-                <DiscosOrfaos><div>Discos Orfãos: 2</div><div>Detalhes</div></DiscosOrfaos>
-            </BlocksContainer>
-            <GraphsContainer>
-                <LineGraphComponent data={dadosHistorico} />
+                <BlocksContainer>
+                    <Users>
+                        <div>Usuarios da Conta: 10</div>
+                        <div>Detalhes</div>
+                    </Users>
+                    <VMsOFF><div>VMs Desligadas: 7</div><div>Detalhes</div></VMsOFF>
+                    <VMsON><div>VMs Ligadas: 25</div><div>Detalhes</div></VMsON>
+                    <DiscosOrfaos><div>Discos Orfãos: 2</div><div>Detalhes</div></DiscosOrfaos>
+                </BlocksContainer>
+                <GraphsContainer>
+                    <LineGraphComponent data={dadosHistorico} />
                 <PieGraphComponent data={dadosServicosOCI} />
-                <BarGraphComponent data={dadosTopMaquinas} />
+                {allTenanciesInfo?.top5_costVM &&
+                    <BarGraphComponent data = {allTenanciesInfo.top5_costVM.map((d) => ({
+                        categoria: d.display_name,
+                        valor: parseFloat(d.dailyCost.toFixed(2)),
+                        tenancy: d.tenancy_name
+                      }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
+                }
+                {/* <BarGraphComponent categorias={allTenanciesInfo.top5_costVM.map((d) => d.display_name)} valores={allTenanciesInfo.top5_costVM.map((d) => d.dailyCost)} /> */}
             </GraphsContainer>
-            
-        </ComponentContainer>
+            </ComponentContainer>
+        // {allTenanciesInfo ?
+        //     <div> Info OK </div>
+        //     :
+        //     <div> Carregando ...</div>
+        // }
     );
 }
 export default DashComponent;
@@ -76,7 +111,7 @@ const ComponentContainer = styled.div`
 
 
 const BlocksContainer = styled.div `
-    width: 95%;
+    width: 100%;
     justify-content: space-between;
     div{
         border-radius: 15px;

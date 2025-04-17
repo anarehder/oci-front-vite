@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
 import apiService from '../services/apiService';
-import MachineInfoDark from '../components/MachineInfoDark';
+import MachineInfoDark from './MachineInfoDark';
 import { Link } from 'react-router-dom';
 import { PricesContext } from '../contexts/PricesContext';
 
