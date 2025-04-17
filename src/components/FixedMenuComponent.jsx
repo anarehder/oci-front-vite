@@ -9,19 +9,45 @@ import { useState } from 'react'
 function FixedMenuComponent() {
     const [open, setOpen] = useState("");
     const items = [
-        { title: "Block Volumes", options: ["Opção 1", "Opção 2", "Opção 3"] },
-        { title: "Compartments", options: ["Opção 1"] },
-        { title: "Compute", options: ["Compute Instances", "Opção 2"] },
-        { title: "Cost", options: ["Opção 1", "Opção 2"] },
-        { title: "Object Storage", options: ["Opção 1", "Opção 2"] },
-        { title: "Users", options: ["Opção 1"] },
-        { title: "Events", options: ["Opção 1"] }
-    ];
+        { title: "Block Volumes", options: [
+            { label: "Opção 1", path: "/" },
+            { label: "Opção 2", path: "/" },
+            { label: "Opção 3", path: "/" }
+          ]
+        },
+        { title: "Compartments", options: [
+            { label: "Opção 1", path: "/" }
+          ]
+        },
+        { title: "Compute", options: [
+            { label: "Compute Instances", path: "/computeinstances" },
+            { label: "Opção 2", path: "/" }
+          ]
+        },
+        { title: "Cost", options: [
+            { label: "Opção 1", path: "/" },
+            { label: "Opção 2", path: "/" }
+          ]
+        },
+        { title: "Object Storage", options: [
+            { label: "Opção 1", path: "/" },
+            { label: "Opção 2", path: "/" }
+          ]
+        },
+        { title: "Users", options: [
+            { label: "Opção 1", path: "/" }
+          ]
+        },
+        { title: "Events", options: [
+            { label: "Opção 1", path: "/" }
+          ]
+        }
+      ];
     
     return (
         <ComponentContainer>
             <img src={Logo} alt={"accerte"}/>
-            <MenuItem>Dashboard</MenuItem>
+            <Link to="/"><MenuItem>Dashboard</MenuItem></Link>
             <br />
             <br />
             <br />
@@ -38,7 +64,9 @@ function FixedMenuComponent() {
                                     {item.title} <MdOutlineKeyboardDoubleArrowDown size={24} />
                                 </div>
                                     {item.options.map((option, i) => (
-                                        <div key={i}>{option}</div>
+                                        <div key={i}>
+                                            <Link to={option.path}>{option.label}</Link>
+                                        </div>
                                     ))}
                             </>
                         )}
