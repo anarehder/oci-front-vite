@@ -13,8 +13,9 @@ function FixedMenuComponent() {
         { title: "Compartments", options: ["Opção 1"] },
         { title: "Compute", options: ["Opção 1", "Opção 2"] },
         { title: "Cost", options: ["Opção 1", "Opção 2"] },
-        { title: "Buckets", options: ["Opção 1", "Opção 2"] },
-        { title: "Users", options: ["Opção 1"] }
+        { title: "Object Storage", options: ["Opção 1", "Opção 2"] },
+        { title: "Users", options: ["Opção 1"] },
+        { title: "Events", options: ["Opção 1"] }
       ];
 
     return (
@@ -60,6 +61,18 @@ const ComponentContainer = styled.div`
     color: white;
     align-items: center;
     justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Esconde a barra de rolagem no Firefox */
+    scrollbar-width: none;
+
+    /* Esconde a barra de rolagem no IE e Edge antigos */
+    -ms-overflow-style: none;
+
+    /* Esconde a barra de rolagem no Chrome, Safari e Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
     z-index: 999;
     img{
         width: 150px;
@@ -69,6 +82,7 @@ const ComponentContainer = styled.div`
 
 const ItemsContainer = styled.div`
     flex-direction: column;
+    margin-bottom: 20px;
 `
 
 const MenuItem = styled.div`

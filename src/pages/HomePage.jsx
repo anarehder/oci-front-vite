@@ -11,8 +11,9 @@ import HeaderComponent from "../components/HeaderComponent";
 function HomePage() {
     const navigate = useNavigate();
     const [user] = useContext(UserContext);
-    
+
     useEffect(() => {
+        window.scrollTo(0, 0);
         // const storedUser = JSON.parse(localStorage.getItem('user'));
         // if (storedUser) {
         //     setUser(storedUser);
