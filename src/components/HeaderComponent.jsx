@@ -12,7 +12,8 @@ function HeaderComponent({title}) {
         { tipo: "Rede", titulo: "Tráfego incomum na VCN-Prod" },
         { tipo: "Backup", titulo: "Backup automático falhou em VM2" },
         { tipo: "Performance", titulo: "Uso de CPU acima de 90% em VM5" }
-      ]);
+    ]);
+
     return (
         <ComponentContainer>
             <Title>{title}</Title>
@@ -40,7 +41,7 @@ export default HeaderComponent;
 
 const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
-    margin-top: 30px;
+    padding-top: 30px;
     
     position: fixed;
     top: 0;
@@ -48,7 +49,6 @@ const ComponentContainer = styled.div`
 
     background-color: #F0F5F9;
     color: #021121;
-    
 `;
 
 const Title = styled.div `

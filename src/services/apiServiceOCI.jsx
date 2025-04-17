@@ -7,6 +7,7 @@ function getDash(token) {
 }
 
 function getJoinDash(body, token) {
+    console.log(body);
     return axios.post(`${BASE_URL}/dashboards/join`, body, { headers: { Authorization: token } });
 }
 
