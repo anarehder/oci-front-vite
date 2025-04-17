@@ -62,6 +62,8 @@ export default LineGraphComponent;
 const Container = styled.div`
   width: 30%;
   flex-direction: column;
+  justify-content: flex-start;
+  height: 400px;
   margin: 20px auto;
   padding: 20px;
   border-radius: 16px;

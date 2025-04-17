@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import BarGraphComponent from './BarGraphComponent';
 import LineGraphComponent from './LineGraphComponent';
 import PieGraphComponent from './PieGraphComponent';
+import CreditPredictionChartComponent from './CreditPredictionChartComponent';
 
 function DashGraphComponent({tenancyInfo}) {
     console.log(tenancyInfo)
@@ -27,6 +28,7 @@ function DashGraphComponent({tenancyInfo}) {
           { item: "Monitoring", valor: 600 }
         ]
     };
+    console.log(tenancyInfo);
     return (
         <>
             <BlocksContainer>
@@ -43,7 +45,11 @@ function DashGraphComponent({tenancyInfo}) {
                 <DiscosOrfaos><div>Discos Orfãos: Y</div><div>Detalhes</div></DiscosOrfaos>
             </BlocksContainer>
             <GraphsContainer>
-                <LineGraphComponent data={dadosHistorico} />
+                {tenancyInfo.tenancies.length === 1 ?
+                    <CreditPredictionChartComponent creditsOCI={tenancyInfo.creditsOCI} />
+                    :
+                    <LineGraphComponent data={dadosHistorico} />
+                }
                 <PieGraphComponent data={dadosServicosOCI} />
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({

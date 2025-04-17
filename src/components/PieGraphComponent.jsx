@@ -78,6 +78,7 @@ export default PieGraphComponent;
 
 const Container = styled.div`
   width: 28%;
+  height: 400px;
   flex-direction: column;
   margin: 20px auto;
   padding: 20px;

@@ -33,7 +33,7 @@ function BarGraphComponent({ data, nome }) {
 
   const chartSeries = [
     {
-      name: data.tenancy,
+      name: ['Custo'],
       data: valores,
     }
   ];
@@ -56,6 +56,7 @@ export default BarGraphComponent;
 const Container = styled.div`
   width: 30%;
   margin: 20px auto;
+  height: 400px;
   padding: 20px;
   border-radius: 16px;
   background-color: #f9f9f9;
