@@ -63,7 +63,7 @@ function PieGraphComponent({ data, nome, type }){
         formatter: (val) => `R$ ${val.toLocaleString()}`,
       },
     },
-    colors: ["#008FFB", "#DC3544", "#FEB019", "#FF4560", "#775DD0"],
+    colors: ["#DC3544", "#008FFB",  "#44aa66", "#efe302", "#f78325"],
   };
   const series = [
     {

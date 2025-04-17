@@ -62,8 +62,9 @@ function DashGraphComponent({tenancyInfo}) {
                     {tenancyInfo?.creditsOCI &&
                         <PieGraphComponent
                             data={tenancyInfo.creditsOCI.flatMap((d) => ([
-                                { categoria: "Crédito Total", valor: d.available_amount },
-                                { categoria: "Crédito Utilizado", valor: d.used_amount }
+                                
+                                { categoria: "Crédito Utilizado", valor: d.used_amount },
+                                { categoria: "Crédito Total", valor: d.available_amount }
                             ]))}
                             nome={"Porcentagem Créditos Gastos"}
                             type={"currency"}
