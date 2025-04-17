@@ -7,6 +7,7 @@ import TenancyProvider from "./contexts/TenancyContext";
 import CreateUserPage from "./pages/CreateUserPage";
 import AccessPage from "./pages/AccessPage";
 import HomePage from "./pages/HomePage";
+import ComputeInstancesPage from "./pages/ComputeInstancesPage";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/homepage" element={<HomePage />}/>
                 <Route path="/createuser" element={<CreateUserPage />} />
+                <Route path="/computeinstances" element={<ComputeInstancesPage />} />
               </Routes>
             </TenancyProvider>
           </PricesProvider>
