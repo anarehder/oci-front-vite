@@ -65,12 +65,16 @@ function DashComponent() {
         <ComponentContainer>
                 <BlocksContainer>
                     <Users>
-                        <div>Usuarios da Conta: 10</div>
-                        <div>Detalhes</div>
-                    </Users>
-                    <VMsOFF><div>VMs Desligadas: 7</div><div>Detalhes</div></VMsOFF>
-                    <VMsON><div>VMs Ligadas: 25</div><div>Detalhes</div></VMsON>
-                    <DiscosOrfaos><div>Discos Orfãos: 2</div><div>Detalhes</div></DiscosOrfaos>
+                        <div>Usuarios da Conta: X</div>
+                    <div>Detalhes</div>
+                </Users>
+                {allTenanciesInfo?.computeInstances &&
+                    <>
+                        <VMsOFF><div>VMs Desligadas: {allTenanciesInfo?.computeInstances?.filter(item => item.lifecycle_state === "STOPPED").length}</div><div>Detalhes</div></VMsOFF>
+                        <VMsON><div>VMs Ligadas: {allTenanciesInfo?.computeInstances?.filter(item => item.lifecycle_state === "RUNNING").length}</div><div>Detalhes</div></VMsON>
+                    </>
+                }
+                <DiscosOrfaos><div>Discos Orfãos: Y</div><div>Detalhes</div></DiscosOrfaos>
                 </BlocksContainer>
                 <GraphsContainer>
                     <LineGraphComponent data={dadosHistorico} />
