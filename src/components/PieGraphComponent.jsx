@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 
-function PieGraphComponent({ data }){
-  const labels = data.data.map((d) => d.item);
-  const values = data.data.map((d) => d.valor);
-  console.log(labels, values);
+function PieGraphComponent({ data, nome, type }){
+  const categorias = data.map((d) => d.categoria);
+  const valores = data.map((d) => d.valor);
+
   const chartOptions = {
     plotOptions: {
       pie: {
@@ -15,7 +15,7 @@ function PieGraphComponent({ data }){
         },
       },
     },
-    labels: labels,
+    labels: categorias,
     dataLabels: {
       enabled: true,
       textAnchor: 'middle',
@@ -45,7 +45,7 @@ function PieGraphComponent({ data }){
         strokeWidth: 1
       },
       itemMargin: {
-        horizontal: 10,
+        horizontal:15,
         vertical: 0
       },
     },
@@ -63,13 +63,18 @@ function PieGraphComponent({ data }){
         formatter: (val) => `R$ ${val.toLocaleString()}`,
       },
     },
-    colors: ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"],
+    colors: ["#008FFB", "#DC3544", "#FEB019", "#FF4560", "#775DD0"],
   };
-
+  const series = [
+    {
+        name: ['Valor'],
+        data: valores,
+    },
+];
   return (
     <Container>
-      <Title>{data.nome}</Title>
-      <Chart options={chartOptions} series={values} type="donut" height={320} />
+      <Title>{nome}</Title>
+      <Chart options={chartOptions} series={valores} type="donut" height={350} />
     </Container>
   );
 };

@@ -21,16 +21,17 @@ function DashGraphComponent({tenancyInfo}) {
     const dadosServicosOCI = {
         nome: "Distribuição de Tipos de Serviço do OCI",
         data: [
-          { item: "Compute", valor: 1200 },
-          { item: "Storage", valor: 800 },
-          { item: "Database", valor: 1700 },
-          { item: "Networking", valor: 400 },
-          { item: "Monitoring", valor: 600 }
+          { categoria: "Compute", valor: 1200 },
+          { categoria: "Storage", valor: 800 },
+          { categoria: "Database", valor: 1700 },
+          { categoria: "Networking", valor: 400 },
+          { categoria: "Monitoring", valor: 600 }
         ]
     };
-    console.log(tenancyInfo);
+    
+    console.log(tenancyInfo?.creditsOCI);
     return (
-        <>
+        <Container>
             <BlocksContainer>
                 <Users>
                     <div>Usuarios da Conta: X</div>
@@ -45,12 +46,8 @@ function DashGraphComponent({tenancyInfo}) {
                 <DiscosOrfaos><div>Discos Orfãos: Y</div><div>Detalhes</div></DiscosOrfaos>
             </BlocksContainer>
             <GraphsContainer>
-                {tenancyInfo.tenancies.length === 1 ?
-                    <CreditPredictionChartComponent creditsOCI={tenancyInfo.creditsOCI} />
-                    :
-                    <LineGraphComponent data={dadosHistorico} />
-                }
-                <PieGraphComponent data={dadosServicosOCI} />
+                <LineGraphComponent data={dadosHistorico} />
+                <PieGraphComponent data={dadosServicosOCI.data} nome={"Porcentagem Gastos Por Tipo De Serviço OCI"}/>
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                         categoria: d.display_name,
@@ -59,26 +56,37 @@ function DashGraphComponent({tenancyInfo}) {
                     }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
                 }
             </GraphsContainer>
-            <GraphsContainer>
-                {tenancyInfo.tenancies.length === 1 ?
+            {tenancyInfo?.tenancies?.length === 1 &&
+                <GraphsContainer>
                     <CreditPredictionChartComponent creditsOCI={tenancyInfo.creditsOCI} />
-                    :
-                    <LineGraphComponent data={dadosHistorico} />
-                }
-                <PieGraphComponent data={dadosServicosOCI} />
-                {tenancyInfo?.top5_costVM &&
-                    <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
-                        categoria: d.display_name,
-                        valor: parseFloat(d.dailyCost.toFixed(2)),
-                        tenancy: d.tenancy_name
-                    }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
-                }
-            </GraphsContainer>
-        </>
+                    {tenancyInfo?.creditsOCI &&
+                        <PieGraphComponent
+                            data={tenancyInfo.creditsOCI.flatMap((d) => ([
+                                { categoria: "Crédito Total", valor: d.available_amount },
+                                { categoria: "Crédito Utilizado", valor: d.used_amount }
+                            ]))}
+                            nome={"Porcentagem Créditos Gastos"}
+                            type={"currency"}
+                        />
+                    }
+                    {tenancyInfo?.top5_costVM &&
+                        <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
+                            categoria: d.display_name,
+                            valor: parseFloat(d.dailyCost.toFixed(2)),
+                            tenancy: d.tenancy_name
+                        }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
+                    }
+                </GraphsContainer>
+            }
+        </Container>
     );
 }
 export default DashGraphComponent;
 
+const Container = styled.div`
+    gap: 10px;
+    flex-direction: column;
+`
 const BlocksContainer = styled.div `
     width: 97%;
     justify-content: space-between;
@@ -112,5 +120,4 @@ const DiscosOrfaos = styled.div `
 `
 const GraphsContainer = styled.div `
     width: 95%;
-    backgorund-color: red;
 `
