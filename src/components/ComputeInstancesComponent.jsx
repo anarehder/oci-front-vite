@@ -10,8 +10,8 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentItems = filteredInstances.slice(startIndex, endIndex);
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = filteredInstances.slice(startIndex, endIndex);
   useEffect(() => {
     setFilteredInstances(computeInstancesInfo);
     setTotalPages(Math.ceil(computeInstancesInfo.length / itemsPerPage));
@@ -24,6 +24,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
       )
     );
     setFilteredInstances(filtered);
+    setCurrentPage(1);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
   }, [searchTerm, computeInstancesInfo]);
 
@@ -68,43 +69,43 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
                   alert(`Editar ${item.display_name}, ${item.tenancy_name}`)
                 }
               >
-                <FaEdit size={24}/>
+                <FaEdit size={24} />
               </EditButton>
             </Info>
-            </Row>
+          </Row>
         ))}
-            </List>
-            <Pagination>
-                {currentPage > 2 && (
-                    <PageButton onClick={() => setCurrentPage(1)}>1</PageButton>
-                )}
+      </List>
+      <Pagination>
+        {currentPage > 2 && (
+          <PageButton onClick={() => setCurrentPage(1)}>1</PageButton>
+        )}
 
-                {currentPage > 3 && <Ellipsis>...</Ellipsis>}
+        {currentPage > 3 && <Ellipsis>...</Ellipsis>}
 
-                {currentPage > 1 && (
-                    <PageButton onClick={() => setCurrentPage(currentPage - 1)}>
-                        {currentPage - 1}
-                    </PageButton>
-                )}
+        {currentPage > 1 && (
+          <PageButton onClick={() => setCurrentPage(currentPage - 1)}>
+            {currentPage - 1}
+          </PageButton>
+        )}
 
-                <PageButton active>{currentPage}</PageButton>
+        <PageButton active>{currentPage}</PageButton>
 
-                {currentPage < totalPages && (
-                    <PageButton onClick={() => setCurrentPage(currentPage + 1)}>
-                        {currentPage + 1}
-                    </PageButton>
-                )}
+        {currentPage < totalPages && (
+          <PageButton onClick={() => setCurrentPage(currentPage + 1)}>
+            {currentPage + 1}
+          </PageButton>
+        )}
 
-                {currentPage < totalPages - 2 && <Ellipsis>...</Ellipsis>}
+        {currentPage < totalPages - 2 && <Ellipsis>...</Ellipsis>}
 
-                {currentPage < totalPages - 1 && (
-                    <PageButton onClick={() => setCurrentPage(totalPages)}>
-                        {totalPages}
-                    </PageButton>
-                )}
-            </Pagination>
-        </ComponentContainer>
-    );
+        {currentPage < totalPages - 1 && (
+          <PageButton onClick={() => setCurrentPage(totalPages)}>
+            {totalPages}
+          </PageButton>
+        )}
+      </Pagination>
+    </ComponentContainer>
+  );
 }
 
 export default ComputeInstancesComponent;
@@ -114,14 +115,14 @@ export default ComputeInstancesComponent;
 const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     margin-left: 200px;
-    margin-top: 120px;
+    margin-top: 100px;
 
     flex-direction: column;
     justify-content: flex-start;
     gap: 20px;
 
     color: #021121;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
 `;
 

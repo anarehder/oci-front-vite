@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import FixedMenuComponent from "../components/FixedMenuComponent";
-import HeaderComponent from "../components/HeaderComponent";
 import apiServiceOCI from "../services/apiServiceOCI";
 import ComputeInstancesComponent from '../components/ComputeInstancesComponent';
+import HeaderComponent from '../components/HeaderComponent';
 
 function ComputeInstancesPage() {
     const [user] = useContext(UserContext);
@@ -30,7 +30,7 @@ function ComputeInstancesPage() {
     return (
         <PageContainer>
             <FixedMenuComponent />
-            <HeaderComponent title={"COMPUTE INSTANCES"} />
+            <HeaderComponent title={"COMPUTE INSTANCES"}/>
             {
                 computeInstancesInfo.length >0 &&
                 <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
@@ -44,6 +44,5 @@ export default ComputeInstancesPage;
 const PageContainer = styled.div`
     width: 100%;
     height: 100vh;
-    max-height: 100vh;
     flex-direction: column;
 `

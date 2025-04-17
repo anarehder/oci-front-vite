@@ -45,7 +45,7 @@ function BarGraphComponent({ data, nome }) {
         options={chartOptions}
         series={chartSeries}
         type="bar"
-        height={350}
+        height={320}
       />
     </Container>
   );
@@ -54,18 +54,20 @@ function BarGraphComponent({ data, nome }) {
 export default BarGraphComponent;
 
 const Container = styled.div`
-  width: 30%;
+  width: 28%;
+  height: 350px;
+  flex-direction: column;
+  justify-content: flex-start;
   margin: 20px auto;
-  height: 400px;
   padding: 20px;
   border-radius: 16px;
   background-color: #f9f9f9;
-  flex-direction: column;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 17px;
+  margin-bottom: 10px;
   color: #333;
 `;

@@ -55,8 +55,8 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
 
     return (
     <Container>
-    <Title>Pedição Gastos Tenancy</Title>
-    <Chart options={chartOptions} series={series} type="bar" height={300}/>
+    <Title>Predição Gastos Tenancy</Title>
+    <Chart options={chartOptions} series={series} type="bar" height={320}/>
     
     {willExceedBeforeTime && predictedTotalDays - dias_decorridos < 10 && <Alert>Urgente</Alert>} 
     {willExceedBeforeTime && predictedTotalDays - dias_decorridos > 10 && 
@@ -71,8 +71,8 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
 export default CreditPredictionChartComponent;
 
 const Container = styled.div`
-  width: 30%;
-  height: 400px;
+  width: 28%;
+  height: 350px;
   margin: 20px auto;
   justify-content: flex-start;
   padding: 20px;
@@ -85,7 +85,8 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 17px;
+  margin-bottom: 10px;
   color: #333;
 `;
 

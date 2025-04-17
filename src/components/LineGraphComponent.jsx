@@ -52,7 +52,7 @@ function LineGraphComponent({ data }) {
         options={chartOptions}
         series={chartSeries}
         type="line"
-        height={350}
+        height={320}
       />
     </Container>
   );
@@ -60,10 +60,10 @@ function LineGraphComponent({ data }) {
 export default LineGraphComponent;
 
 const Container = styled.div`
-  width: 30%;
+  width: 28%;
+  height: 350px;
   flex-direction: column;
   justify-content: flex-start;
-  height: 400px;
   margin: 20px auto;
   padding: 20px;
   border-radius: 16px;
@@ -73,6 +73,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 17px;
+  margin-bottom: 10px;
   color: #333;
 `;

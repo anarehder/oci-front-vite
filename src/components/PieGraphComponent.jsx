@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 function PieGraphComponent({ data }){
   const labels = data.data.map((d) => d.item);
   const values = data.data.map((d) => d.valor);
-
+  console.log(labels, values);
   const chartOptions = {
     plotOptions: {
       pie: {
@@ -36,7 +36,7 @@ function PieGraphComponent({ data }){
     legend: {
       show: true, // Exibe a legenda
       position: "bottom", // Coloca a legenda embaixo
-      fontSize: '14px',
+      fontSize: '12px',
       horizontalAlign: "center", // Centraliza os itens da legenda
       floating: false, // Não permite que a legenda flutue
       markers: {
@@ -45,7 +45,7 @@ function PieGraphComponent({ data }){
         strokeWidth: 1
       },
       itemMargin: {
-        horizontal: 20,
+        horizontal: 10,
         vertical: 0
       },
     },
@@ -69,7 +69,7 @@ function PieGraphComponent({ data }){
   return (
     <Container>
       <Title>{data.nome}</Title>
-      <Chart options={chartOptions} series={values} type="donut" height={400} />
+      <Chart options={chartOptions} series={values} type="donut" height={320} />
     </Container>
   );
 };
@@ -78,7 +78,7 @@ export default PieGraphComponent;
 
 const Container = styled.div`
   width: 28%;
-  height: 400px;
+  height: 350px;
   flex-direction: column;
   margin: 20px auto;
   padding: 20px;
@@ -89,6 +89,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 17px;
+  margin-bottom: 10px;
   color: #333;
 `;

@@ -59,6 +59,21 @@ function DashGraphComponent({tenancyInfo}) {
                     }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
                 }
             </GraphsContainer>
+            <GraphsContainer>
+                {tenancyInfo.tenancies.length === 1 ?
+                    <CreditPredictionChartComponent creditsOCI={tenancyInfo.creditsOCI} />
+                    :
+                    <LineGraphComponent data={dadosHistorico} />
+                }
+                <PieGraphComponent data={dadosServicosOCI} />
+                {tenancyInfo?.top5_costVM &&
+                    <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
+                        categoria: d.display_name,
+                        valor: parseFloat(d.dailyCost.toFixed(2)),
+                        tenancy: d.tenancy_name
+                    }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
+                }
+            </GraphsContainer>
         </>
     );
 }
@@ -97,4 +112,5 @@ const DiscosOrfaos = styled.div `
 `
 const GraphsContainer = styled.div `
     width: 95%;
+    backgorund-color: red;
 `

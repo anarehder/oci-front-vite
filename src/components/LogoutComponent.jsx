@@ -33,6 +33,7 @@ export default function LogoutComponent() {
 }
 
 const ReturnButton = styled.div`
-    width: 150px;
-
+    width: 40px;
+    justify-content: center;
+    margin: 0 auto;
 `

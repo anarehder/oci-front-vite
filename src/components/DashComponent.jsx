@@ -98,7 +98,7 @@ export default DashComponent;
 const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     margin-left: 200px;
-    margin-top: 120px;
+    margin-top: 90px;
 
     flex-direction: column;
     justify-content: flex-start;

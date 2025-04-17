@@ -16,7 +16,8 @@ function HeaderComponent({title}) {
 
     return (
         <ComponentContainer>
-            <Title>{title}</Title>
+          <LimitContainer>
+          <Title>{title}</Title>
             <ButtonsContainer>
                 <BellWrapper onClick={() => setOpen(!open)}>
                     <FaRegBell size={30} />
@@ -34,34 +35,39 @@ function HeaderComponent({title}) {
                 </BellWrapper>
                 <Logout />
             </ButtonsContainer> 
+          </LimitContainer>
+            
         </ComponentContainer>
     );
 }
 export default HeaderComponent;
 
 const ComponentContainer = styled.div`
-    width: calc(100vw - 220px);
-    padding-top: 30px;
-    
+    width: calc(100% - 220px);
+    justify-content: center;
     position: fixed;
     top: 0;
     right: 0;
-
-    background-color: #F0F5F9;
-    color: #021121;
+    background-color: #021121;
+    color: white;
+    gap: 20px;
+    z-index: 999;
 `;
+
+const LimitContainer = styled.div`
+  width: 95%;
+`
 
 const Title = styled.div `
     font-size: 30px;
     font-weight: 700;
     height: 70px;
-    width: calc(100% - 200px);
-    margin-left: 30px;
 `
 
 const ButtonsContainer = styled.div`
-    width: 200px;
     height: 70px;
+    margin: 0 auto;
+    width: 150px;
 `
 
 const BellWrapper = styled.div`
