@@ -3,6 +3,7 @@ import BarGraphComponent from './BarGraphComponent';
 import LineGraphComponent from './LineGraphComponent';
 import PieGraphComponent from './PieGraphComponent';
 import CreditPredictionChartComponent from './CreditPredictionChartComponent';
+import MonthCostsGraphComponent from './MonthCostsGraphComponent';
 
 function DashGraphComponent({tenancyInfo}) {
     // console.log(tenancyInfo);
@@ -46,7 +47,8 @@ function DashGraphComponent({tenancyInfo}) {
                 <DiscosOrfaos><div>Discos Orfãos: Y</div><div>Detalhes</div></DiscosOrfaos>
             </BlocksContainer>
             <GraphsContainer>
-                <LineGraphComponent data={dadosHistorico} />
+                {/* <LineGraphComponent data={dadosHistorico} /> */}
+                <MonthCostsGraphComponent data={tenancyInfo.cost_history} />
                 <PieGraphComponent data={dadosServicosOCI.data} nome={"Porcentagem Gastos Por Tipo De Serviço OCI"}/>
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
