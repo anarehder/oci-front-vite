@@ -4,19 +4,18 @@ import { UserContext } from "../contexts/UserContext";
 import FixedMenuComponent from "../components/FixedMenuComponent";
 import apiServiceOCI from "../services/apiServiceOCI";
 import HeaderComponent from '../components/HeaderComponent';
+import EventsComponent from '../components/EventsComponent';
 
 function EventsPage() {
     const [user] = useContext(UserContext);
     const [eventsInfo , setEventsInfo ] = useState([]);
-    // console.log(eventsInfo);
+    console.log(eventsInfo);
     // console.log(user);
     useEffect(() => {
             if(!user) return;
             const fetchData = async () => {
                 try {
-                    console.log(user.token);
                     const response = await apiServiceOCI.getAudits(user.token);
-                    console.log(response.status);
                     if (response.status === 200) {
                         setEventsInfo(response.data);
                     }
@@ -33,8 +32,8 @@ function EventsPage() {
             <FixedMenuComponent />
             <HeaderComponent title={"EVENTOS"}/>
             {
-                eventsInfo.length >0 && <div> Eventos OK {eventsInfo.length} </div>
-
+                eventsInfo.length >0 &&
+                <EventsComponent eventsInfo={eventsInfo} />
             }
         </PageContainer>
     )
