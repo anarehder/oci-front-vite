@@ -33,7 +33,7 @@ function BarGraphComponent({ data, nome }) {
 
   const chartSeries = [
     {
-      name: ['Custo'],
+      name: ['Custo Mensal R$'],
       data: valores,
     }
   ];

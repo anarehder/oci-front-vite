@@ -5,7 +5,7 @@ import PieGraphComponent from './PieGraphComponent';
 import CreditPredictionChartComponent from './CreditPredictionChartComponent';
 
 function DashGraphComponent({tenancyInfo}) {
-    console.log(tenancyInfo)
+    // console.log(tenancyInfo);
     const dadosHistorico = {
         nome: "Histórico de Consumo (Custo Total)",
         data: [
@@ -29,7 +29,7 @@ function DashGraphComponent({tenancyInfo}) {
         ]
     };
     
-    console.log(tenancyInfo?.creditsOCI);
+    // console.log(tenancyInfo?.creditsOCI);
     return (
         <Container>
             <BlocksContainer>
@@ -51,9 +51,9 @@ function DashGraphComponent({tenancyInfo}) {
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                         categoria: d.display_name,
-                        valor: parseFloat(d.dailyCost.toFixed(2)),
+                        valor: parseFloat(d.monthly_cost.toFixed(2)),
                         tenancy: d.tenancy_name
-                    }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
+                    }))} nome={"Top 5 Máquinas Mais Caras"} />
                 }
             </GraphsContainer>
             {tenancyInfo?.tenancies?.length === 1 &&
@@ -63,8 +63,8 @@ function DashGraphComponent({tenancyInfo}) {
                         <PieGraphComponent
                             data={tenancyInfo.creditsOCI.flatMap((d) => ([
                                 
-                                { categoria: "Crédito Utilizado", valor: d.used_amount },
-                                { categoria: "Crédito Total", valor: d.available_amount }
+                                { categoria: "Crédito Utilizado", valor: parseFloat(d.used_amount.toFixed(2)) },
+                                { categoria: "Crédito Total", valor: parseFloat(d.available_amount.toFixed(2)) }
                             ]))}
                             nome={"Porcentagem Créditos Gastos"}
                             type={"currency"}
@@ -73,9 +73,9 @@ function DashGraphComponent({tenancyInfo}) {
                     {tenancyInfo?.top5_costVM &&
                         <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                             categoria: d.display_name,
-                            valor: parseFloat(d.dailyCost.toFixed(2)),
+                            valor: parseFloat(d.monthly_cost.toFixed(2)),
                             tenancy: d.tenancy_name
-                        }))} nome={"Top 5 Máquinas Mais Caras (Custo Diário)"} />
+                        }))} nome={"Top 5 Máquinas Mais Caras"} />
                     }
                 </GraphsContainer>
             }

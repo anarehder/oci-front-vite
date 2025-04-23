@@ -8,6 +8,7 @@ import CreateUserPage from "./pages/CreateUserPage";
 import AccessPage from "./pages/AccessPage";
 import HomePage from "./pages/HomePage";
 import ComputeInstancesPage from "./pages/ComputeInstancesPage";
+import EventsPage from "./pages/EventsPage";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/homepage" element={<HomePage />}/>
                 <Route path="/createuser" element={<CreateUserPage />} />
                 <Route path="/computeinstances" element={<ComputeInstancesPage />} />
+                <Route path="/eventos" element={<EventsPage />} />
               </Routes>
             </TenancyProvider>
           </PricesProvider>

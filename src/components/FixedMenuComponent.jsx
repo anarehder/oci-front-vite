@@ -39,7 +39,7 @@ function FixedMenuComponent() {
           ]
         },
         { title: "Events", options: [
-            { label: "Opção 1", path: "/" }
+            { label: "Todos os Eventos", path: "/eventos" }
           ]
         }
       ];

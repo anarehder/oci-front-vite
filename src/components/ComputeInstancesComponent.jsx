@@ -62,7 +62,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
             <Info>{item.ocpus}</Info>
             <Info>{item.memory_in_gbs}</Info>
             <Info>{item.lifecycle_state}</Info>
-            <Info>R$ {(item.hourly_cost * 24).toFixed(2)}</Info>
+            <Info>R$ {(item.monthly_cost)}</Info>
             <Info>
               <EditButton
                 onClick={() =>
