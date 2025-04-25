@@ -11,6 +11,7 @@ function DescriptionEventsComponent({eventsInfo}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentItems, setCurrentItems] = useState(eventsInfo.slice(0,10));
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const sortOptions = [null, 'asc', 'desc'];
@@ -27,23 +28,6 @@ function DescriptionEventsComponent({eventsInfo}) {
     setCurrentPage(1); // opcional: resetar para a primeira página após sort
   };
 
-  const sortedEvents = useMemo(() => {
-      if (!sortConfig.key || !sortConfig.direction) return filteredEvents;
-  
-      return [...filteredEvents].sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }, [filteredEvents, sortConfig]);
-
-    const currentItems = useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        return sortedEvents.slice(startIndex, endIndex);
-      }, [sortedEvents, currentPage, itemsPerPage]);
-  // console.log(filteredEvents.length, itemsPerPage, currentPage);
-
     const renderSortIcon = (key) => {
       if (sortConfig.key !== key) return null;
       if (sortConfig.direction === 'asc') return <MdOutlineArrowDropUp size={22} color="white"/>;
@@ -51,21 +35,51 @@ function DescriptionEventsComponent({eventsInfo}) {
       return null;
     };
 
-  useEffect(() => {
-    setFilteredEvents(eventsInfo);
-    setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
-  }, [eventsInfo, itemsPerPage]);
 
-  useEffect(() => {
-    const filtered = eventsInfo.filter((item) =>
-      Object.values(item).some((val) =>
-        String(val).toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-    setFilteredEvents(filtered);
-    setCurrentPage(1);
-    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  }, [searchTerm]);
+
+      useEffect(() => {
+        // Passo 1: filtrar
+        const filtered = eventsInfo.filter((item) =>
+          Object.values(item).some((val) =>
+            String(val).toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+      
+        setFilteredEvents(filtered);
+        setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+        setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+      
+        // Passo 2: sort
+        let sorted = [...filtered];
+        if (sortConfig.key && sortConfig.direction) {
+          sorted.sort((a, b) => {
+            if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+            return 0;
+          });
+        }
+      
+        // Passo 3: paginar
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        setCurrentItems(sorted.slice(startIndex, endIndex));
+      }, [eventsInfo, searchTerm, sortConfig, currentPage, itemsPerPage]);
+    
+  // useEffect(() => {
+  //   setFilteredEvents(eventsInfo);
+  //   setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
+  // }, [eventsInfo, itemsPerPage]);
+
+  // useEffect(() => {
+  //   const filtered = eventsInfo.filter((item) =>
+  //     Object.values(item).some((val) =>
+  //       String(val).toLowerCase().includes(searchTerm.toLowerCase())
+  //     )
+  //   );
+  //   setFilteredEvents(filtered);
+  //   setCurrentPage(1);
+  //   setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+  // }, [searchTerm]);
 
   
   return (

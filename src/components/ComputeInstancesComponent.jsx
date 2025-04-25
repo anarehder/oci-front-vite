@@ -12,7 +12,8 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-
+  const [currentItems, setCurrentItems] = useState(computeInstancesInfo.slice(0,10));
+  console.log(filteredInstances.length);
   const sortOptions = [null, 'asc', 'desc'];
 
   const getNextDirection = (currentDirection) => {
@@ -27,44 +28,39 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
     setCurrentPage(1); // opcional: resetar para a primeira página após sort
   };
 
-  const sortedInstances = useMemo(() => {
-    if (!sortConfig.key || !sortConfig.direction) return filteredInstances;
-
-    return [...filteredInstances].sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-  }, [filteredInstances, sortConfig]);
-
-  const currentItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return sortedInstances.slice(startIndex, endIndex);
-  }, [sortedInstances, currentPage, itemsPerPage]);
-
   const renderSortIcon = (key) => {
     if (sortConfig.key !== key) return null;
     if (sortConfig.direction === 'asc') return <MdOutlineArrowDropUp size={22} color="white"/>;
     if (sortConfig.direction === 'desc') return <MdOutlineArrowDropDown size={22} color="white"/>;
     return null;
   };
-
   useEffect(() => {
-    setFilteredInstances(computeInstancesInfo);
-    setTotalPages(Math.ceil(computeInstancesInfo.length / itemsPerPage));
-  }, [computeInstancesInfo, itemsPerPage]);
-
-  useEffect(() => {
+    // Passo 1: filtrar
     const filtered = computeInstancesInfo.filter((item) =>
       Object.values(item).some((val) =>
         String(val).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
+  
     setFilteredInstances(filtered);
-    setCurrentPage(1);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  }, [searchTerm, computeInstancesInfo]);
+    setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+  
+    // Passo 2: sort
+    let sorted = [...filtered];
+    if (sortConfig.key && sortConfig.direction) {
+      sorted.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+  
+    // Passo 3: paginar
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setCurrentItems(sorted.slice(startIndex, endIndex));
+  }, [computeInstancesInfo, searchTerm, sortConfig, currentPage, itemsPerPage]);
 
   return (
     <ComponentContainer>
@@ -101,7 +97,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
             <Info>{item.ocpus}</Info>
             <Info>{item.memory_in_gbs}</Info>
             <Info>{item.lifecycle_state}</Info>
-            <Info>R$ {(item.monthly_cost?.toFixed(2))}</Info>
+            <Info>R$ {(item.monthly_cost ?? 0).toFixed(2).replace('.', ',')}</Info>
             <Info>
               <EditButton
                 onClick={() =>
