@@ -9,7 +9,7 @@ import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 function ComputeInstancesPage() {
     const [user] = useContext(UserContext);
     const [computeInstancesInfo , setComputeInstancesInfo ] = useState([]);
-    console.log(computeInstancesInfo);
+    // console.log(computeInstancesInfo);
     useEffect(() => {
             if(!user) return;
             const fetchData = async () => {

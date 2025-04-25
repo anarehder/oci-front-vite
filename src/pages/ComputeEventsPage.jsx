@@ -9,7 +9,7 @@ import DescriptionEventsComponent from '../components/DescriptionEventsComponent
 function ComputeEventsPage() {
     const [user] = useContext(UserContext);
     const [eventsInfo , setEventsInfo ] = useState([]);
-    console.log(eventsInfo);
+    // console.log(eventsInfo);
     // console.log(user);
     useEffect(() => {
             if(!user) return;

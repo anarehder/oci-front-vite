@@ -4,20 +4,22 @@ import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
 
-
 function DescriptionEventsComponent({eventsInfo}) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState(eventsInfo);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 8;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredItems.slice(startIndex, endIndex);
+  const currentItems = filteredEvents.slice(startIndex, endIndex);
+
+  // console.log(filteredEvents.length, itemsPerPage, currentPage);
   useEffect(() => {
-    setFilteredItems(eventsInfo);
+    setFilteredEvents(eventsInfo);
     setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
-  }, [eventsInfo]);
+  }, [eventsInfo, itemsPerPage, currentPage]);
 
   useEffect(() => {
     const filtered = eventsInfo.filter((item) =>
@@ -25,20 +27,12 @@ function DescriptionEventsComponent({eventsInfo}) {
         String(val).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-    setFilteredItems(filtered);
+    setFilteredEvents(filtered);
     setCurrentPage(1);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  }, [searchTerm, eventsInfo]);
+  }, [searchTerm]);
 
-  function dateTimeBrazil(date){
-        const dateUTC = new Date(date);
-
-        const brTime = dateUTC.toLocaleString("pt-BR", {
-            timeZone: "America/Sao_Paulo",
-        });
-        return brTime;
-    }
-
+  
   return (
     <ComponentContainer>
       <SearchBar>
@@ -50,17 +44,16 @@ function DescriptionEventsComponent({eventsInfo}) {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </SearchBar>
-
-      <List>
+      <ListHeader>
         <RowHeader>
           <Info><span>Evento</span></Info>
           <Info><span>Descrição</span></Info>
           <Info><span>Ações</span></Info>
         </RowHeader>
-
+      </ListHeader>
+      <List>
         {currentItems.map((item, index) => (
           <Row key={index}>
-
             <Info>{item.eventName}</Info>
             <Info>{item.descricao_evento}</Info>
             <Info>
@@ -75,36 +68,7 @@ function DescriptionEventsComponent({eventsInfo}) {
           </Row>
         ))}
       </List>
-      {/* <Pagination>
-        {currentPage > 2 && (
-          <PageButton onClick={() => setCurrentPage(1)}>1</PageButton>
-        )}
-
-        {currentPage > 3 && <Ellipsis>...</Ellipsis>}
-
-        {currentPage > 1 && (
-          <PageButton onClick={() => setCurrentPage(currentPage - 1)}>
-            {currentPage - 1}
-          </PageButton>
-        )}
-
-        <PageButton active>{currentPage}</PageButton>
-
-        {currentPage < totalPages && (
-          <PageButton onClick={() => setCurrentPage(currentPage + 1)}>
-            {currentPage + 1}
-          </PageButton>
-        )}
-
-        {currentPage < totalPages - 2 && <Ellipsis>...</Ellipsis>}
-
-        {currentPage < totalPages - 1 && (
-          <PageButton onClick={() => setCurrentPage(totalPages)}>
-            {totalPages}
-          </PageButton>
-        )}
-      </Pagination> */}
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+      <PaginationComponent total={filteredEvents.length} currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} setTotalPages={setTotalPages}/>
     </ComponentContainer>
   );
 }
@@ -116,12 +80,11 @@ const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     height: 100vh;
     margin-left: 200px;
-    margin-top: 100px;
+    margin-top: 90px;
     position: relative;
 
     flex-direction: column;
     justify-content: flex-start;
-    gap: 20px;
 
     color: #021121;
     overflow-y: hidden;
@@ -147,52 +110,65 @@ const SearchBar = styled.div`
   }
 `;
 
-const List = styled.div`
+const ListHeader = styled.div`
   display: flex;
   margin-top: 50px;
   flex-direction: column;
   gap: 5px;
   width: 95%;
   font-size: 20px;
+`
+
+const List = styled.div`
+  display: flex;
+  margin-top: 10px;
+  max-height: 70%;
+  flex-direction: column;
+  gap: 10px;
+  width: 95%;
+  font-size: 20px;
+  overflow-y: auto;
+  scroll-y: auto;
+  margin-top: 5px;
 `;
 
 const RowHeader = styled.div`
   background-color: #001F3F;
   display: flex;
-  height: 40px;
+  height: 45px;
   border-radius: 5px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  div:nth-of-type(3){
+    margin-right: 15px;
+  }
 `;
 
 const Row = styled.div`
-  background: white;
+  background-color: white;
   border-radius: 5px;
   display: flex;
-  min-height: 40px;
   align-items: center;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 const Info = styled.div`
-  justify-content: center;
-  text-align: center;
-  word-break: break-word;
-  font-size: 16px;
-  line-height: 24px;
-  gap: 50px;
-  span {
-    font-weight: bold;
-    color: white;
-  }
-
+    justify-content: center;
+    text-align: center;
+    word-break: break-word;
+    font-size: 16px;
+    line-height: 24px;
+    span {
+      font-weight: bold;
+      color: white;
+    }
     &:nth-of-type(1) {
-        width: 18%;
+        width: 16%;
     }
     &:nth-of-type(2) {
         width: 70%;
     }
     &:nth-of-type(3) {
-        width: 8%;
+        width: 6%;
     }
 `;
 
@@ -202,32 +178,4 @@ const EditButton = styled.button`
   cursor: pointer;
   color: #001F3F;
   font-size: 16px;
-`;
-
-
-const Pagination = styled.div`
-  position: absolute;
-  bottom: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  scroll-x: auto;
-`;
-
-const PageButton = styled.button`
-  justify-content: center;
-  border: none;
-  font-size: 15px;
-  width: 10px;
-  height: 10px;
-  background-color: ${({ active }) => (active ? "#001F3F" : "#eee")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: ${({ active }) => (active ? "bold" : "normal")};
-`;
-
-const Ellipsis = styled.span`
-  padding: 4px 10px;
-  color: #666;
 `;

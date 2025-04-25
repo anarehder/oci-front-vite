@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
+import PaginationComponent from "./fixedComponents/PaginationComponent";
 
 function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredInstances, setFilteredInstances] = useState([]);
+  const [filteredInstances, setFilteredInstances] = useState(computeInstancesInfo);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 8;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = filteredInstances.slice(startIndex, endIndex);
+
   useEffect(() => {
     setFilteredInstances(computeInstancesInfo);
     setTotalPages(Math.ceil(computeInstancesInfo.length / itemsPerPage));
-  }, [computeInstancesInfo]);
+  }, [computeInstancesInfo, itemsPerPage, currentPage]);
 
   useEffect(() => {
     const filtered = computeInstancesInfo.filter((item) =>
@@ -26,7 +29,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
     setFilteredInstances(filtered);
     setCurrentPage(1);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  }, [searchTerm, computeInstancesInfo]);
+  }, [searchTerm]);
 
   return (
     <ComponentContainer>
@@ -40,7 +43,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
         />
       </SearchBar>
 
-      <List>
+      <ListHeader>
         <RowHeader>
           <Info><span>Nome</span></Info>
           <Info><span>Tenancy</span></Info>
@@ -52,7 +55,8 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           <Info><span>Custo/Dia</span></Info>
           <Info><span>Ações</span></Info>
         </RowHeader>
-
+        </ListHeader>
+        <List>
         {currentItems.map((item, index) => (
           <Row key={index}>
             <Info>{item.display_name}</Info>
@@ -62,7 +66,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
             <Info>{item.ocpus}</Info>
             <Info>{item.memory_in_gbs}</Info>
             <Info>{item.lifecycle_state}</Info>
-            <Info>R$ {(item.monthly_cost)}</Info>
+            <Info>R$ {(item.monthly_cost?.toFixed(2))}</Info>
             <Info>
               <EditButton
                 onClick={() =>
@@ -75,7 +79,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           </Row>
         ))}
       </List>
-      <Pagination>
+      {/* <Pagination>
         {currentPage > 2 && (
           <PageButton onClick={() => setCurrentPage(1)}>1</PageButton>
         )}
@@ -103,7 +107,8 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
             {totalPages}
           </PageButton>
         )}
-      </Pagination>
+      </Pagination> */}
+      <PaginationComponent total={filteredInstances.length} currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} setTotalPages={setTotalPages}/>
     </ComponentContainer>
   );
 }
@@ -114,12 +119,13 @@ export default ComputeInstancesComponent;
 
 const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
+    height: 100vh;
     margin-left: 200px;
-    margin-top: 100px;
+    margin-top: 90px;
+    position: relative;
 
     flex-direction: column;
     justify-content: flex-start;
-    gap: 20px;
 
     color: #021121;
     overflow-y: hidden;
@@ -145,13 +151,27 @@ const SearchBar = styled.div`
   }
 `;
 
-const List = styled.div`
+const ListHeader = styled.div`
   display: flex;
   margin-top: 50px;
   flex-direction: column;
   gap: 5px;
   width: 95%;
   font-size: 20px;
+`
+
+const List = styled.div`
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-start;
+  height: 70%;
+  flex-direction: column;
+  gap: 10px;
+  width: 95%;
+  font-size: 20px;
+  overflow-y: auto;
+  scroll-y: auto;
+  margin: 10px 0;
 `;
 
 const RowHeader = styled.div`
@@ -160,6 +180,9 @@ const RowHeader = styled.div`
    height: 45px;
   border-radius: 5px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  div:nth-of-type(9){
+    margin-right: 15px;
+  }
 `;
 
 const Row = styled.div`
