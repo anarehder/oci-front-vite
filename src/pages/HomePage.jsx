@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
-import FixedMenuComponent from "../components/FixedMenuComponent";
+import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent";
 import DashComponent from "../components/DashComponent";
-import HeaderComponent from "../components/HeaderComponent";
+import HeaderComponent from "../components/fixedComponents/HeaderComponent";
 
 function HomePage() {
     const navigate = useNavigate();

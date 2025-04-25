@@ -34,6 +34,10 @@ function getJoinCpus(body, token) {
     return axios.post(`${BASE_URL}/cpus/join`, body, { headers: { Authorization: token } });
 }
 
-const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus };
+function getComputeEvents(token) {
+    return axios.get(`${BASE_URL}/computeinstances/events`, { headers: { Authorization: token } });
+}
+
+const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents };
 
 export default apiServiceOCI;

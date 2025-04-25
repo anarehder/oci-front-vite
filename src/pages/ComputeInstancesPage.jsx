@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import FixedMenuComponent from "../components/FixedMenuComponent";
+import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent";
 import apiServiceOCI from "../services/apiServiceOCI";
 import ComputeInstancesComponent from '../components/ComputeInstancesComponent';
-import HeaderComponent from '../components/HeaderComponent';
+import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 
 function ComputeInstancesPage() {
     const [user] = useContext(UserContext);

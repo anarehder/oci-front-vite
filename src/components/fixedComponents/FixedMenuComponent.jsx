@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Logo from '../assets/LOGO-BRANCA.png'
+import Logo from '../../assets/LOGO-BRANCA.png';
 import { Link } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
@@ -39,7 +39,8 @@ function FixedMenuComponent() {
           ]
         },
         { title: "Events", options: [
-            { label: "Todos os Eventos", path: "/eventos" }
+            { label: "Todos os Eventos", path: "/eventos" },
+            { label: "Compute Instances", path: "/eventos/compute" }
           ]
         }
       ];

@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import BarGraphComponent from './BarGraphComponent';
-import LineGraphComponent from './LineGraphComponent';
-import PieGraphComponent from './PieGraphComponent';
-import CreditPredictionChartComponent from './CreditPredictionChartComponent';
-import MonthCostsGraphComponent from './MonthCostsGraphComponent';
+import BarGraphComponent from './graphsComponents/BarGraphComponent';
+import PieGraphComponent from './graphsComponents/PieGraphComponent';
+import CreditPredictionChartComponent from './graphsComponents/CreditPredictionChartComponent';
+import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
 
 function DashGraphComponent({tenancyInfo}) {
     // console.log(tenancyInfo);

@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { useContext } from 'react';
-import { UserContext } from "../contexts/UserContext";
-import apiService from '../services/apiService';
+import { UserContext } from "../../contexts/UserContext";
+import apiService from '../../services/apiService';
 
 export default function LogoutComponent() {
 
