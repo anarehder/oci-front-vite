@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
+import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
 
 function DescriptionEventsComponent({eventsInfo}) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,16 +11,50 @@ function DescriptionEventsComponent({eventsInfo}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredEvents.slice(startIndex, endIndex);
+  const sortOptions = [null, 'asc', 'desc'];
 
+  const getNextDirection = (currentDirection) => {
+    const currentIndex = sortOptions.indexOf(currentDirection);
+    const nextIndex = (currentIndex + 1) % sortOptions.length;
+    return sortOptions[nextIndex];
+  };
+
+  const handleSort = (key) => {
+    const newDirection = sortConfig.key === key ? getNextDirection(sortConfig.direction) : 'asc';
+    setSortConfig({ key, direction: newDirection });
+    setCurrentPage(1); // opcional: resetar para a primeira página após sort
+  };
+
+  const sortedEvents = useMemo(() => {
+      if (!sortConfig.key || !sortConfig.direction) return filteredEvents;
+  
+      return [...filteredEvents].sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }, [filteredEvents, sortConfig]);
+
+    const currentItems = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return sortedEvents.slice(startIndex, endIndex);
+      }, [sortedEvents, currentPage, itemsPerPage]);
   // console.log(filteredEvents.length, itemsPerPage, currentPage);
+
+    const renderSortIcon = (key) => {
+      if (sortConfig.key !== key) return null;
+      if (sortConfig.direction === 'asc') return <MdOutlineArrowDropUp size={22} color="white"/>;
+      if (sortConfig.direction === 'desc') return <MdOutlineArrowDropDown size={22} color="white"/>;
+      return null;
+    };
+
   useEffect(() => {
     setFilteredEvents(eventsInfo);
     setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
-  }, [eventsInfo, itemsPerPage, currentPage]);
+  }, [eventsInfo, itemsPerPage]);
 
   useEffect(() => {
     const filtered = eventsInfo.filter((item) =>
@@ -46,7 +81,7 @@ function DescriptionEventsComponent({eventsInfo}) {
       </SearchBar>
       <ListHeader>
         <RowHeader>
-          <Info><span>Evento</span></Info>
+          <Info onClick={() => handleSort('eventName')}><span>Evento</span>{renderSortIcon('eventName')}</Info>
           <Info><span>Descrição</span></Info>
           <Info><span>Ações</span></Info>
         </RowHeader>

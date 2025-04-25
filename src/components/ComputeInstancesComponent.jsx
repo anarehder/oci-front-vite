@@ -1,24 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
+import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
 
 function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredInstances, setFilteredInstances] = useState(computeInstancesInfo);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredInstances.slice(startIndex, endIndex);
+  const sortOptions = [null, 'asc', 'desc'];
+
+  const getNextDirection = (currentDirection) => {
+    const currentIndex = sortOptions.indexOf(currentDirection);
+    const nextIndex = (currentIndex + 1) % sortOptions.length;
+    return sortOptions[nextIndex];
+  };
+
+  const handleSort = (key) => {
+    const newDirection = sortConfig.key === key ? getNextDirection(sortConfig.direction) : 'asc';
+    setSortConfig({ key, direction: newDirection });
+    setCurrentPage(1); // opcional: resetar para a primeira página após sort
+  };
+
+  const sortedInstances = useMemo(() => {
+    if (!sortConfig.key || !sortConfig.direction) return filteredInstances;
+
+    return [...filteredInstances].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [filteredInstances, sortConfig]);
+
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedInstances.slice(startIndex, endIndex);
+  }, [sortedInstances, currentPage, itemsPerPage]);
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return null;
+    if (sortConfig.direction === 'asc') return <MdOutlineArrowDropUp size={22} color="white"/>;
+    if (sortConfig.direction === 'desc') return <MdOutlineArrowDropDown size={22} color="white"/>;
+    return null;
+  };
 
   useEffect(() => {
     setFilteredInstances(computeInstancesInfo);
     setTotalPages(Math.ceil(computeInstancesInfo.length / itemsPerPage));
-  }, [computeInstancesInfo, itemsPerPage, currentPage]);
+  }, [computeInstancesInfo, itemsPerPage]);
 
   useEffect(() => {
     const filtered = computeInstancesInfo.filter((item) =>
@@ -29,7 +64,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
     setFilteredInstances(filtered);
     setCurrentPage(1);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  }, [searchTerm]);
+  }, [searchTerm, computeInstancesInfo]);
 
   return (
     <ComponentContainer>
@@ -45,14 +80,14 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
 
       <ListHeader>
         <RowHeader>
-          <Info><span>Nome</span></Info>
-          <Info><span>Tenancy</span></Info>
-          <Info><span>Região</span></Info>
-          <Info><span>Shape</span></Info>
-          <Info><span>OCPU</span></Info>
-          <Info><span>Memória</span></Info>
-          <Info><span>Status</span></Info>
-          <Info><span>Custo/Dia</span></Info>
+          <Info onClick={() => handleSort('display_name')}><span>Nome</span>{renderSortIcon('display_name')}</Info>
+          <Info onClick={() => handleSort('tenancy_name')}><span>Tenancy</span>{renderSortIcon('tenancy_name')}</Info>
+          <Info onClick={() => handleSort('region')}><span>Região</span>{renderSortIcon('region')}</Info>
+          <Info onClick={() => handleSort('shape')}><span>Shape</span>{renderSortIcon('shape')}</Info>
+          <Info onClick={() => handleSort('ocpus')}><span>OCPU</span>{renderSortIcon('ocpus')}</Info>
+          <Info onClick={() => handleSort('memory_in_gbs')}><span>Memória</span>{renderSortIcon('memory_in_gbs')}</Info>
+          <Info onClick={() => handleSort('lifecycle_state')}><span>Status</span>{renderSortIcon('lifecycle_state')}</Info>
+          <Info onClick={() => handleSort('monthly_cost')}><span>Custo/Dia </span>{renderSortIcon('monthly_cost')}</Info>
           <Info><span>Ações</span></Info>
         </RowHeader>
         </ListHeader>
@@ -177,7 +212,7 @@ const List = styled.div`
 const RowHeader = styled.div`
   background-color: #001F3F;
   display: flex;
-   height: 45px;
+  height: 45px;
   border-radius: 5px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   div:nth-of-type(9){
@@ -195,13 +230,14 @@ const Row = styled.div`
 `;
 
 const Info = styled.div`
-  width: 11%;
+  width: 12%;
   height: 50px;
   justify-content: center;
   text-align: center;
   word-break: break-word;
   font-size: 16px;
-
+  align-items: center;
+  
   span {
     font-weight: bold;
     color: white;
