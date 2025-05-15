@@ -2,11 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 
-function MonthCostsGraphComponent({ data }) {
-    const currentDate = new Date();
-    const sixMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 5));
-    sixMonthsAgo.setDate(1);
+function MonthCostsGraphComponent({ data, subscriptionDetails }) {
 
+    const anosContrato = Math.round(Number(subscriptionDetails.total_dias_contrato) / 365);
+    const mediaMensal = ((Number(subscriptionDetails.total_value) / anosContrato) / 12);
+
+    const currentDate = new Date();
+    const sixMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 7));
+    sixMonthsAgo.setDate(1);
+    
     // Função para formatar a data como abreviação do mês
     const getMonthAbbreviation = (date) => {
         const monthNames = [
@@ -36,7 +40,10 @@ function MonthCostsGraphComponent({ data }) {
         name,
         data: values.map(({ x, y }) => ({ x, y })),
     }));
-
+    
+    const allYValues = series.flatMap(serie => serie.data.map(point => point.y));
+    const maxDataY = Math.max(...allYValues);
+    const maxY = Math.max(maxDataY, mediaMensal);
 
     const colors = [
         "#4e73df", "#ff6f61", "#5f5f5f", "#f4b400", "#0c9f4d",
@@ -52,11 +59,15 @@ function MonthCostsGraphComponent({ data }) {
             type: "line",
             toolbar: { show: false },
         },
+        dataLabels: {
+            enabled: false
+        },
         xaxis: {
             type: 'category',
             categories: Object.values(groupByTenancy).flat().map((item) => item.x),
         },
         yaxis: {
+            max: maxY,
             // title: { text: 'Custo (R$)' },
             labels: {
                 formatter: (val) => `${(val / 1000).toFixed(0)}K`,
@@ -73,9 +84,6 @@ function MonthCostsGraphComponent({ data }) {
             // },
             offsetX: 50,
             offsetY: -50,
-        },
-        dataLabels: {
-            enabled: false,
         },
         colors,
         stroke: {
@@ -95,14 +103,19 @@ function MonthCostsGraphComponent({ data }) {
         },
     };
 
-    const oneOption = {chart: {
+    const oneOption = {
+    chart: {
         type: "line",
+    },
+    dataLabels: {
+      enabled: false
     },
     xaxis: {
         type: 'category',
         categories: Object.values(groupByTenancy).flat().map((item) => item.x),
     },
     yaxis: {
+        max: 1.1*maxY,
         labels: {
             formatter: (val) => `${(val / 1000).toFixed(0)}K`,
         },
@@ -121,22 +134,27 @@ function MonthCostsGraphComponent({ data }) {
         style: {
             fontSize: '12px',
             fontFamily: 'Arial',
-        },
-        theme: 'dark',
-        x: {
-            show: true,
-        },
-        y: {
-                formatter: (val) =>  `R$ ${new Intl.NumberFormat('pt-BR').format(val)}`
             },
-    },
-    dataLabels: {
-        enabled: true,
-        offsetX: -8, 
-        offsetY: -8,
-        formatter: (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val),
-    },
-    colors,
+            theme: 'dark',
+            x: {
+                show: true,
+            },
+            y: {
+                formatter: function (val) {
+                    return val.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"
+                    }); // R$ no tooltip
+                }
+            }
+        },
+    // dataLabels: {
+    //     enabled: true,
+    //     offsetX: -8, 
+    //     offsetY: -8,
+    //     formatter: (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val),
+    // },
+    colors: ["#017BFF"],
     stroke: {
         curve: 'smooth',
         width: 3,
@@ -144,9 +162,19 @@ function MonthCostsGraphComponent({ data }) {
     annotations: {
         yaxis: [
           {
-            y: 25000, // Valor fixo de 3500
-            borderColor: "#FF0000", // Cor da linha de referência
-          },
+            y: mediaMensal , // Valor fixo de 3500
+                borderColor: "#FF0000", // Cor da linha de referência
+                label: {
+                    borderColor: '#DC3544',
+                    style: {
+                        color: '#fff',
+                        background: '#DC3544',
+                    },
+                    text: `Média Mensal:  ${mediaMensal.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"})}`,
+                }
+            },
         ],
       },
     }
@@ -178,7 +206,7 @@ const Container = styled.div`
   .apexcharts-tooltip {
             border-radius: 5px;
             width: 200px;
-            margin-top: 50px;
+            margin-top: -90px;
             padding: 10px 20px;
             background-color: #f9f9f9;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);

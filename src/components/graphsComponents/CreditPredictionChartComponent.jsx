@@ -32,6 +32,19 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
                 decimalsInFloat: 0,
             },
         },
+        tooltip: {
+            theme: 'dark',
+            x: {
+                formatter: function (val) {
+                    return `${val}`; // Aqui mostra o nome completo no tooltip
+                }
+            },
+            y: {
+                formatter: function (val) {
+                    return `${val}%`; // Aqui mostra o nome completo no tooltip
+                }
+            },
+        },
         plotOptions: {
             bar: {
                 horizontal: true,
@@ -48,7 +61,7 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
 
     const series = [
         {
-            name: ['Porcentagem'],
+            name: [''],
             data: valores,
         },
     ];
@@ -81,6 +94,18 @@ const Container = styled.div`
   flex-direction: column;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
   position: relative;
+  .apexcharts-tooltip {
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 150px;
+            margin-top: -40px;
+            padding: 10px 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            word-wrap: break-word;
+            white-space: normal;
+        }
 `;
 
 const Title = styled.h2`

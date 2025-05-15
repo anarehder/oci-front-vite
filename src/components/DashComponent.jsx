@@ -110,8 +110,8 @@ function DashComponent() {
 
                         <p>Valor SQL selecionado: {selectedTime}</p>
                     </div> */}
-                    <h3>Selecione um mês</h3>
-                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
+                    {/* <h3>Selecione um mês</h3>
+                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} /> */}
                     <button onClick={handleLoadData}>Carregar Dados</button>
                     </div>
                     <button onClick={() =>setShowModal(!showModal)}> 

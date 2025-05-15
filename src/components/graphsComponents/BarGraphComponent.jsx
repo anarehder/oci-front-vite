@@ -9,31 +9,55 @@ function BarGraphComponent({ data, nome }) {
   const chartOptions = {
     chart: {
       type: "bar",
-      toolbar: { show: false }
-    },
-    xaxis: {
-      categories: categorias,
-    },
-    yaxis:{
-      labels: {
-        decimalsInFloat: 0,
-      },
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 6,
-        columnWidth: "45%",
-      }
+      toolbar: { show: false },
+      // dataLabels: { show: false }
     },
     dataLabels: {
       enabled: false
     },
-    colors: ["#4e73df"],
+    xaxis: {
+      categories: categorias,
+      labels: {
+        formatter: function (value) {
+          return value.length > 12 ? value.slice(0, 12) + "..." : value;
+        }
+      }
+    },
+    tooltip: {
+      theme: 'dark',
+      x: {
+        formatter: function (val) {
+          return val; // Aqui mostra o nome completo no tooltip
+        }
+      },
+      y: {
+        formatter: function (val) {
+          return val.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+          }); // R$ no tooltip
+        }
+      }
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return Math.round(value); // força a exibição como inteiro
+        }
+      }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 6,
+        columnWidth: "50%",
+      },
+    },
+    colors: ["#017BFF"],
   };
 
   const chartSeries = [
     {
-      name: ['Custo Mensal R$'],
+      name: ['Custo'],
       data: valores,
     }
   ];
@@ -63,6 +87,19 @@ const Container = styled.div`
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  .apexcharts-tooltip {
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 170px;
+            margin-top: 50px;
+            padding: 10px 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            color: orange !important;
+            word-wrap: break-word;
+            white-space: normal;
+        }
 `;
 
 const Title = styled.h2`

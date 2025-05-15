@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 function PieGraphComponent({ data, nome, type }){
   const categorias = data.map((d) => d.categoria);
   const valores = data.map((d) => d.valor);
-
+  console.log(data);
   const chartOptions = {
     plotOptions: {
       pie: {
@@ -60,8 +60,13 @@ function PieGraphComponent({ data, nome, type }){
         offsetY: 100,
       },
       y: {
-        formatter: (val) => `R$ ${val.toLocaleString()}`,
-      },
+        formatter: function (val) {
+          return val.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+          }); // R$ no tooltip
+        }
+      }
     },
     colors: ["#DC3544", "#008FFB",  "#44aa66", "#efe302", "#f78325"],
   };
@@ -90,6 +95,17 @@ const Container = styled.div`
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  .apexcharts-tooltip {
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 200px;
+            padding: 10px 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            word-wrap: break-word;
+            white-space: normal;
+        }
 `;
 
 const Title = styled.h2`
