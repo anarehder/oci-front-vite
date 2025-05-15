@@ -17,7 +17,7 @@ function DashComponent() {
     const [tenancySelections, setTenancySelections] = useState(
         { tenancy1: null, tenancy2: null, tenancy3: null }
     );
-    console.log(allTenancies);
+    
     const [orphanList, setOrpahnList] = useState([]);
     const [compiledTenanciesInfo, setCompiledTenanciesInfo] = useState(null);
     const [tenanciesToShow, setTenanciesToShow] = useState("");
@@ -25,7 +25,6 @@ function DashComponent() {
 
     const currentMonth = new Date().toISOString().slice(0, 7);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-    console.log(allTenanciesInfo);
 
     const handleChange = (e) => {
         const label = e.target.value;
@@ -68,25 +67,6 @@ function DashComponent() {
         }
     };
 
-    const getData = async () => {
-        try {
-            if(allTenancies){
-                getAllData();
-            } else {
-                const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
-                if (response.status === 200) {
-                    setCompiledTenanciesInfo(response.data);
-                    setTenanciesToShow("compiled");
-                    setOrpahnList(response.data.orphan?.filter(item => item.is_orfao === "Y"));
-                    setAllTenancies(false);
-                }
-            }
-        } catch (error) {
-            console.log(error);
-            alert("Ocorreu um erro", error);
-        }
-    }
-
     const getJoinData = async () => {
         try {
             const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
@@ -103,20 +83,22 @@ function DashComponent() {
     
     const handleTenancyChange = (e) => {
         const selectedValue = e.target.value;
+        setTenancySelections({
+                tenancy1: selectedValue,
+                tenancy2: null,
+                tenancy3: null
+            });
+            console.log(selectedValue);
         if (selectedValue === 'all') {
             setAllTenancies(true);
         } else {
             // Atualiza tenancy1 com o valor selecionado
-            setTenancySelections((prevState) => ({
-                ...prevState,
-                tenancy1: selectedValue
-            }));
             setAllTenancies(false);
         }
     };
 
     const handleLoadData = async () => {
-        // Chamada de API com tenancy1 selecionado
+
         if (allTenancies){
             await getAllData();
         } else if (tenancySelections.tenancy1 === null) {
@@ -125,7 +107,8 @@ function DashComponent() {
             await getJoinData();
         }
     };
-
+    const enabled = (!tenancySelections.tenancy2 && !tenancySelections.tenancy3) || allTenancies;
+    console.log(tenancySelections);
     return (
         <ComponentContainer>
             {allTenanciesInfo?.tenancies &&
@@ -133,13 +116,13 @@ function DashComponent() {
                     <Compiladas>
                         <h3>Selecione uma Tenancy</h3>
                         <div>
-                            <select value={tenancySelections.tenancy1} onChange={handleTenancyChange}>
+                            <select value={enabled? tenancySelections.tenancy1 : "-"} onChange={handleTenancyChange}>
                                 <option key={'all'} value={'all'}>Todas as Tenancies</option>
                                 {allTenanciesInfo?.tenancies.map((tenancy) => (
                                     <option key={tenancy} value={tenancy}>{tenancy}</option>
                                 ))}
                             </select>
-                            <button onClick={handleLoadData}>Carregar Dados</button>
+                            <button disabled={!enabled} onClick={handleLoadData}>Carregar Dados</button>
                         </div>
                         
                         {/* <div>
@@ -168,11 +151,14 @@ function DashComponent() {
                                     <p>2.{tenancySelections?.tenancy2 ? tenancySelections?.tenancy2 : "-"}</p>
                                     <p>3.{tenancySelections?.tenancy3 ? tenancySelections?.tenancy3 : "-"}</p>
                                 </div> :
+                                allTenancies ?
                                 <div>
-                                    <h3>Todas as tenancies</h3>
+                                <h3>Todas as tenancies</h3>
                                 </div>
-
-
+                                :
+                                <div>
+                                <h3>{tenancySelections?.tenancy1}</h3>
+                                </div>
                             }
                             <button onClick={() => setShowModal(!showModal)}>
                                 Compilar Tenancies
