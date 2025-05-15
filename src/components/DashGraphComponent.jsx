@@ -4,11 +4,12 @@ import PieGraphComponent from './graphsComponents/PieGraphComponent';
 import CreditPredictionChartComponent from './graphsComponents/CreditPredictionChartComponent';
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
 
-function DashGraphComponent({tenancyInfo}) {
+function DashGraphComponent({tenancyInfo, scrollToSection}) {
     // console.log(tenancyInfo.creditsOCI);
 
     return (
         <Container>
+            
             <BlocksContainer>
                 <Users>
                     <div>Usuarios da Conta: X</div>
@@ -20,7 +21,15 @@ function DashGraphComponent({tenancyInfo}) {
                         <VMsON><div>VMs Ligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "RUNNING").length}</div><div>Detalhes</div></VMsON>
                     </>
                 }
-                <DiscosOrfaos><div>Discos Orfãos: {tenancyInfo?.orphan?.filter(item => item.is_orfao === "Y").length}</div><div>Detalhes</div></DiscosOrfaos>
+                <DiscosOrfaos>
+                    <div>
+                        Discos Orfãos: {tenancyInfo?.orphan?.filter(item => item.is_orfao === "Y").length}
+                    </div>
+                    <div onClick={scrollToSection}>
+                        Detalhes
+                    </div>
+                    {/* <button ></button> */}
+                </DiscosOrfaos>
             </BlocksContainer>
             <GraphsContainer>
                 {tenancyInfo?.cost_SKU &&
@@ -129,6 +138,9 @@ const VMsON = styled.div `
 `
 const DiscosOrfaos = styled.div `
     background-color: #DC3544;
+    :nth-child(2) {
+        cursor: pointer;
+    }
 `
 const GraphsContainer = styled.div `
     width: 95%;
