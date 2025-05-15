@@ -5,7 +5,7 @@ import CreditPredictionChartComponent from './graphsComponents/CreditPredictionC
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
 
 function DashGraphComponent({tenancyInfo}) {
-    console.log(tenancyInfo.creditsOCI);
+    // console.log(tenancyInfo.creditsOCI);
 
     return (
         <Container>

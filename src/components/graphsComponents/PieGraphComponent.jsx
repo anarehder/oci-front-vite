@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 function PieGraphComponent({ data, nome, type }){
   const categorias = data.map((d) => d.categoria);
   const valores = data.map((d) => d.valor);
-  console.log(data);
+
   const chartOptions = {
     plotOptions: {
       pie: {

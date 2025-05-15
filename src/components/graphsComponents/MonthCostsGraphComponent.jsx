@@ -3,10 +3,9 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 
 function MonthCostsGraphComponent({ data, subscriptionDetails }) {
-
     const anosContrato = Math.round(Number(subscriptionDetails.total_dias_contrato) / 365);
-    const mediaMensal = ((Number(subscriptionDetails.total_value) / anosContrato) / 12);
-
+    const mediaMensal = ((Number(subscriptionDetails.line_net_amount) / anosContrato) / 12);
+    // console.log(anosContrato, subscriptionDetails.line_net_amount, mediaMensal);
     const currentDate = new Date();
     const sixMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 7));
     sixMonthsAgo.setDate(1);
@@ -43,7 +42,9 @@ function MonthCostsGraphComponent({ data, subscriptionDetails }) {
     
     const allYValues = series.flatMap(serie => serie.data.map(point => point.y));
     const maxDataY = Math.max(...allYValues);
+    const minDataY = Math.min(...allYValues);
     const maxY = Math.max(maxDataY, mediaMensal);
+    const minY = Math.min(minDataY, mediaMensal);
 
     const colors = [
         "#4e73df", "#ff6f61", "#5f5f5f", "#f4b400", "#0c9f4d",
@@ -116,6 +117,7 @@ function MonthCostsGraphComponent({ data, subscriptionDetails }) {
     },
     yaxis: {
         max: 1.1*maxY,
+        min: 0.9*minY,
         labels: {
             formatter: (val) => `${(val / 1000).toFixed(0)}K`,
         },

@@ -28,7 +28,7 @@ function DashComponent() {
         if (!user) return;
         getAllData();
     }, []);
-    console.log(allTenanciesInfo?.cost_history[0]);
+    // console.log(allTenanciesInfo?.cost_history[0]);
 
     const getAllData = async () => {
         try {
