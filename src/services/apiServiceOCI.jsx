@@ -2,13 +2,13 @@ import axios from "axios";
 
 const BASE_URL = "http://100.101.1.42:4001";
 
-function getDash(token) {
-    return axios.get(`${BASE_URL}/dashboards`, { headers: { Authorization: token } });
+function getDash(token, month) {
+    return axios.get(`${BASE_URL}/dashboards/${month}`, { headers: { Authorization: token } });
 }
 
-function getJoinDash(body, token) {
+function getJoinDash(body, token, month) {
     console.log(body);
-    return axios.post(`${BASE_URL}/dashboards/join`, body, { headers: { Authorization: token } });
+    return axios.post(`${BASE_URL}/dashboards/join/${month}`, body, { headers: { Authorization: token } });
 }
 
 function getComputeInstances(token) {

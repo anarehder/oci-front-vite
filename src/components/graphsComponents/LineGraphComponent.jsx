@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 
-function LineGraphComponent({ data }) {
-  const categorias = data.data.map((d) => d.item);
-  const valores = data.data.map((d) => d.valor);
+function LineGraphComponent({ data, nome }) {
+  const categorias = data.map((d) => d.item);
+  const valores = data.map((d) => d.valor);
 
   const chartOptions = {
     chart: {
@@ -40,14 +40,14 @@ function LineGraphComponent({ data }) {
 
   const chartSeries = [
     {
-      name: data.nome,
+      name: nome,
       data: valores,
     },
   ];
 
   return (
     <Container>
-      <Title>{data.nome}</Title>
+      <Title>{nome}</Title>
       <Chart
         options={chartOptions}
         series={chartSeries}

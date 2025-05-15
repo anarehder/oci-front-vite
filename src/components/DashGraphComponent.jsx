@@ -3,33 +3,11 @@ import BarGraphComponent from './graphsComponents/BarGraphComponent';
 import PieGraphComponent from './graphsComponents/PieGraphComponent';
 import CreditPredictionChartComponent from './graphsComponents/CreditPredictionChartComponent';
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
+import LineGraphComponent from './graphsComponents/LineGraphComponent';
 
 function DashGraphComponent({tenancyInfo}) {
-    // console.log(tenancyInfo);
-    const dadosHistorico = {
-        nome: "Histórico de Consumo (Custo Total)",
-        data: [
-            { item: "Nov", valor: 3120 },
-            { item: "Dez", valor: 2870 },
-            { item: "Jan", valor: 1980 },
-            { item: "Fev", valor: 4010 },
-            { item: "Mar", valor: 2660 },
-            { item: "Abr", valor: 3590 }
-        ]
-    };
+    console.log(tenancyInfo);
 
-    const dadosServicosOCI = {
-        nome: "Distribuição de Tipos de Serviço do OCI",
-        data: [
-          { categoria: "Compute", valor: 1200 },
-          { categoria: "Storage", valor: 800 },
-          { categoria: "Database", valor: 1700 },
-          { categoria: "Networking", valor: 400 },
-          { categoria: "Monitoring", valor: 600 }
-        ]
-    };
-    
-    // console.log(tenancyInfo?.creditsOCI);
     return (
         <Container>
             <BlocksContainer>
@@ -43,12 +21,24 @@ function DashGraphComponent({tenancyInfo}) {
                         <VMsON><div>VMs Ligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "RUNNING").length}</div><div>Detalhes</div></VMsON>
                     </>
                 }
-                <DiscosOrfaos><div>Discos Orfãos: Y</div><div>Detalhes</div></DiscosOrfaos>
+                <DiscosOrfaos><div>Discos Orfãos: {tenancyInfo?.orphan?.filter(item => item.is_orfao === "Y").length}</div><div>Detalhes</div></DiscosOrfaos>
             </BlocksContainer>
             <GraphsContainer>
-                {/* <LineGraphComponent data={dadosHistorico} /> */}
-                <MonthCostsGraphComponent data={tenancyInfo.cost_history} />
-                <PieGraphComponent data={dadosServicosOCI.data} nome={"Porcentagem Gastos Por Tipo De Serviço OCI"}/>
+                {tenancyInfo?.cost_SKU &&
+                    <BarGraphComponent data={tenancyInfo.cost_SKU
+                        .sort((a, b) => b.cost_mes - a.cost_mes)  // ordena do maior para o menor
+                        .slice(0, 5)
+                        .map((d) => ({
+                            categoria: d.sku_name.slice(0,12),
+                            valor: parseFloat(d.cost_mes.toFixed(2)),
+                        tenancy: d.tenancy_name
+                    }))} nome={"Top 5 SKUs Mais Caros"} />
+                }
+                <PieGraphComponent data={tenancyInfo.cost_services
+                        .map((d) => ({
+                            categoria: d.service,
+                            valor: parseFloat(d.cost_mes.toFixed(2)),
+                    }))} nome={"Porcentagem Gastos Por Tipo De Serviço OCI"}/>
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                         categoria: d.display_name,
@@ -63,7 +53,7 @@ function DashGraphComponent({tenancyInfo}) {
                     {tenancyInfo?.creditsOCI &&
                         <PieGraphComponent
                             data={tenancyInfo.creditsOCI.flatMap((d) => ([
-                                
+
                                 { categoria: "Crédito Utilizado", valor: parseFloat(d.used_amount.toFixed(2)) },
                                 { categoria: "Crédito Total", valor: parseFloat(d.available_amount.toFixed(2)) }
                             ]))}
@@ -71,13 +61,12 @@ function DashGraphComponent({tenancyInfo}) {
                             type={"currency"}
                         />
                     }
-                    {tenancyInfo?.top5_costVM &&
-                        <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
-                            categoria: d.display_name,
-                            valor: parseFloat(d.monthly_cost.toFixed(2)),
-                            tenancy: d.tenancy_name
-                        }))} nome={"Top 5 Máquinas Mais Caras"} />
-                    }
+                    <MonthCostsGraphComponent data={tenancyInfo.cost_history
+                        .map((d) => ({
+                            item: d.mes,
+                            valor: parseFloat(d.cost_mes.toFixed(2)),
+                            nome: d.tenancy_name
+                    }))} nome={"Gastos Mensais"}/>
                 </GraphsContainer>
             }
         </Container>

@@ -67,11 +67,12 @@ function MonthCostsGraphComponent({ data }) {
             strokeWidth: 2,
         },
         tooltip: {
+            enabled: false,
             // y: {
             //     formatter: (val) => new Intl.NumberFormat('pt-BR').format(val)
             // },
-            offsetX: 10,
-            offsetY: 10,
+            offsetX: 50,
+            offsetY: -50,
         },
         dataLabels: {
             enabled: false,
@@ -96,7 +97,6 @@ function MonthCostsGraphComponent({ data }) {
 
     const oneOption = {chart: {
         type: "line",
-        toolbar: { show: false },
     },
     xaxis: {
         type: 'category',
@@ -112,13 +112,28 @@ function MonthCostsGraphComponent({ data }) {
         strokeWidth: 2,
     },
     tooltip: {
-        y: {
-            formatter: (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val),
+        shared: false,
+        followCursor: false,
+        intersect: false,
+        onDatasetHover: {
+            highlightDataSeries: false,
         },
+        style: {
+            fontSize: '12px',
+            fontFamily: 'Arial',
+        },
+        theme: 'dark',
+        x: {
+            show: true,
+        },
+        y: {
+                formatter: (val) =>  `R$ ${new Intl.NumberFormat('pt-BR').format(val)}`
+            },
     },
     dataLabels: {
         enabled: true,
         offsetX: -8, 
+        offsetY: -8,
         formatter: (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val),
     },
     colors,
@@ -160,6 +175,15 @@ const Container = styled.div`
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  .apexcharts-tooltip {
+            border-radius: 5px;
+            width: 200px;
+            margin-top: 50px;
+            padding: 10px 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            color: orange !important;
+        }
 `;
 
 const Title = styled.h2`

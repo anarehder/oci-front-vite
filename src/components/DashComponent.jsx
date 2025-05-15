@@ -3,24 +3,37 @@ import { useContext, useEffect, useState } from 'react';
 import apiServiceOCI from '../services/apiServiceOCI';
 import { UserContext } from '../contexts/UserContext';
 import DashGraphComponent from './DashGraphComponent';
+import dbTime from '../assets/constants/dbTime';
 
 function DashComponent() {
     const [user] = useContext(UserContext);
     const [showModal, setShowModal] = useState(false);
     const [allTenanciesInfo, setAllTenanciesInfo] = useState(null);
-    const [tenancySelections, setTenancySelections] = useState({tenancy1: null, tenancy2: null, tenancy3:null});
+    const [tenancySelections, setTenancySelections] = useState({ tenancy1: 'all', tenancy2: null, tenancy3: null });
     const [compiledTenanciesInfo, setCompiledTenanciesInfo] = useState(null);
     const [tenanciesToShow, setTenanciesToShow] = useState("");
+    const [selectedTime, setSelectedTime] = useState();
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+    const handleChange = (e) => {
+    const label = e.target.value;
+    const sqlValue = dbTime[label];
+    setSelectedTime(sqlValue);
+  };
+
     
+    // console.log(currentMonth);
     useEffect(() => {
-        if(!user) return;
+        if (!user) return;
         getAllData();
     }, []);
     console.log(allTenanciesInfo?.cost_history[0]);
 
     const getAllData = async () => {
         try {
-            const response = await apiServiceOCI.getDash(user.token);
+            const response = await apiServiceOCI.getDash(user.token, selectedMonth);
+            // alert(`busquei mais dados ${selectedMonth}`);
             if (response.status === 200) {
                 setAllTenanciesInfo(response.data);
                 setCompiledTenanciesInfo(null);
@@ -34,7 +47,8 @@ function DashComponent() {
 
     const getJoinData = async () => {
         try {
-            const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token);
+            
+            const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
             if (response.status === 200) {
                 setCompiledTenanciesInfo(response.data);
                 setTenanciesToShow("compiled");
@@ -74,16 +88,33 @@ function DashComponent() {
             {allTenanciesInfo?.tenancies &&
             <TenancySelectionContainer>
                 <div>
-                    <h3>Selecionar Tenancy</h3>
+                    <h3>Selecione uma Tenancy</h3>
                     <select value={tenancySelections.tenancy1} onChange={handleTenancyChange}>
                         <option key={'all'} value={'all'}>Todas as Tenancies</option>
                         {allTenanciesInfo?.tenancies.map((tenancy) => (
                             <option key={tenancy} value={tenancy}>{tenancy}</option>
                         ))}
-                    </select>
+                        </select>
+                        
+                    
+                    {/* <div>
+                        <label>Selecione o intervalo de tempo:</label>
+                        <select onChange={handleChange} defaultValue="">
+                            <option value="" disabled>Escolha...</option>
+                            {Object.keys(dbTime).map((label) => (
+                                <option key={label} value={label}>
+                                    {label}
+                                </option>
+                            ))}
+                        </select>
+
+                        <p>Valor SQL selecionado: {selectedTime}</p>
+                    </div> */}
+                    <h3>Selecione um mês</h3>
+                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
                     <button onClick={handleLoadData}>Carregar Dados</button>
-                </div>
-                <button onClick={()=>setShowModal(!showModal)}> 
+                    </div>
+                    <button onClick={() =>setShowModal(!showModal)}> 
                     Compilar Dados Tenancies {showModal ? "sim" : "nao"}
                 </button>
             </TenancySelectionContainer>
