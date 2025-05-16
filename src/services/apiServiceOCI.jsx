@@ -51,6 +51,7 @@ function getBlockVolumes(token){
 }
 
 function getEvents(type, token){
+    console.log(`${BASE_URL}/events/${type}`);
     return axios.get(`${BASE_URL}/events/${type}`, { headers: { Authorization: token } });
 }
 const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents };

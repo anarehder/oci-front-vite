@@ -15,7 +15,8 @@ function ComputeEventsPage() {
             if(!user) return;
             const fetchData = async () => {
                 try {
-                    const response = await apiServiceOCI.getComputeEvents(user.token);
+                    const type = "compute";
+                    const response = await apiServiceOCI.getEvents(type, user.token);
                     if (response.status === 200) {
                         setEventsInfo(response.data);
                     }

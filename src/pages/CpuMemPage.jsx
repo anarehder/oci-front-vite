@@ -6,6 +6,7 @@ import RadialBarComponent from '../components/graphsComponents/RadialBarComponen
 import FixedMenuComponent from '../components/fixedComponents/FixedMenuComponent';
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 import { Link } from 'react-router-dom';
+import LiquidFillChart from '../components/graphsComponents/LiquidFillChartComponent';
 
 function CpuMemPage() {
     const [memory, setMemory] = useState([]);
@@ -42,7 +43,7 @@ function CpuMemPage() {
     return (
         <Container>
             <FixedMenuComponent />
-            <HeaderComponent title={"CPU E MEMÓRIA - AGORA"} />
+            <HeaderComponent title={"CPU E MEMÓRIA"} />
             <GraphsContainer>
                 <GraphBlock>
                     <h2>
@@ -51,13 +52,14 @@ function CpuMemPage() {
                 </GraphBlock>
                 {cpu.length > 0 && memory.length > 0 &&
                 <>
-                <h2>USO CPU</h2>
+                <h2>TOP 8 - USO CPU</h2>
                         <GraphBlock>
                             {cpu
                                 .slice(0, 8)
                                 .map((c) => (
                                     < PieBlock key={c.resourceDisplayName}>
-                                        <RadialBarComponent value={c.cpu_usage} />
+                                        <LiquidFillChart value={c.cpu_usage} size={120}/>
+                                        {/* <RadialBarComponent value={c.cpu_usage} /> */}
                                         <p>{c.resourceDisplayName.length > 15
                                             ? `${c.resourceDisplayName.slice(0, 15)}...`
                                             : c.resourceDisplayName}</p>
@@ -66,13 +68,14 @@ function CpuMemPage() {
                                     </PieBlock>
                                 ))}
                     </GraphBlock>
-                    <h2>USO MEMÓRIA</h2>
+                    <h2>TOP 8 - USO MEMÓRIA</h2>
                     <GraphBlock>
                         {memory
                             .slice(0, 8)
                             .map((c) => (
                                 <PieBlock key={c.resourceDisplayName}>
-                                    <RadialBarComponent value={c.memory_usage} />
+                                    <LiquidFillChart value={c.memory_usage} size={120}/>
+                                    {/* <RadialBarComponent value={c.memory_usage} /> */}
                                     <div>
                                         <p>{c.resourceDisplayName.length > 15
                                             ? `${c.resourceDisplayName.slice(0, 15)}...`
@@ -129,7 +132,7 @@ const GraphBlock = styled.div`
 
 const PieBlock = styled.div`
     flex-direction: column;
-    height: 230px;
+    height: 200px;
     justify-content: space-between;
     box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -140,6 +143,8 @@ const PieBlock = styled.div`
     }
     button {
         font-size: 15px;
+        height: 15px;
+        margin-bottom: 5px;
     }
     p{
         font-size: 14px;
