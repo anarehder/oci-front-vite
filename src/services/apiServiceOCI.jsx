@@ -43,7 +43,7 @@ function getLatestValues(token){
 }
 
 function getComputeDetails(token, body){
-    return axios.post(`${BASE_URL}/compute/details`, body, { headers: { Authorization: token } });
+    return axios.post(`${BASE_URL}/computeinstances/details`, body, { headers: { Authorization: token } });
 }
 
 function getBlockVolumes(token){

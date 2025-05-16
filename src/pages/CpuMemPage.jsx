@@ -5,13 +5,14 @@ import { UserContext } from '../contexts/UserContext';
 import RadialBarComponent from '../components/graphsComponents/RadialBarComponent';
 import FixedMenuComponent from '../components/fixedComponents/FixedMenuComponent';
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
+import { Link } from 'react-router-dom';
 
 function CpuMemPage() {
     const [memory, setMemory] = useState([]);
     const [cpu, setCpu] = useState([]);
     const [carregando, setCarregando] = useState(false);
     const [user] = useContext(UserContext);
-    console.log(cpu[0]);
+    // console.log(cpu[0]);
     useEffect(() => {
         if (!user?.token) return;
 
@@ -43,11 +44,11 @@ function CpuMemPage() {
             <FixedMenuComponent />
             <HeaderComponent title={"CPU E MEMÓRIA - AGORA"} />
             <GraphsContainer>
-                <div>
+                <GraphBlock>
                     <h2>
                         {carregando && cpu.length === 0 && "Carregando dados..."}
                     </h2>
-                </div>
+                </GraphBlock>
                 {cpu.length > 0 && memory.length > 0 &&
                 <>
                 <h2>USO CPU</h2>
@@ -57,23 +58,30 @@ function CpuMemPage() {
                                 .map((c) => (
                                     < PieBlock key={c.resourceDisplayName}>
                                         <RadialBarComponent value={c.cpu_usage} />
-                                        <p>{c.resourceDisplayName}</p>
+                                        <p>{c.resourceDisplayName.length > 15
+                                            ? `${c.resourceDisplayName.slice(0, 15)}...`
+                                            : c.resourceDisplayName}</p>
                                         <p>{c.profile_name}</p>
-                                        <button> Detalhes </button>
+                                        <button> <Link to={`/compute/details/${encodeURIComponent(c.resourceDisplayName)}`}>Detalhes </Link> </button>
                                     </PieBlock>
                                 ))}
-                        </GraphBlock>
-                        <h2>USO MEMÓRIA</h2>
-                        <GraphBlock>
-                            {memory
-                                .slice(0, 8)
-                                .map((c) => (
-                                    <PieBlock key={c.resourceDisplayName}>
-                                        <RadialBarComponent value={c.memory_usage} />
-                                        <p>{c.resourceDisplayName}</p>
+                    </GraphBlock>
+                    <h2>USO MEMÓRIA</h2>
+                    <GraphBlock>
+                        {memory
+                            .slice(0, 8)
+                            .map((c) => (
+                                <PieBlock key={c.resourceDisplayName}>
+                                    <RadialBarComponent value={c.memory_usage} />
+                                    <div>
+                                        <p>{c.resourceDisplayName.length > 15
+                                            ? `${c.resourceDisplayName.slice(0, 15)}...`
+                                            : c.resourceDisplayName}</p>
                                         <p>{c.profile_name}</p>
-                                        <button> Detalhes </button>
-                                    </PieBlock>
+                                        <button> <Link to={`/compute/details/${encodeURIComponent(c.resourceDisplayName)}`}>Detalhes </Link> </button>
+                                    </div>
+
+                                </PieBlock>
                                 ))}
                         </GraphBlock>
                     </>}
@@ -91,7 +99,6 @@ const Container = styled.div`
 
 const GraphsContainer = styled.div`
     width: calc(100vw - 220px);
-    margin: 80px 0;
     margin-left: 200px;
     position: relative;
 
@@ -102,34 +109,39 @@ const GraphsContainer = styled.div`
     overflow-y: hidden;
     overflow-x: hidden;
     h2{
-        margin-bottom: 20px;
+        margin: 10px 0;
     }
 `
 
 const GraphBlock = styled.div`
     width: 95%;
-    gap: 10px;
+    gap: 1%;
     flex-wrap: wrap;
     margin: 20px;
     margin-bottom: 40px;
     
     div{
-        width: 10%;
+        width: 11%;
         flex-direction: column;
-        height: 250px;
-        justify-content: flex-start;
     }
 
 `
 
 const PieBlock = styled.div`
-    border: 1px solid #555;
     flex-direction: column;
-    height: 300px;
-    justify-content: flex-start;
+    height: 230px;
+    justify-content: space-between;
+    box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
     z-index: 3;
-    gap: 7px;
+    div{ 
+        width: 100%;
+        gap: 5px;
+    }
     button {
         font-size: 15px;
+    }
+    p{
+        font-size: 14px;
     }
 `

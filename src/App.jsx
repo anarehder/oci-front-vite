@@ -11,6 +11,7 @@ import ComputeInstancesPage from "./pages/ComputeInstancesPage";
 import EventsPage from "./pages/EventsPage";
 import ComputeEventsPage from "./pages/ComputeEventsPage";
 import CpuMemPage from "./pages/CpuMemPage";
+import ComputeInstanceDetailsPage from "./pages/ComputeInstanceDetailsPage";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/eventos" element={<EventsPage />} />
                 <Route path="/eventos/compute" element={<ComputeEventsPage />} />
                 <Route path="/latest/cpumem" element={<CpuMemPage />} />
+                <Route path="/compute/details/:displayName" element={<ComputeInstanceDetailsPage />} />
               </Routes>
             </TenancyProvider>
           </PricesProvider>

@@ -15,7 +15,7 @@ function ComputeInstancesPage() {
             const fetchData = async () => {
                 try {
                     const response = await apiServiceOCI.getComputeInstances(user.token);
-                    console.log(response.status);
+                    // console.log(response.status);
                     if (response.status === 200) {
                         setComputeInstancesInfo(response.data);
                     }

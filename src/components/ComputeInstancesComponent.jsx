@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
+import { Link } from "react-router-dom";
 
 function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,7 +14,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [totalPages, setTotalPages] = useState(0);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentItems, setCurrentItems] = useState(computeInstancesInfo.slice(0,10));
-  console.log(filteredInstances.length);
+  // console.log(filteredInstances.length);
   const sortOptions = [null, 'asc', 'desc'];
 
   const getNextDirection = (currentDirection) => {
@@ -90,7 +91,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
         <List>
         {currentItems.map((item, index) => (
           <Row key={index}>
-            <Info>{item.display_name}</Info>
+            <Info><Link to={`/compute/details/${encodeURIComponent(item.display_name)}`}> {item.display_name} </Link></Info>
             <Info>{item.tenancy_name}</Info>
             <Info>{item.region}</Info>
             <Info>{item.shape}</Info>
@@ -241,6 +242,7 @@ const Info = styled.div`
 
   &:nth-of-type(1) {
     width: 18%;
+    cursor: pointer;
   }
 
   &:nth-of-type(2) {
