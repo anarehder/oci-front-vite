@@ -1,10 +1,9 @@
-import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-function RadialBarComponent({value, name}){
-
+function RadialBarComponent({value}){
+    console.log(value);
     const chartData = {
-        series: [value],
+        series: [value.toFixed(2)],
         options: {
         plotOptions: {
             radialBar: {
@@ -41,7 +40,7 @@ function RadialBarComponent({value, name}){
                     show: true,
                     name: {
                     offsetY: -10,
-                    show: true,
+                    show: false,
                     color: '#021121',
                     fontSize: '16px'
                     },
@@ -72,7 +71,6 @@ function RadialBarComponent({value, name}){
         stroke: {
             lineCap: 'round'
         },
-        labels: [name],
         },
     
     
@@ -81,7 +79,7 @@ function RadialBarComponent({value, name}){
 
     return (
         <>
-        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" />
+        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" width={150} height={180}/>
         </>
     )
 }

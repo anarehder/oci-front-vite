@@ -21,7 +21,7 @@ function FixedMenuComponent() {
         },
         { title: "Compute", options: [
             { label: "Compute Instances", path: "/computeinstances" },
-            { label: "Opção 2", path: "/" }
+            { label: "CPU e Memória", path: "/latest/cpumem" }
           ]
         },
         { title: "Cost", options: [
@@ -39,8 +39,9 @@ function FixedMenuComponent() {
           ]
         },
         { title: "Events", options: [
-            { label: "Todos os Eventos", path: "/eventos" },
-            { label: "Compute Instances", path: "/eventos/compute" }
+            { label: "Compute Instances", path: "/eventos/compute" },
+            { label: "Identity", path: "/eventos/identity" },
+            { label: "Network", path: "/eventos/network" }
           ]
         }
       ];
