@@ -5,6 +5,9 @@ import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent
 import apiServiceOCI from "../services/apiServiceOCI";
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 import { useParams } from 'react-router-dom';
+import { GrCloudComputer } from "react-icons/gr";
+import LineGraphComponent from '../components/graphsComponents/LineGraphComponent';
+
 
 function ComputeInstanceDetailsPage() {
     const { displayName } = useParams();
@@ -14,7 +17,7 @@ function ComputeInstanceDetailsPage() {
     const [cpuDetails, setCpuDetails]= useState([]);
     const [memDetails, setMemDetails] = useState([]);
     const [interval, setInterval] = useState("2 HOUR");
-    // console.log(computeInstancesInfo);
+    console.log(cpuDetails);
     useEffect(() => {
             if(!user) return;
             const body = {displayName: decodedDisplayName, interval: interval};
@@ -38,23 +41,44 @@ function ComputeInstanceDetailsPage() {
     return (
         <PageContainer>
             <FixedMenuComponent />
-            <HeaderComponent title={"COMPUTE INSTANCE DETAILS"}/>
+            <HeaderComponent title={"COMPUTE INSTANCE DETAILS"} />
             <DetailsContainer>
-                <h2>{decodedDisplayName}</h2>
+                <h2><GrCloudComputer size={30} /> {decodedDisplayName}</h2>
+
                 <h2>intervalo de coleta: {interval}</h2>
                 {
-                computeInstanceInfo?.id &&
-                    <h2>Resultado recebido - objeto - id maquina {computeInstanceInfo?.id}</h2>
-                // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
-            }
-             {
-                cpuDetails.length >0 &&
+                    computeInstanceInfo?.id &&
+                    <>
+                        <h2>Resultado recebido - objeto - id maquina {computeInstanceInfo?.id}</h2>
+                        <div> <h2>fault_domain</h2>{computeInstanceInfo.fault_domain}</div>
+                        <div> <h2>availability_domain</h2>{computeInstanceInfo.availability_domain.slice(5)}</div>
+                        <div> <h2>lifecycle_state</h2>{computeInstanceInfo.lifecycle_state}</div>
+                        <div> <h2>memory_in_gbs</h2>{computeInstanceInfo.fault_memory_in_gbsdomain}</div>
+                        <div> <h2>monthly_cost</h2>{computeInstanceInfo.monthly_cost}</div>
+                        <div> <h2>ocpus</h2>{computeInstanceInfo.ocpus}</div>
+                        <div> <h2>processor_description</h2>{computeInstanceInfo.processor_description}</div>
+                        <div> <h2>region</h2>{computeInstanceInfo.region}</div>
+                        <div> <h2>shape</h2>{computeInstanceInfo.shape}</div>         
+                        <div> <h2>time_created</h2>{computeInstanceInfo.time_created}</div>
+                        <div> <h2>tenancy_name</h2>{computeInstanceInfo.tenancy_name}</div>           
+                    </>
+                }
+                {
+                    cpuDetails.length > 0 &&
+                    <>
                     <h2>Resultado recebido - array de tamanho {cpuDetails.length}  </h2>
-                // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
-            }
+                    <LineGraphComponent  data={cpuDetails.map(entry => ({item: entry.metric_timestamp, value: entry.cpu_usage}))} nome={"Cpu"}/>
+                    </>
+                    
+                    // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
+                }
              {
                 memDetails.length >0 &&
+                    
+                    <>
                     <h2>Resultado recebido - array de tamanho {memDetails.length} </h2>
+                    <LineGraphComponent  data={memDetails.map(entry => ({item: entry.metric_timestamp, value: entry.mem_usage}))} nome={"Memoria"}/>
+                    </>
                 // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
             }
             </DetailsContainer>
@@ -62,11 +86,15 @@ function ComputeInstanceDetailsPage() {
     )
 }
 
+// function LineGraphComponent({ , nome }) {
+//   const categorias = data.map((d) => d.item);
+//   const valores = data.map((d) => d.valor);
+
 export default ComputeInstanceDetailsPage;
 
 const PageContainer = styled.div`
     width: 100%;
-    height: 100vh;
+    // height: 100vh;
     flex-direction: column;
 `
 
@@ -84,5 +112,8 @@ const DetailsContainer = styled.div`
     overflow-x: hidden;
     h2{
         margin-bottom: 20px;
+    }
+    div {
+        width: 50%;
     }
 `

@@ -12,6 +12,7 @@ import EventsPage from "./pages/EventsPage";
 import ComputeEventsPage from "./pages/ComputeEventsPage";
 import CpuMemPage from "./pages/CpuMemPage";
 import ComputeInstanceDetailsPage from "./pages/ComputeInstanceDetailsPage";
+import ProjectsPage from "./pages/ProjectsPage";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/" element={<AccessPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/homepage" element={<HomePage />}/>
+                <Route path="/projetos" element={<ProjectsPage />} />
                 <Route path="/createuser" element={<CreateUserPage />} />
                 <Route path="/computeinstances" element={<ComputeInstancesPage />} />
                 <Route path="/eventos" element={<EventsPage />} />

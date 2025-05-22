@@ -5,7 +5,7 @@ export const PricesContext = createContext();
 
 export default function PricesProvider ({ children }) {
   const [prices, setPrices] = useState([]);
-
+  
   useEffect(() => {
     const fetchPrices = async () => {
         try {
@@ -14,6 +14,7 @@ export default function PricesProvider ({ children }) {
                     const data = response.data;
                     setPrices(data);
                     console.log("SALVEI O PRICES!")
+                    console.log(data);
                 }
         } catch (error) {
             console.log(error);

@@ -21,7 +21,7 @@ function LiquidFillChart({ value, size }) {
     const getGradientColors = (value) => {
         if (value < 50) return ['#66bb6a', '#2e7d32']; // verde claro -> escuro
         if (value <= 75) return ['#ffb74d', '#ef6c00']; // laranja claro -> escuro
-        return ['#ef5350', '#b71c1c']; // vermelho claro -> escuro
+        return ['#e31a1c', '#b71c1c']; // vermelho claro -> escuro
     };
 
     const [startColor, endColor] = getGradientColors(value);

@@ -84,7 +84,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           <Info onClick={() => handleSort('ocpus')}><span>OCPU</span>{renderSortIcon('ocpus')}</Info>
           <Info onClick={() => handleSort('memory_in_gbs')}><span>Memória</span>{renderSortIcon('memory_in_gbs')}</Info>
           <Info onClick={() => handleSort('lifecycle_state')}><span>Status</span>{renderSortIcon('lifecycle_state')}</Info>
-          <Info onClick={() => handleSort('monthly_cost')}><span>Custo/Dia </span>{renderSortIcon('monthly_cost')}</Info>
+          <Info onClick={() => handleSort('monthly_cost')}><span>Custo/Mês </span>{renderSortIcon('monthly_cost')}</Info>
           <Info><span>Ações</span></Info>
         </RowHeader>
         </ListHeader>

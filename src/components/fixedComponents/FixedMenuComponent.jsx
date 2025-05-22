@@ -49,8 +49,11 @@ function FixedMenuComponent() {
     return (
         <ComponentContainer>
             <img src={Logo} alt={"accerte"}/>
+            <br />
             <Link to="/"><MenuItem>Dashboard</MenuItem></Link>
             <br />
+            <br />
+            <Link to="/projetos"><MenuItem>Projetos</MenuItem></Link> 
             <br />
             <br />
             <ItemsContainer>
@@ -106,7 +109,7 @@ const ComponentContainer = styled.div`
     z-index: 999;
     img{
         width: 150px;
-        margin: 45px 0;
+        margin: 15px 0;
     }
 `;
 

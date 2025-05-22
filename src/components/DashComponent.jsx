@@ -21,7 +21,7 @@ function DashComponent() {
     const [orphanList, setOrpahnList] = useState([]);
     const [compiledTenanciesInfo, setCompiledTenanciesInfo] = useState(null);
     const [tenanciesToShow, setTenanciesToShow] = useState("");
-    // const [selectedTime, setSelectedTime] = useState();
+    const [selectedTime, setSelectedTime] = useState();
 
     const currentMonth = new Date().toISOString().slice(0, 7);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -81,7 +81,7 @@ function DashComponent() {
         }
     };
     
-    const handleTenancyChange = (e) => {
+    const handleTenancyChange = async (e) => {
         const selectedValue = e.target.value;
         setTenancySelections({
                 tenancy1: selectedValue,
@@ -90,10 +90,12 @@ function DashComponent() {
             });
             console.log(selectedValue);
         if (selectedValue === 'all') {
+            await getAllData();
             setAllTenancies(true);
         } else {
             // Atualiza tenancy1 com o valor selecionado
             setAllTenancies(false);
+            await getJoinData();
         }
     };
 
@@ -138,8 +140,8 @@ function DashComponent() {
 
                         <p>Valor SQL selecionado: {selectedTime}</p>
                     </div> */}
-                        {/* <h3>Selecione um mês</h3>
-                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} /> */}
+                        <h3>Selecione um mês</h3>
+                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
 
                     </Compiladas>
                     <Compiladas>
@@ -180,8 +182,8 @@ function DashComponent() {
                 setAllTenancies={setAllTenancies}
                 getJoinData={getJoinData}
             />
-            {tenanciesToShow === "all" && <DashGraphComponent tenancyInfo={allTenanciesInfo} scrollToSection={scrollToSection}/>}
-            {tenanciesToShow === "compiled" && <DashGraphComponent tenancyInfo={compiledTenanciesInfo} scrollToSection={scrollToSection}/>}
+            {tenanciesToShow === "all" && <DashGraphComponent tenancyInfo={allTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
+            {tenanciesToShow === "compiled" && <DashGraphComponent tenancyInfo={compiledTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
             <OrphanListComponent orphanList={orphanList} sectionRef={sectionRef}/>
         </ComponentContainer>
     );

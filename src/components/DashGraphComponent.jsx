@@ -4,7 +4,7 @@ import PieGraphComponent from './graphsComponents/PieGraphComponent';
 import CreditPredictionChartComponent from './graphsComponents/CreditPredictionChartComponent';
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
 
-function DashGraphComponent({tenancyInfo, scrollToSection}) {
+function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
     // console.log(tenancyInfo.creditsOCI);
 
     return (
@@ -40,14 +40,14 @@ function DashGraphComponent({tenancyInfo, scrollToSection}) {
                             categoria: d.sku_name,
                             valor: parseFloat(d.cost_mes.toFixed(2)),
                             tenancy: d.tenancy_name
-                        }))} nome={"Top 5 SKUs Mais Caros"} />
+                        }))} nome={`Top 5 SKUs Mais Caros - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
                 }
                 {tenancyInfo?.tenancies?.length === 1 ?
                     <PieGraphComponent data={tenancyInfo.cost_services
                         .map((d) => ({
                             categoria: d.service,
                             valor: parseFloat(d.cost_mes.toFixed(2)),
-                        }))} nome={"Porcentagem Gastos Por Tipo De Serviço OCI"} />
+                        }))} nome={`Porcentagem Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
                     :
                     <PieGraphComponent
                         data={Object.values(
@@ -68,7 +68,7 @@ function DashGraphComponent({tenancyInfo, scrollToSection}) {
                             .sort((a, b) => b.valor - a.valor)
                             .slice(0, 5)
                         }
-                        nome={"Porcentagem Gastos Por Tipo De Serviço OCI"}
+                        nome={`Porcentagem Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} 
                     />
                 }
                 {tenancyInfo?.top5_costVM &&
@@ -76,7 +76,7 @@ function DashGraphComponent({tenancyInfo, scrollToSection}) {
                         categoria: d.display_name,
                         valor: parseFloat(d.monthly_cost.toFixed(2)),
                         tenancy: d.tenancy_name
-                    }))} nome={"Top 5 Máquinas Mais Caras"} />
+                    }))} nome={"Top 5 Máquinas Mais Caras (Custo Mensal)"} />
                 }
             </GraphsContainer>
             {tenancyInfo?.tenancies?.length === 1 &&
