@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function TenancySelectionComponent({ show, setShowModal, onClose, tenancySelections, setTenancySelections, allTenancies, setAllTenancies, getJoinData }) {
+function TenancySelectionComponent({ show, setShowModal, onClose, tenancySelections, setTenancySelections, allTenancies, setAllTenancies, getData }) {
   if (!show) return null;
 
   const handleChange = (e, tenancyKey) => {
@@ -13,7 +13,7 @@ function TenancySelectionComponent({ show, setShowModal, onClose, tenancySelecti
 
   const submitTenancies = async () =>{
     setAllTenancies(false);
-    await getJoinData();
+    await getData();
     setShowModal(false)
   }
 

@@ -13,6 +13,7 @@ import ComputeEventsPage from "./pages/ComputeEventsPage";
 import CpuMemPage from "./pages/CpuMemPage";
 import ComputeInstanceDetailsPage from "./pages/ComputeInstanceDetailsPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import DataikuApiPage from "./pages/DataikuApiPage";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/eventos/compute" element={<ComputeEventsPage />} />
                 <Route path="/latest/cpumem" element={<CpuMemPage />} />
                 <Route path="/compute/details/:displayName" element={<ComputeInstanceDetailsPage />} />
+                <Route path="/dataikuapi" element={<DataikuApiPage />} />
               </Routes>
             </TenancyProvider>
           </PricesProvider>

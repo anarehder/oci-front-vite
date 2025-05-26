@@ -3,7 +3,6 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import apiServiceOCI from '../services/apiServiceOCI';
 import { UserContext } from '../contexts/UserContext';
 import DashGraphComponent from './DashGraphComponent';
-import dbTime from '../assets/constants/dbTime';
 import OrphanListComponent from './OrphanListComponent';
 import TenancySelectionComponent from './TenancySelectionComponent';
 
@@ -12,7 +11,7 @@ function DashComponent() {
     const sectionRef = useRef(null);
     const [allTenancies, setAllTenancies] = useState(true);
     const [allTenanciesInfo, setAllTenanciesInfo] = useState(null);
-    
+
     const [showModal, setShowModal] = useState(false);
     const [tenancySelections, setTenancySelections] = useState(
         { tenancy1: null, tenancy2: null, tenancy3: null }
@@ -20,17 +19,9 @@ function DashComponent() {
     
     const [orphanList, setOrpahnList] = useState([]);
     const [compiledTenanciesInfo, setCompiledTenanciesInfo] = useState(null);
-    const [tenanciesToShow, setTenanciesToShow] = useState("");
-    const [selectedTime, setSelectedTime] = useState();
 
     const currentMonth = new Date().toISOString().slice(0, 7);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-
-    const handleChange = (e) => {
-        const label = e.target.value;
-        const sqlValue = dbTime[label];
-        setSelectedTime(sqlValue);
-    };
 
     const scrollToSection = () => {
         if (sectionRef.current) {
@@ -41,135 +32,102 @@ function DashComponent() {
             });
         }
     };
-    // console.log(currentMonth);
+
     useEffect(() => {
         if (!user) return;
-        if(allTenancies){
-            getAllData();
-        }
-    }, []);
-    // console.log(allTenanciesInfo?.cost_history[0]);
+        getData();
+    }, [selectedMonth, tenancySelections]);
 
-    const getAllData = async () => {
-        try {
-            const response = await apiServiceOCI.getDash(user.token, selectedMonth);
-            // alert(`busquei mais dados ${selectedMonth}`);
-            if (response.status === 200) {
-                setAllTenanciesInfo(response.data);
-                setCompiledTenanciesInfo(null);
-                setTenanciesToShow("all");
-                setOrpahnList(response.data.orphan?.filter(item => item.is_orfao === "Y"));
-                setTenancySelections({ tenancy1: null, tenancy2: null, tenancy3: null });
+    const getData = async () => {
+        if (tenancySelections.tenancy1 === null && tenancySelections.tenancy2 === null && tenancySelections.tenancy3 === null) {
+            try {
+                const response = await apiServiceOCI.getDash(user.token, selectedMonth);
+                if (response.status === 200) {
+                    setAllTenanciesInfo(response.data);
+                    setCompiledTenanciesInfo(null);
+                    setAllTenancies(true);
+                    setOrpahnList(response.data.orphan?.filter(item => item.is_orfao === "Y"));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Ocorreu um erro na busca de todas as tenancies", error);
             }
-        } catch (error) {
-            console.log(error);
-            alert("Ocorreu um erro", error);
+        } if (tenancySelections.tenancy1 !== null) {
+            try {
+                const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
+                if (response.status === 200) {
+                    setCompiledTenanciesInfo(response.data);
+                    setAllTenancies(false);
+                    setOrpahnList(response.data.orphan?.filter(item => item.is_orfao === "Y"));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Ocorreu um erro ao buscar tenancy", error);
+            }
         }
-    };
+    }
 
-    const getJoinData = async () => {
-        try {
-            const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
-            if (response.status === 200) {
-                setCompiledTenanciesInfo(response.data);
-                setTenanciesToShow("compiled");
-                setOrpahnList(response.data.orphan?.filter(item => item.is_orfao === "Y"));
-            }
-        } catch (error) {
-            console.log(error);
-            alert("Ocorreu um erro", error);
-        }
-    };
-    
     const handleTenancyChange = async (e) => {
         const selectedValue = e.target.value;
-        setTenancySelections({
+        if (selectedValue === 'null') {
+            setTenancySelections({
+                tenancy1: null,
+                tenancy2: null,
+                tenancy3: null
+            });
+        } else {
+            setTenancySelections({
                 tenancy1: selectedValue,
                 tenancy2: null,
                 tenancy3: null
             });
-            console.log(selectedValue);
-        if (selectedValue === 'all') {
-            await getAllData();
-            setAllTenancies(true);
-        } else {
-            // Atualiza tenancy1 com o valor selecionado
-            setAllTenancies(false);
-            await getJoinData();
         }
     };
 
-    const handleLoadData = async () => {
-
-        if (allTenancies){
-            await getAllData();
-        } else if (tenancySelections.tenancy1 === null) {
-            alert("É necessário selecionar uma tenancy");
-        } else {
-            await getJoinData();
-        }
-    };
-    const enabled = (!tenancySelections.tenancy2 && !tenancySelections.tenancy3) || allTenancies;
-    console.log(tenancySelections);
     return (
         <ComponentContainer>
             {allTenanciesInfo?.tenancies &&
                 <TenancySelectionContainer>
                     <Compiladas>
-                        <h3>Selecione uma Tenancy</h3>
                         <div>
-                            <select value={enabled? tenancySelections.tenancy1 : "-"} onChange={handleTenancyChange}>
-                                <option key={'all'} value={'all'}>Todas as Tenancies</option>
+                            <h3>Selecione uma Tenancy</h3>
+                            <select value={tenancySelections.tenancy2 ? "nao" : tenancySelections.tenancy1} onChange={handleTenancyChange}>
+                                {tenancySelections.tenancy2 && <option>Compilado</option>}
+                                <option key={'null'} value={'null'}>Todas as Tenancies</option>
                                 {allTenanciesInfo?.tenancies.map((tenancy) => (
                                     <option key={tenancy} value={tenancy}>{tenancy}</option>
                                 ))}
                             </select>
-                            <button disabled={!enabled} onClick={handleLoadData}>Carregar Dados</button>
                         </div>
-                        
-                        {/* <div>
-                        <label>Selecione o intervalo de tempo:</label>
-                        <select onChange={handleChange} defaultValue="">
-                            <option value="" disabled>Escolha...</option>
-                            {Object.keys(dbTime).map((label) => (
-                                <option key={label} value={label}>
-                                    {label}
-                                </option>
-                            ))}
-                        </select>
 
-                        <p>Valor SQL selecionado: {selectedTime}</p>
-                    </div> */}
-                        <h3>Selecione um mês</h3>
-                    <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
-
-                    </Compiladas>
-                    <Compiladas>
-                        <h3>Tenancies Compiladas</h3>
                         <div>
-                            {tenancySelections.tenancy1 && tenancySelections.tenancy2 ?
-                                <div>
-                                    <p>1.{tenancySelections?.tenancy1 ? tenancySelections?.tenancy1 : "-"}</p>
-                                    <p>2.{tenancySelections?.tenancy2 ? tenancySelections?.tenancy2 : "-"}</p>
-                                    <p>3.{tenancySelections?.tenancy3 ? tenancySelections?.tenancy3 : "-"}</p>
-                                </div> :
-                                allTenancies ?
-                                <div>
-                                <h3>Todas as tenancies</h3>
-                                </div>
-                                :
-                                <div>
-                                <h3>{tenancySelections?.tenancy1}</h3>
-                                </div>
-                            }
-                            <button onClick={() => setShowModal(!showModal)}>
-                                Compilar Tenancies
-                            </button>
+                            <h3>Selecione um mês</h3>
+                            <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
                         </div>
-
+                        {user?.isAdmin === 1 &&
+                            <div>
+                                <h3>Tenancies Compiladas</h3>
+                                {tenancySelections.tenancy1 && tenancySelections.tenancy2 ?
+                                    <div>
+                                        <p>1.{tenancySelections?.tenancy1 ? tenancySelections?.tenancy1 : "-"}</p>
+                                        <p>2.{tenancySelections?.tenancy2 ? tenancySelections?.tenancy2 : "-"}</p>
+                                        <p>3.{tenancySelections?.tenancy3 ? tenancySelections?.tenancy3 : "-"}</p>
+                                    </div> :
+                                    allTenancies ?
+                                        <div>
+                                            <h3>Todas as tenancies</h3>
+                                        </div>
+                                        :
+                                        <div>
+                                            <h3>{tenancySelections?.tenancy1}</h3>
+                                        </div>
+                                }
+                                <button onClick={() => setShowModal(!showModal)}>
+                                    Compilar Tenancies
+                                </button>
+                            </div>
+                        }
                     </Compiladas>
-
-
                 </TenancySelectionContainer>
             }
             <TenancySelectionComponent
@@ -180,10 +138,18 @@ function DashComponent() {
                 setTenancySelections={setTenancySelections}
                 allTenancies={allTenanciesInfo?.tenancies}
                 setAllTenancies={setAllTenancies}
-                getJoinData={getJoinData}
+                getData={getData}
             />
-            {tenanciesToShow === "all" && <DashGraphComponent tenancyInfo={allTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
-            {tenanciesToShow === "compiled" && <DashGraphComponent tenancyInfo={compiledTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
+            {/* {
+                !allTenancies &&
+                    <h2>
+                        {tenancySelections.tenancy1 && tenancySelections.tenancy1}
+                        {tenancySelections.tenancy2 && ` / ${tenancySelections.tenancy2}`}
+                        {tenancySelections.tenancy3 && ` / ${tenancySelections.tenancy3}`}
+                    </h2>
+            } */}
+            {allTenancies && allTenanciesInfo && <DashGraphComponent tenancyInfo={allTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
+            {!allTenancies && allTenanciesInfo && <DashGraphComponent tenancyInfo={compiledTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth}/>}
             <OrphanListComponent orphanList={orphanList} sectionRef={sectionRef}/>
         </ComponentContainer>
     );
@@ -207,6 +173,7 @@ const ComponentContainer = styled.div`
 const TenancySelectionContainer = styled.div `
     width: 95%;
     justify-content: space-between;
+    flex-direction: column;
     gap: 50px;
     button{
         font-size: 15px;
@@ -216,21 +183,29 @@ const TenancySelectionContainer = styled.div `
 
 const Compiladas = styled.div`
     padding-top: 5px;
-    flex-direction: column;
     justify-content: space-between;
-    flex-direction: column;
+    // min-gap: 15px;
+    h3{
+        max-width: 130px;
+    }
     select {
-        width: 400px;
+        width: 300px;
+    }
+    input{ 
+        font-size: 20px;
+        width: 200px;
     }
     div{
-        
         align-items: center;
-        justify-content: space-between;
-        width: 90%;
+        justify-content: center;
+        width: auto;
+        gap: 20px;
         div{
             justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 2px;
             flex-wrap: wrap;
+            width: 250px;
         }
     }
 `

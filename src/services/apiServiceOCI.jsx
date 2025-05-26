@@ -7,7 +7,6 @@ function getDash(token, month) {
 }
 
 function getJoinDash(body, token, month) {
-    console.log(body);
     return axios.post(`${BASE_URL}/dashboards/join/${month}`, body, { headers: { Authorization: token } });
 }
 
@@ -51,7 +50,6 @@ function getBlockVolumes(token){
 }
 
 function getEvents(type, token){
-    console.log(`${BASE_URL}/events/${type}`);
     return axios.get(`${BASE_URL}/events/${type}`, { headers: { Authorization: token } });
 }
 const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents };
