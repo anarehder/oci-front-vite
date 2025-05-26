@@ -5,7 +5,7 @@ import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
 
-function DescriptionEventsComponent({eventsInfo}) {
+function DescriptionEventsComponent({eventsInfo, eventsDescription}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(eventsInfo);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +13,6 @@ function DescriptionEventsComponent({eventsInfo}) {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentItems, setCurrentItems] = useState(eventsInfo.slice(0,10));
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-
   const sortOptions = [null, 'asc', 'desc'];
 
   const getNextDirection = (currentDirection) => {
@@ -65,21 +64,21 @@ function DescriptionEventsComponent({eventsInfo}) {
         setCurrentItems(sorted.slice(startIndex, endIndex));
       }, [eventsInfo, searchTerm, sortConfig, currentPage, itemsPerPage]);
     
-  // useEffect(() => {
-  //   setFilteredEvents(eventsInfo);
-  //   setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
-  // }, [eventsInfo, itemsPerPage]);
+  useEffect(() => {
+    setFilteredEvents(eventsInfo);
+    setTotalPages(Math.ceil(eventsInfo.length / itemsPerPage));
+  }, [eventsInfo, itemsPerPage]);
 
-  // useEffect(() => {
-  //   const filtered = eventsInfo.filter((item) =>
-  //     Object.values(item).some((val) =>
-  //       String(val).toLowerCase().includes(searchTerm.toLowerCase())
-  //     )
-  //   );
-  //   setFilteredEvents(filtered);
-  //   setCurrentPage(1);
-  //   setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-  // }, [searchTerm]);
+  useEffect(() => {
+    const filtered = eventsInfo.filter((item) =>
+      Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    setFilteredEvents(filtered);
+    setCurrentPage(1);
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+  }, [searchTerm]);
 
   
   return (
@@ -104,7 +103,7 @@ function DescriptionEventsComponent({eventsInfo}) {
         {currentItems.map((item, index) => (
           <Row key={index}>
             <Info>{item.eventName}</Info>
-            <Info>{item.descricao_evento}</Info>
+            <Info>{eventsDescription(item)}</Info>
             <Info>
               <EditButton
                 onClick={() =>
@@ -201,8 +200,9 @@ const Row = styled.div`
 `;
 
 const Info = styled.div`
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    text-align: left;
+    margin-left: 15px;
     word-break: break-word;
     font-size: 16px;
     line-height: 24px;

@@ -6,28 +6,8 @@ import apiServiceOCI from "../services/apiServiceOCI";
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 import DescriptionEventsComponent from '../components/DescriptionEventsComponent';
 
-function ComputeEventsPage() {
-    const [user] = useContext(UserContext);
-    const [eventsInfo , setEventsInfo ] = useState([]);
-    // console.log(eventsInfo);
-    // console.log(user);
-    useEffect(() => {
-            if(!user) return;
-            const fetchData = async () => {
-                try {
-                    const type = "compute";
-                    const response = await apiServiceOCI.getEvents(type, user.token);
-                    if (response.status === 200) {
-                        setEventsInfo(response.data);
-                    }
-                } catch (error) {
-                    console.log(error);
-                    alert("Ocorreu um erro", error);
-                }
-            };
-            fetchData();
-        }, [user]);
-    
+function ComputeEventsPage({eventsInfo}) {
+   
     return (
         <PageContainer>
             <FixedMenuComponent />
