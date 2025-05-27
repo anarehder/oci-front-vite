@@ -10,9 +10,9 @@ function FixedMenuComponent() {
     const [open, setOpen] = useState("");
     const items = [
         { title: "Block Volumes", options: [
-            { label: "Opção 1", path: "/" },
-            { label: "Opção 2", path: "/" },
-            { label: "Opção 3", path: "/" }
+            { label: "Detalhes", path: "/blockvolume" },
+            // { label: "Opção 2", path: "/" },
+            // { label: "Opção 3", path: "/" }
           ]
         },
         { title: "Compartments", options: [
@@ -116,11 +116,13 @@ const ComponentContainer = styled.div`
 const ItemsContainer = styled.div`
     flex-direction: column;
     margin-bottom: 20px;
+    
 `
 
 const MenuItem = styled.div`
     width: 160px;
-    min-height: 50px;
+    min-height: 60px;
+    
 
     flex-direction: column;
     align-items: flex-start;
@@ -134,6 +136,6 @@ const MenuItem = styled.div`
     border-radius: 5px;
     box-shadow: inset 0 -2px 3px rgba(255, 255, 255, 0.2);
     div{
-        height: 40px;
+        height: 30px;
     }
 `;

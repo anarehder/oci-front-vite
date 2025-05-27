@@ -14,6 +14,7 @@ import CpuMemPage from "./pages/CpuMemPage";
 import ComputeInstanceDetailsPage from "./pages/ComputeInstanceDetailsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import DataikuApiPage from "./pages/DataikuApiPage";
+import BlockVolumePage from "./pages/BlockVolumePage";
 
 function App() {
 
@@ -29,9 +30,8 @@ function App() {
                 <Route path="/homepage" element={<HomePage />}/>
                 <Route path="/projetos" element={<ProjectsPage />} />
                 <Route path="/createuser" element={<CreateUserPage />} />
+                <Route path="/blockvolume" element={<BlockVolumePage />} />
                 <Route path="/computeinstances" element={<ComputeInstancesPage />} />
-                {/* <Route path="/eventos" element={<EventsPage />} /> */}
-                {/* <Route path="/eventos/compute" element={<ComputeEventsPage />} /> */}
                 <Route path="/latest/cpumem" element={<CpuMemPage />} />
                 <Route path="/compute/details/:displayName" element={<ComputeInstanceDetailsPage />} />
                 <Route path="/eventos/:type" element={<EventsPage />} />
