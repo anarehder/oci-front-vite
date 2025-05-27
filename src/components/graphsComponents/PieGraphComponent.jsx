@@ -15,7 +15,7 @@ function PieGraphComponent({ data, nome, type }){
         },
       },
     },
-    labels: categorias,
+    labels: categorias.slice(0,5),
     dataLabels: {
       enabled: true,
       textAnchor: 'middle',
@@ -79,7 +79,7 @@ function PieGraphComponent({ data, nome, type }){
   return (
     <Container>
       <Title>{nome}</Title>
-      <Chart options={chartOptions} series={valores} type="donut" height={350} />
+      <Chart options={chartOptions} series={valores.slice(0,5)} type="donut" height={350} />
     </Container>
   );
 };

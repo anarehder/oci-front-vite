@@ -11,7 +11,7 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
     } = creditsOCI[0];
 
     const categorias = ["Valor Utilizado %", "Dias Decorridos %"];
-    const valores = [parseFloat(used_percentage.toFixed(2)), parseFloat(date_percentage.toFixed(2))];
+    const valores = [parseFloat(used_percentage?.toFixed(2)), parseFloat(date_percentage?.toFixed(2))];
 
     const predictedTotalDays = used_percentage > 0 ? (100 * dias_decorridos) / used_percentage : 0;
     const predictedEndDate = dayjs().add(predictedTotalDays - dias_decorridos, "day").format("YYYY-MM-DD");
