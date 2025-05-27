@@ -7,7 +7,7 @@ import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 import { useParams } from 'react-router-dom';
 import { GrCloudComputer } from "react-icons/gr";
 import LineGraphComponent from '../components/graphsComponents/LineGraphComponent';
-
+import { DBTimeArray } from '../utils/dbTime';
 
 function ComputeInstanceDetailsPage() {
     const { displayName } = useParams();
@@ -17,90 +17,94 @@ function ComputeInstanceDetailsPage() {
     const [cpuDetails, setCpuDetails]= useState([]);
     const [memDetails, setMemDetails] = useState([]);
     const [interval, setInterval] = useState("2 HOUR");
-    console.log(cpuDetails);
+    const [carregando, setCarregando] = useState(false);
+
     useEffect(() => {
+            setCarregando(true);
             if(!user) return;
             const body = {displayName: decodedDisplayName, interval: interval};
             const fetchData = async () => {
                 try {
-                    // const body = {displayName: decodedDisplayName, interval: interval};
                     const response = await apiServiceOCI.getComputeDetails(user.token, body);
                     if (response.status === 200) {
                         setComputeInstanceInfo(response.data.details);
                         setCpuDetails(response.data.cpu);
                         setMemDetails(response.data.memory);
+                        setCarregando(false);
                     }
                 } catch (error) {
                     console.log(error);
                     alert("Ocorreu um erro", error);
+                    setCarregando(false);
                 }
             };
             fetchData();
-        }, []);
-    
-    return (
+        }, [interval]);
+
+        return (
         <PageContainer>
             <FixedMenuComponent />
             <HeaderComponent title={"COMPUTE INSTANCE DETAILS"} />
             <DetailsContainer>
-                <h2><GrCloudComputer size={30} /> {decodedDisplayName}</h2>
+                    <InfoContainer>
+                        <h2><GrCloudComputer size={30} /> {decodedDisplayName}</h2>
 
-                <h2>intervalo de coleta: {interval}</h2>
-                {
-                    computeInstanceInfo?.id &&
-                    <>
-                        <h2>Resultado recebido - objeto - id maquina {computeInstanceInfo?.id}</h2>
-                        <div> <h2>fault_domain</h2>{computeInstanceInfo.fault_domain}</div>
-                        <div> <h2>availability_domain</h2>{computeInstanceInfo.availability_domain.slice(5)}</div>
-                        <div> <h2>lifecycle_state</h2>{computeInstanceInfo.lifecycle_state}</div>
-                        <div> <h2>memory_in_gbs</h2>{computeInstanceInfo.fault_memory_in_gbsdomain}</div>
-                        <div> <h2>monthly_cost</h2>{computeInstanceInfo.monthly_cost}</div>
-                        <div> <h2>ocpus</h2>{computeInstanceInfo.ocpus}</div>
-                        <div> <h2>processor_description</h2>{computeInstanceInfo.processor_description}</div>
-                        <div> <h2>region</h2>{computeInstanceInfo.region}</div>
-                        <div> <h2>shape</h2>{computeInstanceInfo.shape}</div>         
-                        <div> <h2>time_created</h2>{computeInstanceInfo.time_created}</div>
-                        <div> <h2>tenancy_name</h2>{computeInstanceInfo.tenancy_name}</div>           
-                    </>
-                }
-                {
-                    cpuDetails.length > 0 &&
-                    <>
-                    <h2>Resultado recebido - array de tamanho {cpuDetails.length}  </h2>
-                    <LineGraphComponent  data={cpuDetails.map(entry => ({item: entry.metric_timestamp, value: entry.cpu_usage}))} nome={"Cpu"}/>
-                    </>
-                    
-                    // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
-                }
-             {
-                memDetails.length >0 &&
-                    
-                    <>
-                    <h2>Resultado recebido - array de tamanho {memDetails.length} </h2>
-                    <LineGraphComponent  data={memDetails.map(entry => ({item: entry.metric_timestamp, value: entry.mem_usage}))} nome={"Memoria"}/>
-                    </>
-                // <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
-            }
+                        {
+                            computeInstanceInfo?.id &&
+                            <InstanceDetails>
+                                <div> <h2>fault_domain</h2>{computeInstanceInfo.fault_domain}</div>
+                                <div> <h2>availability_domain</h2>{computeInstanceInfo.availability_domain.slice(5)}</div>
+                                <div> <h2>lifecycle_state</h2>{computeInstanceInfo.lifecycle_state}</div>
+                                <div> <h2>memory_in_gbs</h2>{computeInstanceInfo.memory_in_gbs}</div>
+                                <div> <h2>monthly_cost</h2>{computeInstanceInfo.monthly_cost}</div>
+                                <div> <h2>ocpus</h2>{computeInstanceInfo.ocpus}</div>
+                                <div> <h2>processor_description</h2>{computeInstanceInfo.processor_description}</div>
+                                <div> <h2>region</h2>{computeInstanceInfo.region}</div>
+                                <div> <h2>shape</h2>{computeInstanceInfo.shape}</div>
+                                <div> <h2>time_created</h2>{computeInstanceInfo.time_created}</div>
+                                <div> <h2>tenancy_name</h2>{computeInstanceInfo.tenancy_name}</div>
+                            </InstanceDetails>
+                        }
+                        <InputContainer>
+                            <h2>Intervalo de coleta:</h2>
+                            <select value={interval} onChange={(e) => setInterval(e.target.value)}>
+                                {DBTimeArray.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+
+                            </select>
+                        </InputContainer>
+                        {carregando ? <h2>Carregando dados...</h2> :
+                            <GraphsContainer>
+                                {
+                                    cpuDetails.length > 0 &&
+                                    <LineGraphComponent data={cpuDetails.map(entry => ({ item: entry.metric_timestamp, valor: entry.cpu_usage.toFixed(2) }))} nome={"Cpu"} />
+                                }
+                                {
+                                    memDetails.length > 0 &&
+                                    <LineGraphComponent data={memDetails.map(entry => ({ item: entry.metric_timestamp, valor: entry.memory_usage.toFixed(2) }))} nome={"Memoria"} />
+                                }
+                            </GraphsContainer>
+                        }
+                    </InfoContainer>
             </DetailsContainer>
         </PageContainer>
     )
 }
 
-// function LineGraphComponent({ , nome }) {
-//   const categorias = data.map((d) => d.item);
-//   const valores = data.map((d) => d.valor);
-
 export default ComputeInstanceDetailsPage;
 
 const PageContainer = styled.div`
     width: 100%;
-    // height: 100vh;
+    min-height: 100vh;
     flex-direction: column;
 `
 
 const DetailsContainer = styled.div`
-    width: calc(100vw - 220px);
-    margin: 80px 0;
+    width: calc(100vw - 250px);
+    margin: 100px 0;
     margin-left: 200px;
     position: relative;
 
@@ -113,7 +117,45 @@ const DetailsContainer = styled.div`
     h2{
         margin-bottom: 20px;
     }
-    div {
-        width: 50%;
+
+`
+const InstanceDetails = styled.div`
+    flex-wrap: wrap;
+    gap:  10px;
+    div{
+        width: 40%;
+        text-aling: left;
+        justify-content: flex-start;
+        align-items: center;
+        // background-color: red;
+        gap: 15px;
+        h2{
+            margin-bottom: 0;
+        }
     }
+`
+
+const InfoContainer = styled.div `
+    width: 90%;
+    flex-direction: column;
+    gap: 20px;
+`
+
+const InputContainer = styled.div`
+    width: 400px;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    height: 60px;
+    // background-color: red;
+    h2{
+        margin: 0 auto;
+    }
+`
+
+const GraphsContainer = styled.div`
+    // width: 50%;
+    gap: 15px;
+    // background-color: red;
+    justify-content: center;
 `

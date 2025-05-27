@@ -104,6 +104,7 @@ const GraphsContainer = styled.div`
     width: calc(100vw - 220px);
     margin-left: 200px;
     position: relative;
+    margin-top: 100px;
 
     flex-direction: column;
     justify-content: flex-start;

@@ -3,39 +3,69 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 
 function LineGraphComponent({ data, nome }) {
-  const categorias = data.map((d) => d.item);
+
+  function formatISODateWithoutTimezone(isoString) {
+  const date = new Date(isoString);
+
+  const pad = (num) => num.toString().padStart(2, '0');
+
+  const year = date.getUTCFullYear();
+  const month = pad(date.getUTCMonth() + 1); // meses começam do 0
+  const day = pad(date.getUTCDate());
+  const hours = pad(date.getUTCHours());
+  const minutes = pad(date.getUTCMinutes());
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+  const categorias = data.map((d) => formatISODateWithoutTimezone(d.item));
   const valores = data.map((d) => d.valor);
 
   const chartOptions = {
     chart: {
-      type: "line",
-      toolbar: { show: false },
+        type: "line",
+    },
+    dataLabels: {
+      enabled: false
+    },
+    yaxis: {
+        labels: {
+            formatter: (val) => `${(val).toFixed(0)}%`,
+        },
     },
     stroke: {
       curve: "smooth",
       width: 3,
     },
     markers: {
-      size: 6,
+      size: 5,
       colors: ["#4e73df"],
       strokeColors: "#fff",
-      strokeWidth: 2,
-    },
-    dataLabels: {
-      enabled: true,
+      strokeWidth: 3,
     },
     xaxis: {
-      categories: categorias,
+      categories: categorias, // seu array de datas formatadas
+      labels: {
+        rotate: -45,
+      },
     },
     colors: ["#4e73df"],
-    annotations: {
-      yaxis: [
-        {
-          y: 3500, // Valor fixo de 3500
-          borderColor: "#FF0000", // Cor da linha de referência
+    tooltip: {
+        shared: false,
+        followCursor: false,
+        intersect: false,
+        onDatasetHover: {
+            highlightDataSeries: false,
         },
-      ],
-    },
+        style: {
+            fontSize: '12px',
+            fontFamily: 'Arial',
+            },
+            theme: 'dark',
+            x: {
+                show: true,
+            },
+        },
   };
 
   const chartSeries = [
@@ -52,7 +82,7 @@ function LineGraphComponent({ data, nome }) {
         options={chartOptions}
         series={chartSeries}
         type="line"
-        height={320}
+        height={500}
       />
     </Container>
   );
@@ -60,15 +90,22 @@ function LineGraphComponent({ data, nome }) {
 export default LineGraphComponent;
 
 const Container = styled.div`
-  width: 28%;
-  height: 350px;
   flex-direction: column;
-  justify-content: flex-start;
-  margin: 20px auto;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  .apexcharts-tooltip {
+            border-radius: 5px;
+            width: 200px;
+            margin-top: -90px;
+            padding: 10px 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            color: orange !important;
+        }
 `;
 
 const Title = styled.h2`
