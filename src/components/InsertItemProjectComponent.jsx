@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import NewVMComponent from "./NewVMComponent";
+import NewDBComponent from "./NewDBComponent";
 
 function InsertItemProjectComponent({ selectedProject, setSelectedProject }) {
     const [os, setOs] = useState('');
@@ -11,16 +12,18 @@ function InsertItemProjectComponent({ selectedProject, setSelectedProject }) {
 
     return (
         <Container>
-            <h2>{selectedProject.idProjeto} {selectedProject.cliente}</h2>
-            <h3> Selecione um recurso para adicionar:</h3>
+            <h2>Projeto: {selectedProject.idProjeto} {selectedProject.cliente}</h2>
+            <h3> Selecione o tipo de recurso para provisionar:</h3>
             <ResourcesContainer>
                 <ResourceButton onClick={()=>setSelectedType("VM")} $selected={selectedType==="VM" ? "sim" : "não"}>Máquina Virtual</ResourceButton>
                 <ResourceButton onClick={()=>setSelectedType("DB")} $selected={selectedType==="DB" ? "sim" : "não"}>Database</ResourceButton>
             </ResourcesContainer>
             {selectedType === "VM" &&
-                <NewVMComponent />
+                <NewVMComponent idProjeto={selectedProject.idProjeto}/>
             }
-
+            {selectedType === "DB" &&
+                <NewDBComponent idProjeto={selectedProject.idProjeto} />
+            }
             <button onClick={() => setSelectedProject(null)}>Fechar</button>
         </Container>
     );

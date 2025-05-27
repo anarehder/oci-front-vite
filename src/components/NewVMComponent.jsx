@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-function NewVMComponent() {
-    const [form, setForm] = useState({ nome: "", so: "", burst: 0, shape: "", ocpu: 1, memoria: 1, blockvolume: 0, retencao: 15, perfil: 5});
+function NewVMComponent({idProjeto}) {
+    const [form, setForm] = useState({ idProjeto:idProjeto, nome: "", so: "", burst: 0, shape: "", ocpu: 1, memoria: 1, blockvolume: 0, retencao: 15, perfil: 5});
 
     const objectStorage= (Number(form.blockvolume)+(Number(form.blockvolume)*(Number(form.perfil)/100)*(Number(form.retencao)-1))).toFixed(1);
 
@@ -14,7 +14,7 @@ function NewVMComponent() {
 
     async function handleSubmitVM(e) {
         e.preventDefault();
-        alert(`Inserir VM ${form.nome} no projeto`);
+        alert(`Inserir VM ${form.nome} no projeto ${form.idProjeto}`);
         // if (!form.username || !form.password) return alert("Todos os campos devem ser preenchidos");
         // try {
         //     const response = await apiService.login(form);
@@ -146,7 +146,7 @@ function NewVMComponent() {
                             disabled='true'
                         />
                     </Item>
-                    <button type="submit">Cadastrar VM</button>
+                    <button type="submit">Cadastrar no Projeto </button>
                 </FormContainer>
                 {/* <Details>
                     <h3>Valores Selecionados:</h3>

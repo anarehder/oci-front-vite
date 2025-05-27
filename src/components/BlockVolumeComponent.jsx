@@ -183,6 +183,9 @@ const RowHeader = styled.div`
   height: 45px;
   border-radius: 5px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  div:nth-of-type(9) {
+      margin-right:8px;
+    }
 `;
 
 const Row = styled.div`

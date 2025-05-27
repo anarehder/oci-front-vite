@@ -1,11 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import styled from 'styled-components';
-import logo from '../assets/logo.svg';
 import { GoArrowRight } from "react-icons/go";
 import { LuUserCircle2 } from "react-icons/lu";
 import { TbFilterEdit } from "react-icons/tb";
-import { IoCloseSharp } from "react-icons/io5";
-
 import { FaEdit } from "react-icons/fa";
 import { TbLock } from "react-icons/tb";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
@@ -16,29 +13,28 @@ import { GoTasklist } from "react-icons/go";
 import { LiaOrcid } from "react-icons/lia";
 import { BsCalendarDate } from "react-icons/bs";
 import { RiListSettingsLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import apiService from "../services/apiService";
 import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent";
 import HeaderComponent from "../components/fixedComponents/HeaderComponent";
 import InsertItemProjectComponent from "../components/InsertItemProjectComponent";
+import ProjectsGraphsComponent from "../components/graphsComponents/ProjectsGraphsComponent";
 
 function ProjectsPage() {
     const [form, setForm] = useState({ idProjeto: "", tenancy: "", cliente: "", arquiteto: "", status: "", inicio: "", regiao: "" });
     const [user, setUser] = useContext(UserContext);
-    const [novoProjeto, setNovoProjeto] = useState(false);
+    const [item, setItem] = useState("Overview");
     const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
     const [selectedProject, setSelectedProject] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const sortOptions = [null, 'asc', 'desc'];
-
     const projetos = [
         {
             idProjeto: "OCI-001",
             tenancy: "empresa01-tenancy",
             cliente: "Grupo TechNova",
             arquiteto: "Joana Martins",
-            status: "Implantação",
+            status: "Implementação",
             inicio: "2024-11-10",
             regiao: "us-ashburn-1"
         },
@@ -56,7 +52,7 @@ function ProjectsPage() {
             tenancy: "empresa03-tenancy",
             cliente: "Indústria Alfa",
             arquiteto: "Renata Lima",
-            status: "Implantação",
+            status: "Implementação",
             inicio: "2023-07-01",
             regiao: "uk-london-1"
         },
@@ -81,7 +77,6 @@ function ProjectsPage() {
     ];
 
     const [currentItems, setCurrentItems] = useState(projetos);
-    const navigate = useNavigate();
 
     const handleForm = (e) => {
         e.preventDefault(); setForm((prevForm) => ({ ...prevForm, [e.target.id]: e.target.value }));
@@ -159,13 +154,70 @@ function ProjectsPage() {
             <HeaderComponent title={"PROJETOS"} />
 
             <ProjetosContainer>
-                {!novoProjeto &&
-                    <button onClick={() => setNovoProjeto(!novoProjeto)}>Cadastrar <br/>novo projeto</button>
+                <UpperMenu>
+                    <ItemMenu $selected={item==="Overview" ? "sim" : "não"} onClick={()=>setItem("Overview")}>Overview</ItemMenu> 
+                    <ItemMenu $selected={item==="Projetos" ? "sim" : "não"} onClick={()=>setItem("Projetos")}>Projetos<div>{projetos?.length}</div></ItemMenu>
+                    <ItemMenu $selected={item==="New" ? "sim" : "não"} onClick={()=>setItem("New")}>Criar Novo Projeto</ItemMenu>
+                    <ItemMenu $selected={item==="Documentos" ? "sim" : "não"} onClick={()=>setItem("Documentos")}>Documentos</ItemMenu>
+                </UpperMenu>
+                {selectedProject &&
+                    <InsertItemProjectComponent selectedProject={selectedProject} setSelectedProject={setSelectedProject} />
                 }
-                {!selectedProject &&
+                {item === "Overview" && <ProjectsGraphsComponent projetos={projetos} />}
+                {item === "Projetos" && 
                     <ListContainer>
-                        {
-                            novoProjeto &&
+                    <h2>Projetos Cadastrados</h2>
+                    <SearchBar>
+                        <TbFilterEdit size={30} />
+                        <input
+                            type="text"
+                            placeholder="Filtrar por qualquer campo..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </SearchBar>
+                    <ListHeader>
+                        <RowHeader>
+                            <Info onClick={() => handleSort('idProjeto')}><span>Id Projeto</span>{renderSortIcon('idProjeto')}</Info>
+                            <Info onClick={() => handleSort('tenancy')}><span>Tenancy</span>{renderSortIcon('tenancy')}</Info>
+                            <Info onClick={() => handleSort('cliente')}><span>Cliente</span>{renderSortIcon('cliente')}</Info>
+                            <Info onClick={() => handleSort('arquiteto')}><span>Arquiteto</span>{renderSortIcon('arquiteto')}</Info>
+                            <Info onClick={() => handleSort('regiao')}><span>Região</span>{renderSortIcon('regiao')}</Info>
+                            <Info onClick={() => handleSort('status')}><span>Status</span>{renderSortIcon('status')}</Info>
+                            <Info onClick={() => handleSort('inicio')}><span>Início</span>{renderSortIcon('inicio')}</Info>
+                            <Info ><span>Detalhes</span></Info>
+                            <Info><span>Editar</span></Info>
+                        </RowHeader>
+                    </ListHeader>
+                    <List>
+                        {currentItems.length === 0 ?
+                            <h2>Sem informações para exibir...</h2> :
+                            currentItems.map((item, index) => (
+                                <Row key={index}>
+                                    <Info>{item.idProjeto}</Info>
+                                    <Info>{item.tenancy}</Info>
+                                    <Info>{item.cliente}</Info>
+                                    <Info>{item.arquiteto}</Info>
+                                    <Info>{item.regiao}</Info>
+                                    <Info>{item.status}</Info>
+                                    <Info>{item.inicio}</Info>
+                                    <Info><RiListSettingsLine size={30} /></Info>
+                                    <Info>{item.status === "Desenho" ?
+                                        <EditButton onClick={() => setSelectedProject(item)}>
+                                            <FaEdit size={24} />
+                                        </EditButton> :
+                                        <EditButton disabled={true}>
+                                            <TbLock size={24} />
+                                        </EditButton>
+                                    }
+                                    </Info>
+                                </Row>
+                            ))}
+                    </List>
+                    </ListContainer>
+                }
+                {item === "New" &&
+                    <NewProjectContainer>
                             <FormContainer>
                                 <div>
                                     <h2>Sobre o projeto:</h2>
@@ -263,71 +315,11 @@ function ProjectsPage() {
                                             <p>Criar Projeto</p>
                                             <GoArrowRight size={24} />
                                         </button>
-
-                                        <button onClick={() => setNovoProjeto(false)}>
-                                            <p>Fechar</p>
-                                            <IoCloseSharp size={24} />
-                                        </button>
                                     </div>
 
                                 </FormContainer>
-                        }
-                    </ListContainer>
+                    </NewProjectContainer>
                 }
-                {selectedProject &&
-                    <InsertItemProjectComponent selectedProject={selectedProject} setSelectedProject={setSelectedProject} />
-                }
-                <ListContainer>
-                    <h2>Projetos Cadastrados</h2>
-                    <SearchBar>
-                        <TbFilterEdit size={30} />
-                        <input
-                            type="text"
-                            placeholder="Filtrar por qualquer campo..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </SearchBar>
-                    <ListHeader>
-                        <RowHeader>
-                            <Info onClick={() => handleSort('idProjeto')}><span>Id Projeto</span>{renderSortIcon('idProjeto')}</Info>
-                            <Info onClick={() => handleSort('tenancy')}><span>Tenancy</span>{renderSortIcon('tenancy')}</Info>
-                            <Info onClick={() => handleSort('cliente')}><span>Cliente</span>{renderSortIcon('cliente')}</Info>
-                            <Info onClick={() => handleSort('arquiteto')}><span>Arquiteto</span>{renderSortIcon('arquiteto')}</Info>
-                            <Info onClick={() => handleSort('regiao')}><span>Região</span>{renderSortIcon('regiao')}</Info>
-                            <Info onClick={() => handleSort('status')}><span>Status</span>{renderSortIcon('status')}</Info>
-                            <Info onClick={() => handleSort('inicio')}><span>Início</span>{renderSortIcon('inicio')}</Info>
-                            <Info ><span>Detalhes</span></Info>
-                            <Info><span>Editar</span></Info>
-                        </RowHeader>
-                    </ListHeader>
-                    <List>
-                        {currentItems.length === 0 ?
-                            <h2>Sem informações para exibir...</h2> :
-                            currentItems.map((item, index) => (
-                                <Row key={index}>
-                                    <Info>{item.idProjeto}</Info>
-                                    <Info>{item.tenancy}</Info>
-                                    <Info>{item.cliente}</Info>
-                                    <Info>{item.arquiteto}</Info>
-                                    <Info>{item.regiao}</Info>
-                                    <Info>{item.status}</Info>
-                                    <Info>{item.inicio}</Info>
-                                    <Info><RiListSettingsLine size={30} /></Info>
-                                    <Info>{item.status === "Desenho" ?
-                                        <EditButton onClick={() => setSelectedProject(item)}>
-                                            <FaEdit size={24} />
-                                        </EditButton> :
-                                        <EditButton disabled={true}>
-                                            <TbLock size={24} />
-                                        </EditButton>
-                                    }
-                                    </Info>
-                                </Row>
-                            ))}
-                    </List>
-                </ListContainer>
-                
             </ProjetosContainer>
 
         </PageContainer>
@@ -367,6 +359,37 @@ const ProjetosContainer = styled.div`
         text-align: center;
     }
 `
+
+const UpperMenu = styled.div`
+    width: 40%;
+    // background-color: red;
+    height: 70px;
+    justify-content: space-between; 
+`
+
+const ItemMenu = styled.div`
+    cursor: pointer;
+    color: #555;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    width: auto;
+    font-weight: 500;
+    gap: 4px;
+    padding-bottom: 10px;
+    border-bottom: ${(props) => props.$selected === "sim" ? "2px solid #444444" : "2px solid #FFFFFF"};
+    div{
+        background-color: #444444;
+        color: white;
+        border-radius:50px;
+        height:20px;
+        font-size: 15px;
+        width:20px;
+        align-items: center;
+        justify-content: center;
+    }
+`
+
 const SearchBar = styled.div`
   display: flex;
   align-items: center;
@@ -389,6 +412,16 @@ const SearchBar = styled.div`
 const ListContainer = styled.div`
     flex-direction: column;
     margin-top: 30px;
+`
+
+const NewProjectContainer = styled.div`
+    max-width: 1350px;
+    flex-direction: column;
+    margin-top: 30px;
+    // background-color: red;
+    button{
+        margin-top: 30px;
+    }
 `
 
 const FormContainer = styled.form`
@@ -457,6 +490,8 @@ const List = styled.div`
   margin-bottom: 50px;
   h2 {
     line-height: 50px;
+    text-align: center;
+    font-size: 22px;
   }
 `;
 
