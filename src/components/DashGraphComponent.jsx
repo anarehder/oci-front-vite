@@ -95,12 +95,8 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                             type={"currency"}
                         />
                     }
-                    {
-                        tenancyInfo.cost_history && tenancyInfo.subscriptionDetails.lenght > 0 &&
-                        <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
+                    <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
                             subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
-                    }
-
                 </GraphsContainer>
             }
         </Container>

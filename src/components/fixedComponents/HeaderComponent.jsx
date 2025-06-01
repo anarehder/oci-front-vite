@@ -1,9 +1,13 @@
 import { FaRegBell } from "react-icons/fa";
 import styled from 'styled-components';
 import Logout from "./LogoutComponent";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useTenancy } from "../../contexts/TenancyContext";
+import { UserContext } from "../../contexts/UserContext";
 
 function HeaderComponent({title}) {
+    const [user] = useContext(UserContext);
+    const { tenancy } = useTenancy();
     //obter as tips quando renderizar o header
     const [open, setOpen] = useState(false);
     const [ociTips, setOciTips] = useState([
@@ -17,8 +21,9 @@ function HeaderComponent({title}) {
     return (
         <ComponentContainer>
           <LimitContainer>
-          <Title>{title}</Title>
+          <Title>{title} <h2>{tenancy=== 'all' ? ' - Todas as Tenancies' : ` - ${tenancy}`}</h2></Title>
             <ButtonsContainer>
+              {user?.client && <UserBall> AT </UserBall>}
                 <BellWrapper onClick={() => setOpen(!open)}>
                     <FaRegBell size={30} />
                     {ociTips.length > 0 && <RedDot />}
@@ -43,7 +48,7 @@ function HeaderComponent({title}) {
 export default HeaderComponent;
 
 const ComponentContainer = styled.div`
-    width: calc(100% - 220px);
+    width: calc(100% - 200px);
     justify-content: center;
     position: fixed;
     top: 0;
@@ -55,24 +60,38 @@ const ComponentContainer = styled.div`
 `;
 
 const LimitContainer = styled.div`
-  width: 95%;
+    width: 95%;
 `
 
 const Title = styled.div `
     font-size: 30px;
     font-weight: 700;
     height: 70px;
+    justify-content: flex-start;
+    gap: 7px;
 `
 
 const ButtonsContainer = styled.div`
     height: 70px;
     margin: 0 auto;
-    width: 150px;
+    gap: 20px;
+    justify-content: space-between;
+    width: 140px;
+`
+
+const UserBall = styled.div`
+  background-color: white;
+  width: 35px;
+  justify-content: center;
+  height: 35px;
+  border-radius: 50px;
+  font-weight: 600;
+  color: blue;
 `
 
 const BellWrapper = styled.div`
+  width: 30px;
   position: relative;
-  width: fit-content;
 `;
 
 const RedDot = styled.div`

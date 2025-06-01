@@ -3,59 +3,96 @@ import Logo from '../../assets/LOGO-BRANCA.png';
 import { Link } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { useTenancy } from '../../contexts/TenancyContext';
+import { UserContext } from '../../contexts/UserContext';
 
 
 function FixedMenuComponent() {
+    const { tenancy, setTenancy, allTenanciesInfo, selectedMonth } = useTenancy();
+    const [user] = useContext(UserContext);
     const [open, setOpen] = useState("");
     const items = [
-        { title: "Block Volumes", options: [
-            { label: "Detalhes", path: "/blockvolume" },
-            // { label: "Opção 2", path: "/" },
-            // { label: "Opção 3", path: "/" }
-          ]
+        {
+            title: "Block Volumes", options: [
+                { label: "Backup", path: "/blockvolume" },                
+                { label: "Órfãos", path: "/blockvolume" },
+                { label: "Volumes", path: "/blockvolume" },               
+            ]
         },
-        { title: "Compartments", options: [
-            { label: "Opção 1", path: "/" }
-          ]
+        // {
+        //     title: "Compartments", options: [
+        //         { label: "Opção 1", path: "/" }
+        //     ]
+        // },
+        {
+            title: "Compute", options: [
+                { label: "Compute Instances", path: "/computeinstances" },
+                { label: "CPU e Memória", path: "/latest/cpumem" }
+            ]
         },
-        { title: "Compute", options: [
-            { label: "Compute Instances", path: "/computeinstances" },
-            { label: "CPU e Memória", path: "/latest/cpumem" }
-          ]
-        },
-        { title: "Cost", options: [
-            { label: "Opção 1", path: "/" },
-            { label: "Opção 2", path: "/" }
-          ]
-        },
-        { title: "Object Storage", options: [
-            { label: "Opção 1", path: "/" },
-            { label: "Opção 2", path: "/" }
-          ]
-        },
-        { title: "Users", options: [
-            { label: "Opção 1", path: "/" }
-          ]
-        },
-        { title: "Events", options: [
-            { label: "Compute Instances", path: "/eventos/compute" },
-            { label: "Identity", path: "/eventos/identity" },
-            { label: "Network", path: "/eventos/network" }
-          ]
+        // {
+        //     title: "Cost", options: [
+        //         { label: "Opção 1", path: "/" },
+        //         { label: "Opção 2", path: "/" }
+        //     ]
+        // },
+        // {
+        //     title: "Object Storage", options: [
+        //         { label: "Opção 1", path: "/" },
+        //         { label: "Opção 2", path: "/" }
+        //     ]
+        // },
+        // {
+        //     title: "Users", options: [
+        //         { label: "Opção 1", path: "/" }
+        //     ]
+        // },
+        {
+            title: "Eventos", options: [
+                { label: "Compute Instances", path: "/eventos/compute" },
+                { label: "Identity", path: "/eventos/identity" },
+                { label: "Network", path: "/eventos/network" }
+            ]
         }
-      ];
-    
+    ];
+
+    useEffect(() => {
+        if (!allTenanciesInfo) {
+            return
+        }
+    }, []);
+
+    const handleTenancyChange = async (e) => {
+        const selectedValue = e.target.value;
+        setTenancy(selectedValue);
+    }
+    console.log(tenancy, allTenanciesInfo, selectedMonth);
     return (
         <ComponentContainer>
-            <img src={Logo} alt={"accerte"}/>
+            <img src={Logo} alt={"accerte"} />
             <br />
-            <Link to="/"><MenuItem>Dashboard</MenuItem></Link>
+            {
+                allTenanciesInfo?.tenancies &&
+                <TenancySelection>
+                    {/* <h3>Tenancy:</h3> */}
+                    <select value={tenancy} onChange={handleTenancyChange}>
+                        <option value={'all'}>Todas as Tenancies</option>
+                        {allTenanciesInfo?.tenancies.map((tenancy) => (
+                            <option key={tenancy} value={tenancy}>{tenancy}</option>
+                        ))}
+                    </select>
+                </TenancySelection>
+            }
             <br />
+            {
+                user?.client === 'Accerte Tecnologia' &&
+                <MenuItem>
+                    <Link to="/projetos"> Projetos </Link>
+                </MenuItem>
+            }
             <br />
-            <Link to="/projetos"><MenuItem>Projetos</MenuItem></Link> 
-            <br />
-            <br />
+            <MenuItem><Link to="/">Dashboard</Link></MenuItem>
             <ItemsContainer>
                 {items.map((item, index) => (
                     <MenuItem key={index}>
@@ -116,12 +153,20 @@ const ComponentContainer = styled.div`
 const ItemsContainer = styled.div`
     flex-direction: column;
     margin-bottom: 20px;
-    
+`
+
+const TenancySelection = styled.div`
+    flex-direction: column;
+    text-indent: 10px;
+    select{
+        width: 90%;
+        margin-left: 10px;
+        margin: 10px 0;
+    }
 `
 
 const MenuItem = styled.div`
-    width: 160px;
-    min-height: 60px;
+    min-height: 70px;
     
 
     flex-direction: column;
@@ -129,7 +174,7 @@ const MenuItem = styled.div`
     justify-content: center;
 
     padding: 5px 25px;
-
+    text-indent: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     

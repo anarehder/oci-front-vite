@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { FaEdit } from "react-icons/fa";
 import { TbFilterEdit } from "react-icons/tb";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
+import { useTenancy } from "../contexts/TenancyContext";
 
-function OrphanListComponent({ orphanList, sectionRef }) {
+function OrphanListComponent({ sectionRef }) {
+  const { orphanList } = useTenancy();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentItems, setCurrentItems] = useState(orphanList);
