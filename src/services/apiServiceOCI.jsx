@@ -45,13 +45,18 @@ function getComputeDetails(token, body){
     return axios.post(`${BASE_URL}/computeinstances/details`, body, { headers: { Authorization: token } });
 }
 
+function getJoinBlockVolumes(token, body){
+    return axios.get(`${BASE_URL}/blockvolume/join`,body, { headers: { Authorization: token } });
+}
+
 function getBlockVolumes(token){
     return axios.get(`${BASE_URL}/blockvolume`, { headers: { Authorization: token } });
 }
 
+
 function getEvents(type, token){
     return axios.get(`${BASE_URL}/events/${type}`, { headers: { Authorization: token } });
 }
-const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents };
+const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents, getJoinBlockVolumes };
 
 export default apiServiceOCI;

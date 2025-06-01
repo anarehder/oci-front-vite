@@ -5,27 +5,37 @@ import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent
 import apiServiceOCI from "../services/apiServiceOCI";
 import ComputeInstancesComponent from '../components/ComputeInstancesComponent';
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
+import { useTenancy } from '../contexts/TenancyContext';
 
 function ComputeInstancesPage() {
     const [user] = useContext(UserContext);
-    const [computeInstancesInfo , setComputeInstancesInfo ] = useState([]);
-    // console.log(computeInstancesInfo);
+    const { tenancy } = useTenancy();
+    const [computeInstancesInfo, setComputeInstancesInfo] = useState([]);
+
     useEffect(() => {
-            if(!user) return;
-            const fetchData = async () => {
-                try {
+        if (!user) return;
+        const fetchData = async () => {
+            try {
+                if (tenancy === 'all') {
                     const response = await apiServiceOCI.getComputeInstances(user.token);
-                    // console.log(response.status);
                     if (response.status === 200) {
                         setComputeInstancesInfo(response.data);
                     }
-                } catch (error) {
-                    console.log(error);
-                    alert("Ocorreu um erro", error);
+                } else {
+                    const tenancySelections = { tenancy1: tenancy, tenancy2: null, tenancy3: null };
+                    console.log(tenancySelections);
+                    const response = await apiServiceOCI.getJoinComputeInstances(tenancySelections, user.token);
+                    if (response.status === 200) {
+                        setComputeInstancesInfo(response.data);
+                    }
                 }
-            };
-            fetchData();
-        }, []);
+            } catch (error) {
+                console.log(error);
+                alert("Ocorreu um erro", error);
+            }
+        };
+        fetchData();
+    }, [tenancy]);
     
     return (
         <PageContainer>
