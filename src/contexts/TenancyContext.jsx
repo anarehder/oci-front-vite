@@ -24,7 +24,7 @@ export default function TenancyProvider({ children }) {
                     }
                 } else {
                     const tenancySelections = {tenancy1: tenancy, tenancy2: null, tenancy3: null};
-                    console.log(tenancySelections);
+                    // console.log(tenancySelections);
                     const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
                     if (response.status === 200) {
                         setOneTenancyInfo(response.data);

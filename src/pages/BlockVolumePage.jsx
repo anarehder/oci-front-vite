@@ -11,7 +11,8 @@ function BlockVolumePage() {
     const [user] = useContext(UserContext);
     const { tenancy } = useTenancy();
     const [blockVolumeInfo , setBlockVolumeInfo ] = useState([]);
-    console.log(blockVolumeInfo[0]);
+    const [carregando, setCarregando] = useState(true);
+
     useEffect(() => {
             if(!user) return;
             const fetchData = async () => {
@@ -20,13 +21,14 @@ function BlockVolumePage() {
                     const response = await apiServiceOCI.getBlockVolumes(user.token);
                     if (response.status === 200) {
                         setBlockVolumeInfo(response.data);
+                        setCarregando(false);
                     }
                 } else {
                     const tenancySelections = {tenancy1: tenancy, tenancy2: null, tenancy3: null};
-                    console.log(tenancySelections);
                     const response = await apiServiceOCI.getJoinBlockVolumes(user.token, tenancySelections);
                     if (response.status === 200) {
                         setBlockVolumeInfo(response.data);
+                        setCarregando(false);
                     }
                 }
                 } catch (error) {
@@ -35,14 +37,14 @@ function BlockVolumePage() {
                 }
             };
             fetchData();
-        }, []);
+        }, [tenancy]);
     
     return (
         <PageContainer>
             <FixedMenuComponent />
             <HeaderComponent title={"BLOCK VOLUME"}/>
             {
-                blockVolumeInfo.length >0 &&
+                !carregando &&
                 <BlockVolumeComponent blockVolumeInfo={blockVolumeInfo} />
             }
         </PageContainer>

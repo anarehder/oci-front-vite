@@ -3,14 +3,21 @@ import Logo from '../../assets/LOGO-BRANCA.png';
 import { Link } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
+import { MdKeyboardDoubleArrowLeft  } from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+
 import { useContext, useEffect, useState } from 'react'
 import { useTenancy } from '../../contexts/TenancyContext';
 import { UserContext } from '../../contexts/UserContext';
+import { useFilter } from '../../contexts/FilterContext';
+import { useMenu } from '../../contexts/MenuContext';
 
 
 function FixedMenuComponent() {
     const { tenancy, setTenancy, allTenanciesInfo, selectedMonth } = useTenancy();
+    const { setSearchTerm } = useFilter();
     const [user] = useContext(UserContext);
+    const { show, setShow } = useMenu();
     const [open, setOpen] = useState("");
     const items = [
         {
@@ -67,10 +74,12 @@ function FixedMenuComponent() {
         const selectedValue = e.target.value;
         setTenancy(selectedValue);
     }
-    console.log(tenancy, allTenanciesInfo, selectedMonth);
+
     return (
-        <ComponentContainer>
-            <img src={Logo} alt={"accerte"} />
+        <ComponentContainer >
+            <ShowContainer $show={show ? "exibir" : "ocultar"}>
+            
+            <Hidden onClick={()=>setShow(!show)}> <img src={Logo} alt={"accerte"} /> <MdKeyboardDoubleArrowLeft  size={24}/> </Hidden>
             <br />
             {
                 allTenanciesInfo?.tenancies &&
@@ -88,11 +97,11 @@ function FixedMenuComponent() {
             {
                 user?.client === 'Accerte Tecnologia' &&
                 <MenuItem>
-                    <Link to="/projetos"> Projetos </Link>
+                    <Link to="/projetos" onClick={() => setSearchTerm("")}> Projetos </Link>
                 </MenuItem>
             }
             <br />
-            <MenuItem><Link to="/">Dashboard</Link></MenuItem>
+            <MenuItem><Link to="/" onClick={() => setSearchTerm("")}>Dashboard</Link></MenuItem>
             <ItemsContainer>
                 {items.map((item, index) => (
                     <MenuItem key={index}>
@@ -107,7 +116,7 @@ function FixedMenuComponent() {
                                 </div>
                                     {item.options.map((option, i) => (
                                         <div key={i}>
-                                            <Link to={option.path}>{option.label}</Link>
+                                            <Link to={option.path} onClick={() => setSearchTerm("")}>{option.label}</Link>
                                         </div>
                                     ))}
                             </>
@@ -115,12 +124,28 @@ function FixedMenuComponent() {
                     </MenuItem>
                 ))}
             </ItemsContainer>
+            </ShowContainer>
+            <HiddenContainer $show={show ? "exibir" : "ocultar"}>
+                <Hidden onClick={()=>setShow(!show)}> <img src={Logo} alt={"accerte"} /> <MdKeyboardDoubleArrowRight  size={24}/> </Hidden>
+            </HiddenContainer>
         </ComponentContainer>
     );
 }
 export default FixedMenuComponent;
 
 const ComponentContainer = styled.div`
+    width: ${({ $show }) => ($show === 'exibir' ? '200px' : '40px')};
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    background-color: #021121;
+    color: white;
+`;
+
+const ShowContainer = styled.div`
+    display: ${({ $show }) => ($show === "exibir" ? "flex" : "none")};
     width: 200px;
     height: 100vh;
     position: fixed;
@@ -145,11 +170,24 @@ const ComponentContainer = styled.div`
     }
     z-index: 999;
     img{
-        width: 150px;
+        width: 140px;
         margin: 15px 0;
+        margin-right: 15px;
     }
-`;
+`
 
+const HiddenContainer = styled.div`
+    max-width: 24px;
+    height: 70px;
+    display: ${({ $show }) => ($show === "exibir" ? "none" : "flex")};
+    img{
+        display: none;
+    }
+`
+const Hidden = styled.div`
+    justify-content: flex-end;
+    margin-right: 15px;
+`
 const ItemsContainer = styled.div`
     flex-direction: column;
     margin-bottom: 20px;

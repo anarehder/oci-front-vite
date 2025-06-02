@@ -46,7 +46,8 @@ function DescriptionEventsComponent({eventsInfo, eventsDescription}) {
       
         setFilteredEvents(filtered);
         setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-        setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+        // setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+        setCurrentPage(1);
       
         // Passo 2: sort
         let sorted = [...filtered];
@@ -99,6 +100,7 @@ function DescriptionEventsComponent({eventsInfo, eventsDescription}) {
           <Info><span>Ações</span></Info>
         </RowHeader>
       </ListHeader>
+      {eventsInfo.length ===  0 && <List> Sem dados para exibir. </List>}
       <List>
         {currentItems.map((item, index) => (
           <Row key={index}>
@@ -172,7 +174,7 @@ const List = styled.div`
   margin-top: 10px;
   max-height: 70%;
   flex-direction: column;
-  gap: 10px;
+  // gap: 10px;
   width: 95%;
   font-size: 20px;
   overflow-y: auto;
@@ -193,18 +195,19 @@ const RowHeader = styled.div`
 
 const Row = styled.div`
   background-color: white;
-  border-radius: 5px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #a0a1aa;
+  // box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 const Info = styled.div`
     justify-content: flex-start;
     text-align: left;
     margin-left: 15px;
+    font-size: 15px;
     word-break: break-word;
-    font-size: 16px;
     line-height: 24px;
     span {
       font-weight: bold;

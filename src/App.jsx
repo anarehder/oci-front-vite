@@ -15,6 +15,8 @@ import ComputeInstanceDetailsPage from "./pages/ComputeInstanceDetailsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import DataikuApiPage from "./pages/DataikuApiPage";
 import BlockVolumePage from "./pages/BlockVolumePage";
+import FilterProvider from "./contexts/FilterContext";
+import MenuProvider from "./contexts/MenuContext";
 
 function App() {
 
@@ -23,21 +25,25 @@ function App() {
       <BrowserRouter>
         <UserProvider>
           <PricesProvider>
-            <TenancyProvider>
-              <Routes>
-                <Route path="/" element={<AccessPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/homepage" element={<HomePage />}/>
-                <Route path="/projetos" element={<ProjectsPage />} />
-                <Route path="/createuser" element={<CreateUserPage />} />
-                <Route path="/blockvolume" element={<BlockVolumePage />} />
-                <Route path="/computeinstances" element={<ComputeInstancesPage />} />
-                <Route path="/latest/cpumem" element={<CpuMemPage />} />
-                <Route path="/compute/details/:displayName" element={<ComputeInstanceDetailsPage />} />
-                <Route path="/eventos/:type" element={<EventsPage />} />
-                <Route path="/dataikuapi" element={<DataikuApiPage />} />
-              </Routes>
-            </TenancyProvider>
+            <FilterProvider>
+              <MenuProvider>
+              <TenancyProvider>
+                <Routes>
+                  <Route path="/" element={<AccessPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/homepage" element={<HomePage />} />
+                  <Route path="/projetos" element={<ProjectsPage />} />
+                  <Route path="/createuser" element={<CreateUserPage />} />
+                  <Route path="/blockvolume" element={<BlockVolumePage />} />
+                  <Route path="/computeinstances" element={<ComputeInstancesPage />} />
+                  <Route path="/latest/cpumem" element={<CpuMemPage />} />
+                  <Route path="/compute/details/:displayName" element={<ComputeInstanceDetailsPage />} />
+                  <Route path="/eventos/:type" element={<EventsPage />} />
+                  <Route path="/dataikuapi" element={<DataikuApiPage />} />
+                </Routes>
+              </TenancyProvider>
+              </MenuProvider>
+            </FilterProvider>
           </PricesProvider>
         </UserProvider>
       </BrowserRouter >

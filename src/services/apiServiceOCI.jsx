@@ -41,22 +41,29 @@ function getLatestValues(token){
     return axios.get(`${BASE_URL}/latest/cpumem`, { headers: { Authorization: token } });
 }
 
+function getJoinLatestValues(token, body){
+    return axios.post(`${BASE_URL}/latest/join/cpumem`, body, { headers: { Authorization: token } });
+}
+
 function getComputeDetails(token, body){
     return axios.post(`${BASE_URL}/computeinstances/details`, body, { headers: { Authorization: token } });
 }
 
 function getJoinBlockVolumes(token, body){
-    return axios.get(`${BASE_URL}/blockvolume/join`,body, { headers: { Authorization: token } });
+    return axios.post(`${BASE_URL}/blockvolume/join`,body, { headers: { Authorization: token } });
 }
 
 function getBlockVolumes(token){
     return axios.get(`${BASE_URL}/blockvolume`, { headers: { Authorization: token } });
 }
 
-
 function getEvents(type, token){
     return axios.get(`${BASE_URL}/events/${type}`, { headers: { Authorization: token } });
 }
-const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents, getJoinBlockVolumes };
+
+function getJoinEvents(type, token, body){
+    return axios.post(`${BASE_URL}/events/${type}`, body, { headers: { Authorization: token } });
+}
+const apiServiceOCI = { getDash, getJoinDash, getComputeInstances, getJoinComputeInstances, getAudits, getJoinAudits, getCpus, getJoinCpus, getComputeEvents, getLatestValues, getComputeDetails, getBlockVolumes, getEvents, getJoinBlockVolumes, getJoinEvents, getJoinLatestValues };
 
 export default apiServiceOCI;

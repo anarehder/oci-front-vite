@@ -4,9 +4,11 @@ import Logout from "./LogoutComponent";
 import { useContext, useState } from "react";
 import { useTenancy } from "../../contexts/TenancyContext";
 import { UserContext } from "../../contexts/UserContext";
+import { useMenu } from "../../contexts/MenuContext";
 
 function HeaderComponent({title}) {
     const [user] = useContext(UserContext);
+    const { show } = useMenu();
     const { tenancy } = useTenancy();
     //obter as tips quando renderizar o header
     const [open, setOpen] = useState(false);
@@ -17,9 +19,9 @@ function HeaderComponent({title}) {
         { tipo: "Backup", titulo: "Backup automático falhou em VM2" },
         { tipo: "Performance", titulo: "Uso de CPU acima de 90% em VM5" }
     ]);
-
+    console.log(show);
     return (
-        <ComponentContainer>
+        <ComponentContainer $show={show ? "exibir" : "ocultar"}>
           <LimitContainer>
           <Title>{title} <h2>{tenancy=== 'all' ? ' - Todas as Tenancies' : ` - ${tenancy}`}</h2></Title>
             <ButtonsContainer>
@@ -48,7 +50,7 @@ function HeaderComponent({title}) {
 export default HeaderComponent;
 
 const ComponentContainer = styled.div`
-    width: calc(100% - 200px);
+    width: ${({ $show }) => ($show === "exibir" ? "calc(100vw - 210px)" : "calc(100vw - 50px)")}; 
     justify-content: center;
     position: fixed;
     top: 0;

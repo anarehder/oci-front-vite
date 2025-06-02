@@ -6,9 +6,11 @@ import DashGraphComponent from './DashGraphComponent';
 import OrphanListComponent from './OrphanListComponent';
 import TenancySelectionComponent from './TenancySelectionComponent';
 import { useTenancy } from '../contexts/TenancyContext';
+import { useMenu } from '../contexts/MenuContext';
 
 function DashComponent() {
     const [user] = useContext(UserContext);
+    const { show } = useMenu();
     const { tenancy, oneTenancyInfo, allTenanciesInfo, selectedMonth, setSelectedMonth } = useTenancy();
     const sectionRef = useRef(null);
 
@@ -28,7 +30,7 @@ function DashComponent() {
 
 
     return (
-        <ComponentContainer>
+        <ComponentContainer $show={show ? "exibir" : "ocultar"}>
             {allTenanciesInfo?.tenancies &&
                 <TenancySelectionContainer>
                     <div>
@@ -47,12 +49,14 @@ function DashComponent() {
 export default DashComponent;
 
 const ComponentContainer = styled.div`
-    width: calc(100vw - 200px);
-    margin-left: 200px;
+    width: ${({ $show }) => ($show === "exibir" ? "calc(100vw - 210px)" : "calc(100vw - 50px)")};
+    margin-left: ${({ $show }) => ($show === "exibir" ? "180px" : "20px")};  
+    // margin-left: 200px;
     margin-top: 90px;
 
     flex-direction: column;
     justify-content: flex-start;
+    align-items: center;
     gap: 20px;
 
     color: #021121;

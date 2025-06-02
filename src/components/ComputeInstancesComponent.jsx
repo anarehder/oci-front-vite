@@ -5,9 +5,11 @@ import { TbFilterEdit } from "react-icons/tb";
 import PaginationComponent from "./fixedComponents/PaginationComponent";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from 'react-icons/md';
 import { Link } from "react-router-dom";
+import { useFilter } from "../contexts/FilterContext";
 
 function ComputeInstancesComponent({ computeInstancesInfo }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const { searchTerm, setSearchTerm } = useFilter();
+  // const [searchTerm, setSearchTerm] = useState('');
   const [filteredInstances, setFilteredInstances] = useState(computeInstancesInfo);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -45,7 +47,8 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   
     setFilteredInstances(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+    // setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+    setCurrentPage(1);
   
     // Passo 2: sort
     let sorted = [...filtered];
@@ -74,7 +77,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </SearchBar>
-
+    
       <ListHeader>
         <RowHeader>
           <Info onClick={() => handleSort('display_name')}><span>Nome</span>{renderSortIcon('display_name')}</Info>
@@ -88,6 +91,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           <Info><span>Ações</span></Info>
         </RowHeader>
         </ListHeader>
+        {computeInstancesInfo.length ===  0 && <List> Sem dados para exibir. </List>}
         <List>
         {currentItems.map((item, index) => (
           <Row key={index}>
@@ -198,7 +202,6 @@ const List = styled.div`
   justify-content: flex-start;
   height: 70%;
   flex-direction: column;
-  gap: 10px;
   width: 95%;
   font-size: 20px;
   overflow-y: auto;
@@ -219,20 +222,21 @@ const RowHeader = styled.div`
 
 const Row = styled.div`
   background: white;
-  border-radius: 5px;
+  border-radius: 2px;
   display: flex;
   height: 45px;
   align-items: center;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #a0a1aa;
+  // box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 const Info = styled.div`
   width: 12%;
   height: 50px;
+  font-size: 15px;
   justify-content: center;
   text-align: center;
   word-break: break-word;
-  font-size: 16px;
   align-items: center;
   
   span {

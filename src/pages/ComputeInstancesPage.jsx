@@ -11,7 +11,7 @@ function ComputeInstancesPage() {
     const [user] = useContext(UserContext);
     const { tenancy } = useTenancy();
     const [computeInstancesInfo, setComputeInstancesInfo] = useState([]);
-
+    const [carregando, setCarregando] = useState(true);
     useEffect(() => {
         if (!user) return;
         const fetchData = async () => {
@@ -20,6 +20,7 @@ function ComputeInstancesPage() {
                     const response = await apiServiceOCI.getComputeInstances(user.token);
                     if (response.status === 200) {
                         setComputeInstancesInfo(response.data);
+                        setCarregando(false);
                     }
                 } else {
                     const tenancySelections = { tenancy1: tenancy, tenancy2: null, tenancy3: null };
@@ -27,6 +28,7 @@ function ComputeInstancesPage() {
                     const response = await apiServiceOCI.getJoinComputeInstances(tenancySelections, user.token);
                     if (response.status === 200) {
                         setComputeInstancesInfo(response.data);
+                        setCarregando(false);
                     }
                 }
             } catch (error) {
@@ -42,8 +44,8 @@ function ComputeInstancesPage() {
             <FixedMenuComponent />
             <HeaderComponent title={"COMPUTE INSTANCES"}/>
             {
-                computeInstancesInfo.length >0 &&
-                <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo} />
+                !carregando &&
+                <ComputeInstancesComponent computeInstancesInfo={computeInstancesInfo}/>
             }
         </PageContainer>
     )

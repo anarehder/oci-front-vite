@@ -3,10 +3,12 @@ import BarGraphComponent from './graphsComponents/BarGraphComponent';
 import PieGraphComponent from './graphsComponents/PieGraphComponent';
 import CreditPredictionChartComponent from './graphsComponents/CreditPredictionChartComponent';
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
+import { useFilter } from '../contexts/FilterContext';
+import { Link } from 'react-router-dom';
 
 function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
     // console.log(tenancyInfo.creditsOCI);
-
+    const { setSearchTerm } = useFilter();
     return (
         <Container>
             
@@ -17,8 +19,8 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                 </Users>
                 {tenancyInfo?.computeInstances &&
                     <>
-                        <VMsOFF><div>VMs Desligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "STOPPED").length}</div><div>Detalhes</div></VMsOFF>
-                        <VMsON><div>VMs Ligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "RUNNING").length}</div><div>Detalhes</div></VMsON>
+                        <VMsOFF><div>VMs Desligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "STOPPED").length}</div><div onClick={()=>setSearchTerm('STOPPED')}><Link to='/computeinstances'> Detalhes </Link></div></VMsOFF>
+                        <VMsON><div>VMs Ligadas: {tenancyInfo?.computeInstances?.filter(item => item.lifecycle_state === "RUNNING").length}</div><div onClick={()=>setSearchTerm('RUNNING')}><Link to='/computeinstances'>Detalhes</Link></div></VMsON>
                     </>
                 }
                 <DiscosOrfaos>
@@ -42,7 +44,7 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                             tenancy: d.tenancy_name
                         }))} nome={`Top 5 SKUs Mais Caros - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
                 }
-                {tenancyInfo?.tenancies?.length === 1 ?
+                {/* {tenancyInfo?.tenancies?.length === 1 ?
                     <PieGraphComponent data={tenancyInfo.cost_services
                         .map((d) => ({
                             categoria: d.service,
@@ -51,7 +53,7 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                     :
                     <PieGraphComponent
                         data={Object.values(
-                            tenancyInfo.cost_services.reduce((acc, item) => {
+                            tenancyInfo.cost_services?.reduce((acc, item) => {
                                 const key = item.service;
 
                                 if (!acc[key]) {
@@ -70,7 +72,7 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                         }
                         nome={`Top 5 Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} 
                     />
-                }
+                } */}
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                         categoria: d.display_name,
@@ -109,7 +111,7 @@ const Container = styled.div`
     flex-direction: column;
 `
 const BlocksContainer = styled.div `
-    width: 97%;
+    width: 95%;
     justify-content: space-between;
     div{
         border-radius: 15px;
@@ -132,9 +134,15 @@ const Users = styled.div `
 `
 const VMsOFF = styled.div `
     background-color: #FFC207;
+    :nth-child(2) {
+        cursor: pointer;
+    }
 `
 const VMsON = styled.div `
     background-color: #27A745;
+    :nth-child(2) {
+        cursor: pointer;
+    }
 `
 const DiscosOrfaos = styled.div `
     background-color: #DC3544;
@@ -144,4 +152,5 @@ const DiscosOrfaos = styled.div `
 `
 const GraphsContainer = styled.div `
     width: 95%;
+    justify-content: space-between;
 `

@@ -108,7 +108,7 @@ function OrphanListComponent({ sectionRef }) {
 export default OrphanListComponent;
 
 const ComponentContainer = styled.div`
-    width: 95%;
+    width: 92%;
     margin-top: 30px;
     position: relative;
     flex-direction: column;
@@ -146,7 +146,6 @@ const ListHeader = styled.div`
   margin-top: 30px;
   flex-direction: column;
   gap: 5px;
-  width: 95%;
   font-size: 20px;
 `
 
@@ -155,8 +154,6 @@ const List = styled.div`
   margin-top: 10px;
   justify-content: flex-start;
   flex-direction: column;
-  gap: 10px;
-  width: 95%;
   font-size: 20px;
   margin-bottom: 50px;
   h2 {
@@ -174,11 +171,10 @@ const RowHeader = styled.div`
 
 const Row = styled.div`
   background: white;
-  border-radius: 5px;
+  border-radius: 2px;
   display: flex;
-  height: 45px;
   align-items: center;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #a0a1aa;
 `;
 
 const Info = styled.div`
@@ -187,7 +183,7 @@ const Info = styled.div`
     justify-content: center;
     text-align: center;
     word-break: break-word;
-    font-size: 16px;
+    font-size: 15px;
     align-items: center;
 
     span {
