@@ -7,9 +7,12 @@ import { UserContext } from "../contexts/UserContext";
 import FixedMenuComponent from "../components/fixedComponents/FixedMenuComponent";
 import DashComponent from "../components/DashComponent";
 import HeaderComponent from "../components/fixedComponents/HeaderComponent";
+import { useMenu } from "../contexts/MenuContext";
 
 function HomePage() {
     const navigate = useNavigate();
+    const { show } = useMenu();
+    
     const [user] = useContext(UserContext);
 
     useEffect(() => {
@@ -27,7 +30,13 @@ function HomePage() {
         <PageContainer>
             <FixedMenuComponent />
             <HeaderComponent title={"DASHBOARD"} />
-            <DashComponent />
+            <RightContainer>
+                <MenuBackground $show={show ? "exibir" : "ocultar"}>
+                    teste
+                </MenuBackground>
+                <DashComponent />
+            </RightContainer>
+            
         </PageContainer>
     )
 }
@@ -38,4 +47,22 @@ const PageContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     flex-direction: column;
+`
+
+const RightContainer = styled.div`
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    margin-top: 90px;
+    justify-content: flex-start;
+    // background-color: red;
+`
+
+const MenuBackground = styled.div`
+    width: ${({ $show }) => ($show === "exibir" ? "221px" : "30px")};
+    height: 100%;
+    // width: 221px;
+    border-right: 10px solid blue;
+    background-color: blue !important;
+    z-index: 1500;
 `

@@ -7,7 +7,7 @@ import { useFilter } from '../contexts/FilterContext';
 import { Link } from 'react-router-dom';
 
 function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
-    // console.log(tenancyInfo.creditsOCI);
+    console.log(tenancyInfo.subscriptionDetails);
     const { setSearchTerm } = useFilter();
     return (
         <Container>
@@ -44,6 +44,13 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                             tenancy: d.tenancy_name
                         }))} nome={`Top 5 SKUs Mais Caros - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
                 }
+                {tenancyInfo.cost_services &&
+                <PieGraphComponent data={tenancyInfo.cost_services
+                        .map((d) => ({
+                            categoria: d.service,
+                            valor: parseFloat(d.cost_mes?.toFixed(2)),
+                        }))} nome={`Top 5 Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
+                    }
                 {/* {tenancyInfo?.tenancies?.length === 1 ?
                     <PieGraphComponent data={tenancyInfo.cost_services
                         .map((d) => ({
@@ -97,8 +104,12 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                             type={"currency"}
                         />
                     }
-                    <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
+                    {
+                        tenancyInfo?.subscriptionDetails?.length > 0 &&
+                        <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
                             subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
+                    }
+                    
                 </GraphsContainer>
             }
         </Container>

@@ -134,7 +134,7 @@ function FixedMenuComponent() {
 export default FixedMenuComponent;
 
 const ComponentContainer = styled.div`
-    width: ${({ $show }) => ($show === 'exibir' ? '200px' : '40px')};
+    width: ${({ $show }) => ($show === 'exibir' ? '210px' : '40px')};
     height: 100vh;
     position: fixed;
     top: 0;
@@ -142,6 +142,7 @@ const ComponentContainer = styled.div`
     flex-direction: column;
     background-color: #021121;
     color: white;
+    z-index: 999;
 `;
 
 const ShowContainer = styled.div`
@@ -205,7 +206,6 @@ const TenancySelection = styled.div`
 
 const MenuItem = styled.div`
     min-height: 70px;
-    
 
     flex-direction: column;
     align-items: flex-start;

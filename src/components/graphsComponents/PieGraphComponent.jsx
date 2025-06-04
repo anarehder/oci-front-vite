@@ -79,7 +79,7 @@ function PieGraphComponent({ data, nome, type }){
   return (
     <Container>
       <Title>{nome}</Title>
-      <Chart options={chartOptions} series={valores.slice(0,5)} type="donut" height={350} />
+      <Chart options={chartOptions} series={valores.slice(0,5)} type="donut" height='95%' />
     </Container>
   );
 };

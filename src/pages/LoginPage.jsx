@@ -23,15 +23,16 @@ function LoginPage(){
         try {
             const response = await apiService.login(form);
             if (response.status === 200) {
-                const { userId, username, isAdmin, client, token } = response.data;
+                const { userId, username, isAdmin, client, name, token } = response.data;
                 const userData = {
                     userId,
                     username,
                     isAdmin,
                     client,
+                    name,
                     token: `Bearer ${token}`
                 };
-                localStorage.setItem("user", JSON.stringify({userId, username, isAdmin, client, token: `Bearer ${token}`}));
+                localStorage.setItem("user", JSON.stringify({userId, username, isAdmin, client, name, token: `Bearer ${token}`}));
                 setUser(userData);
                 navigate("/homepage");
             }

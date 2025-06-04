@@ -19,7 +19,6 @@ function HeaderComponent({title}) {
         { tipo: "Backup", titulo: "Backup automático falhou em VM2" },
         { tipo: "Performance", titulo: "Uso de CPU acima de 90% em VM5" }
     ]);
-    console.log(show);
     return (
         <ComponentContainer $show={show ? "exibir" : "ocultar"}>
           <LimitContainer>
