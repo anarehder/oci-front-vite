@@ -28,6 +28,7 @@ export default function TenancyProvider({ children }) {
                     const response = await apiServiceOCI.getJoinDash(tenancySelections, user.token, selectedMonth);
                     if (response.status === 200) {
                         setOneTenancyInfo(response.data);
+                        console.log(response.data);
                         setOrpahnList(response.data.orphan ? response.data?.orphan?.filter(item => item.is_orfao === "Y") : []);
                     }
                 }

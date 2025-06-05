@@ -13,7 +13,7 @@ function DashComponent() {
     const { show } = useMenu();
     const { tenancy, oneTenancyInfo, allTenanciesInfo, selectedMonth, setSelectedMonth } = useTenancy();
     const sectionRef = useRef(null);
-    console.log(user);
+    console.log(oneTenancyInfo);
     const scrollToSection = () => {
         if (sectionRef.current) {
             const offsetTop = sectionRef.current.offsetTop;
@@ -42,7 +42,7 @@ function DashComponent() {
 
                     {(tenancy === 'all' && allTenanciesInfo) && <DashGraphComponent tenancyInfo={allTenanciesInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth} />}
                     {(tenancy !== 'all' && oneTenancyInfo) && <DashGraphComponent tenancyInfo={oneTenancyInfo} scrollToSection={scrollToSection} selectedMonth={selectedMonth} />}
-                    
+
                     <OrphanListComponent sectionRef={sectionRef} />
                 </>
             }

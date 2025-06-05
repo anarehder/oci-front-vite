@@ -3,21 +3,32 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 import dayjs from "dayjs";
 
-const CreditPredictionChartComponent = ({ creditsOCI }) => {
-    const {
-        used_percentage,
-        date_percentage,
-        dias_decorridos,
-    } = creditsOCI[0];
-
+const CreditPredictionChartComponent = ({ subsDetails, commitDetails }) => {
+    //DO COMMIT
     const categorias = ["Valor Utilizado %", "Dias Decorridos %"];
-    const valores = [parseFloat(used_percentage?.toFixed(2)), parseFloat(date_percentage?.toFixed(2))];
+    const duracaoAnosSub1 = Math.round(subsDetails[0].total_dias_contrato/365);
+    let valorAnual = subsDetails[0].line_net_amount/duracaoAnosSub1;
 
-    const predictedTotalDays = used_percentage > 0 ? (100 * dias_decorridos) / used_percentage : 0;
-    const predictedEndDate = dayjs().add(predictedTotalDays - dias_decorridos, "day").format("YYYY-MM-DD");
-    const [year, month, day] = predictedEndDate.split("-");
-    const formattedDate = `${month}-${day}-${year}`;
-    const willExceedBeforeTime = used_percentage > date_percentage;
+    if (subsDetails.length > 1) {
+        const fimCommit = dayjs(commitDetails[0].time_ended_commit);
+        const inicioSubs = dayjs(subsDetails[1].time_start);
+        //pego quantos meses de diferenca entre o inicio da outra subs e o fim do commit
+        const diffMeses = fimCommit.diff(inicioSubs, 'month');
+        const mesesContrato = Math.round(subsDetails[1].total_dias_contrato/30);
+        const valorMensalSubs2 = (subsDetails[1].line_net_amount/mesesContrato);
+        const addValor = diffMeses*valorMensalSubs2;
+        valorAnual += addValor;
+    }
+
+    const porcentagemGasta = valorAnual !==0 ? (commitDetails[0].total_used/valorAnual)*100 : 0;
+    const porcentagemDias = (commitDetails[0].dias_decorridos/365) * 100;
+    const valores = [porcentagemGasta.toFixed(2), porcentagemDias.toFixed(2)];
+    console.log(valorAnual, commitDetails[0].total_used, "bar")
+    // const predictedTotalDays = used_percentage > 0 ? (100 * dias_decorridos) / used_percentage : 0;
+    // const predictedEndDate = dayjs().add(predictedTotalDays - dias_decorridos, "day").format("YYYY-MM-DD");
+    // const [year, month, day] = predictedEndDate.split("-");
+    // const formattedDate = `${month}-${day}-${year}`;
+    // const willExceedBeforeTime = used_percentage > date_percentage;
 
     const chartOptions = {
         chart: {
@@ -52,7 +63,7 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
                 columnWidth: "45%",
             }
         },
-        colors: [willExceedBeforeTime ? "#ff0000" : "#27A745"],
+        colors: [porcentagemGasta > porcentagemDias ? "#ff0000" : "#27A745"],
         dataLabels: {
             enabled: true,
             formatter: (val) => `${val.toFixed(1)}%`,
@@ -68,15 +79,17 @@ const CreditPredictionChartComponent = ({ creditsOCI }) => {
 
     return (
     <Container>
-    <Title>Predição Gastos Tenancy</Title>
+    <Title>% Gastos Tenancy - Commit Atual</Title>
     <Chart options={chartOptions} series={series} type="bar" height={270}/>
     
-    {willExceedBeforeTime && predictedTotalDays - dias_decorridos < 10 && <Alert>Urgente</Alert>} 
-    {willExceedBeforeTime && predictedTotalDays - dias_decorridos > 10 && 
-    <Alert><div>Alerta: Consumo de crédito acelerado!</div>
-    <div>Data prevista para 100% consumo: {formattedDate}</div></Alert>
+    {/* {willExceedBeforeTime && predictedTotalDays - dias_decorridos < 10 && <Alert>Urgente</Alert>}  */}
+    {porcentagemGasta > porcentagemDias ? 
+    <Alert>Alerta: Consumo de crédito acelerado! </Alert> :
+    <Alert>Controle de Custos OCI - OK</Alert>
     }
-    {! willExceedBeforeTime && <Alert>Controle de Custos OCI - OK</Alert>} 
+    {/* <Alert><div>Alerta: Consumo de crédito acelerado!</div>
+    <div>Data prevista para 100% consumo: {formattedDate}</div></Alert>
+    {! willExceedBeforeTime && <Alert>Controle de Custos OCI - OK</Alert>}  */}
     </Container>
   );
 };
