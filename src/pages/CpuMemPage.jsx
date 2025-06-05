@@ -7,13 +7,15 @@ import FixedMenuComponent from '../components/fixedComponents/FixedMenuComponent
 import HeaderComponent from '../components/fixedComponents/HeaderComponent';
 import { Link } from 'react-router-dom';
 import LiquidFillChart from '../components/graphsComponents/LiquidFillChartComponent';
+import { useMenu } from '../contexts/MenuContext';
 
 function CpuMemPage() {
+    const { show } = useMenu();
     const [memory, setMemory] = useState([]);
     const [cpu, setCpu] = useState([]);
     const [carregando, setCarregando] = useState(false);
     const [user] = useContext(UserContext);
-    // console.log(cpu[0]);
+    console.log(cpu[0]);
     useEffect(() => {
         if (!user?.token) return;
 
@@ -22,8 +24,8 @@ function CpuMemPage() {
                 setCarregando(true);
                 const response = await apiServiceOCI.getLatestValues(user.token);
                 if (response.status === 200) {
-                    setCpu(response.data.cpu);
-                    setMemory(response.data.memory);
+                    setCpu(response.data.topCPU);
+                    setMemory(response.data.topMEM);
                     setCarregando(false);
                 }
             } catch (error) {
@@ -42,76 +44,104 @@ function CpuMemPage() {
 
     return (
         <Container>
+
+
             <FixedMenuComponent />
             <HeaderComponent title={"CPU E MEMÓRIA"} />
-            <GraphsContainer>
-                <GraphBlock>
-                    <h2>
-                        {carregando && cpu.length === 0 && "Carregando dados..."}
-                    </h2>
-                </GraphBlock>
-                {cpu.length > 0 && memory.length > 0 &&
-                <>
-                <h2>TOP 8 - USO CPU</h2>
-                        <GraphBlock>
-                            {cpu
-                                .slice(0, 8)
-                                .map((c) => (
-                                    < PieBlock key={c.resourceDisplayName}>
-                                        <LiquidFillChart value={c.cpu_usage} size={120}/>
-                                        {/* <RadialBarComponent value={c.cpu_usage} /> */}
-                                        <p>{c.resourceDisplayName.length > 15
-                                            ? `${c.resourceDisplayName.slice(0, 15)}...`
-                                            : c.resourceDisplayName}</p>
-                                        <p>{c.profile_name}</p>
-                                        <button> <Link to={`/compute/details/${encodeURIComponent(c.resourceDisplayName)}`}>Detalhes </Link> </button>
-                                    </PieBlock>
-                                ))}
-                    </GraphBlock>
-                    <h2>TOP 8 - USO MEMÓRIA</h2>
-                    <GraphBlock>
-                        {memory
-                            .slice(0, 8)
-                            .map((c) => (
-                                <PieBlock key={c.resourceDisplayName}>
-                                    <LiquidFillChart value={c.memory_usage} size={120}/>
-                                    {/* <RadialBarComponent value={c.memory_usage} /> */}
-                                    <div>
-                                        <p>{c.resourceDisplayName.length > 15
-                                            ? `${c.resourceDisplayName.slice(0, 15)}...`
-                                            : c.resourceDisplayName}</p>
-                                        <p>{c.profile_name}</p>
-                                        <button> <Link to={`/compute/details/${encodeURIComponent(c.resourceDisplayName)}`}>Detalhes </Link> </button>
-                                    </div>
+            <RightContainer>
+                <MenuBackground $show={show ? "exibir" : "ocultar"}>
+                    teste
+                </MenuBackground>
+                <GraphsContainer>
+                    <>
+                        {carregando && cpu.length === 0 && <h2>"Carregando dados..."</h2>}
+                        {!carregando && cpu.length !== 0 &&
+                            <>
+                                <h2>TOP 8 - USO CPU</h2>
+                                <GraphBlock>
+                                    {cpu
+                                        .slice(0, 8)
+                                        .map((c) => (
+                                            <PieBlock key={c.displayName}>
+                                                <div>CPU</div>
+                                                <LiquidFillChart value={c.cpu} size={70} />
+                                                <div>MEM</div>
+                                                <LiquidFillChart value={c.mem} size={70} />
+                                                <div>
+                                                    <p>{c.displayName.length > 10
+                                                        ? `${c.displayName.slice(0, 10)}...`
+                                                        : c.displayName}</p>
+                                                    <p>{c.profile_name}</p>
+                                                    <button> <Link to={`/compute/details/${encodeURIComponent(c.displayName)}`}>Detalhes </Link> </button>
+                                                </div>
 
-                                </PieBlock>
-                                ))}
-                        </GraphBlock>
-                    </>}
-            </GraphsContainer>
+                                            </PieBlock>
+                                        ))}
+                                </GraphBlock>
+                            </>
+                        }
+                        {!carregando && memory.length !== 0 &&
+                            <>
+                                <h2>TOP 8 - USO MEMÓRIA</h2>
+                                <GraphBlock>
+                                    {memory
+                                        .slice(0, 8)
+                                        .map((c) => (
+                                            <PieBlock key={c.displayName}>
+                                                <div>CPU</div>
+                                                <LiquidFillChart value={c.cpu} size={70} />
+                                                <div>MEM</div>
+                                                <LiquidFillChart value={c.mem} size={70} />
+                                                <div>
+                                                    <p>{c.displayName.length > 10
+                                                        ? `${c.displayName.slice(0, 10)}...`
+                                                        : c.displayName}</p>
+                                                    <p>{c.profile_name}</p>
+                                                    <button> <Link to={`/compute/details/${encodeURIComponent(c.displayName)}`}>Detalhes </Link> </button>
+                                                </div>
+
+                                            </PieBlock>
+                                        ))}
+                                </GraphBlock>
+                            </>
+                        }
+                    </>
+                </GraphsContainer>
+            </RightContainer>
+
         </Container>
     );
 }
 export default CpuMemPage;
 
 const Container = styled.div`
-    gap: 10px;
+    width: 100%;
+    min-height: 100vh;
     flex-direction: column;
-    position: absolute;
+`
+
+const RightContainer = styled.div`
+    // width: 100%;
+    width: ${({ $show }) => ($show === "exibir" ? "calc(100% - 221px)" : "calc(100% -30px)")};
+    z-index: 1;
+    display: flex;
+    margin-top: 90px;
+    justify-content: flex-start;
+`
+
+const MenuBackground = styled.div`
+    width: ${({ $show }) => ($show === "exibir" ? "221px" : "30px")};
+    height: 100%;
+    z-index: 1500;
 `
 
 const GraphsContainer = styled.div`
-    width: calc(100vw - 220px);
-    margin-left: 200px;
-    position: relative;
-    margin-top: 100px;
-
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: space-between;
+    flex-wrap: wrap;
 
     color: #021121;
-    overflow-y: hidden;
-    overflow-x: hidden;
     h2{
         margin: 10px 0;
     }
@@ -125,22 +155,22 @@ const GraphBlock = styled.div`
     margin-bottom: 40px;
     
     div{
-        width: 11%;
+        width: 10%;
         flex-direction: column;
     }
 
 `
 
 const PieBlock = styled.div`
+    height: 250px;
     flex-direction: column;
-    height: 200px;
     justify-content: space-between;
     box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 3;
     div{ 
         width: 100%;
-        gap: 5px;
+        gap: 2px;
     }
     button {
         font-size: 15px;

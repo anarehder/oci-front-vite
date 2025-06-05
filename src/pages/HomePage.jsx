@@ -61,8 +61,5 @@ const RightContainer = styled.div`
 const MenuBackground = styled.div`
     width: ${({ $show }) => ($show === "exibir" ? "221px" : "30px")};
     height: 100%;
-    // width: 221px;
-    border-right: 10px solid blue;
-    background-color: blue !important;
     z-index: 1500;
 `
