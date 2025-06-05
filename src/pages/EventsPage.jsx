@@ -11,8 +11,10 @@ import DescriptionEventsComponent from '../components/DescriptionEventsComponent
 import { getComputeEventsDescriptions, ComputeEventsNames } from '../utils/computeEventsDescriptions';
 import { getIdentityEventsDescriptions, IdentityEventsNames } from '../utils/identityEventsDescriptions';
 import { useTenancy } from '../contexts/TenancyContext';
+import { useMenu } from '../contexts/MenuContext';
 
 function EventsPage() {
+    const { show } = useMenu();
     const [user] = useContext(UserContext);
     const { tenancy } = useTenancy();
     const { type } = useParams();
@@ -53,8 +55,10 @@ function EventsPage() {
                 <HeaderComponent title={`EVENTOS - ${type.toUpperCase()}`}/> :
                 <HeaderComponent title={`EVENTOS - ${type.toUpperCase()} - ${user.client.toUpperCase()}`}/>
             }
-            
-            <h2> tenancy</h2>
+            <RightContainer>
+                <MenuBackground $show={show ? "exibir" : "ocultar"}>
+                    teste
+                </MenuBackground>
             {
                 type === 'compute' && !carregando &&
                 <DescriptionEventsComponent eventsInfo={eventsInfo.filter(item => ComputeEventsNames.includes(item.eventName))} eventsDescription={getComputeEventsDescriptions}/>
@@ -67,15 +71,32 @@ function EventsPage() {
                 type === 'network' && !carregando &&
                 <DescriptionEventsComponent eventsInfo={eventsInfo} eventsDescription={getIdentityEventsDescriptions}/>
             }
-            
+            </RightContainer>
         </PageContainer>
     )
 }
 
 export default EventsPage;
 
+
+
 const PageContainer = styled.div`
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     flex-direction: column;
+`
+
+const RightContainer = styled.div`
+    // width: 100%;
+    width: ${({ $show }) => ($show === "exibir" ? "calc(100% - 221px)" : "calc(100% -30px)")};
+    z-index: 1;
+    display: flex;
+    margin-top: 90px;
+    justify-content: flex-start;
+`
+
+const MenuBackground = styled.div`
+    width: ${({ $show }) => ($show === "exibir" ? "221px" : "30px")};
+    height: 100%;
+    z-index: 1500;
 `

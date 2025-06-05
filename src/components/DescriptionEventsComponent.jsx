@@ -46,8 +46,7 @@ function DescriptionEventsComponent({eventsInfo, eventsDescription}) {
       
         setFilteredEvents(filtered);
         setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-        // setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
-        setCurrentPage(1);
+        setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
       
         // Passo 2: sort
         let sorted = [...filtered];
@@ -81,6 +80,10 @@ function DescriptionEventsComponent({eventsInfo, eventsDescription}) {
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
   }, [searchTerm]);
 
+  useEffect(() => {
+      setCurrentPage(1);
+  
+    }, [searchTerm]);
   
   return (
     <ComponentContainer>
@@ -127,10 +130,7 @@ export default DescriptionEventsComponent;
 
 
 const ComponentContainer = styled.div`
-    width: calc(100vw - 220px);
     height: 100vh;
-    margin-left: 200px;
-    margin-top: 60px;
     position: relative;
 
     flex-direction: column;

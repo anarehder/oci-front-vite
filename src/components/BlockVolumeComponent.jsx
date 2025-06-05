@@ -135,10 +135,7 @@ export default BlockVolumeComponent;
 // Styled Components
 
 const ComponentContainer = styled.div`
-    width: calc(100vw - 220px);
     height: 100vh;
-    margin-left: 200px;
-    margin-top: 80px;
     position: relative;
 
     flex-direction: column;

@@ -57,7 +57,7 @@ function CpuMemPage() {
                         {carregando && cpu.length === 0 && <h2>"Carregando dados..."</h2>}
                         {!carregando && cpu.length !== 0 &&
                             <>
-                                <h2>TOP 8 - USO CPU</h2>
+                                <h2>TOP 8 - USO CPU (média 30 min)</h2>
                                 <GraphBlock>
                                     {cpu
                                         .slice(0, 8)
@@ -82,7 +82,7 @@ function CpuMemPage() {
                         }
                         {!carregando && memory.length !== 0 &&
                             <>
-                                <h2>TOP 8 - USO MEMÓRIA</h2>
+                                <h2>TOP 8 - USO MEMÓRIA (média 30 min)</h2>
                                 <GraphBlock>
                                     {memory
                                         .slice(0, 8)
