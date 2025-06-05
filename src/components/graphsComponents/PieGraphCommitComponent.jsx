@@ -118,8 +118,8 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
 export default PieGraphCommitComponent;
 
 const Container = styled.div`
-  width: 30%;
-  height: 400px;
+  width: 28%;
+  height: 390px;
   flex-direction: column;
   justify-content: flex-start;
   margin: 10px auto;

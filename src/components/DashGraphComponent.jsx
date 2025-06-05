@@ -43,15 +43,15 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                         .map((d) => ({
                             categoria: d.sku_name,
                             valor: parseFloat(d._sum?.cost_mes?.toFixed(2))
-                        }))} nome={`Top 5 SKUs Mais Caros - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
+                        }))} nome={`Top 5 SKUs Mais Caros - ${selectedMonth.slice(5)}/${selectedMonth.slice(0, 4)}`} />
                 }
                 {tenancyInfo?.cost_services &&
-                <PieGraphComponent data={tenancyInfo.cost_services
+                    <PieGraphComponent data={tenancyInfo.cost_services
                         .map((d) => ({
                             categoria: d.service,
                             valor: parseFloat(d._sum?.cost_mes?.toFixed(2)),
-                        }))} nome={`Top 5 Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0,4)}`} />
-                    }
+                        }))} nome={`Top 5 Gastos Por Tipo De Serviço OCI - ${selectedMonth.slice(5)}/${selectedMonth.slice(0, 4)}`} />
+                }
                 {tenancyInfo?.top5_costVM &&
                     <BarGraphComponent data={tenancyInfo.top5_costVM.map((d) => ({
                         categoria: d.display_name,
@@ -59,33 +59,22 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                         tenancy: d.tenancy_name
                     }))} nome={"Top 5 Máquinas Mais Caras (Custo Mensal)"} />
                 }
-            </GraphsContainer>
-            {tenancyInfo?.tenancies?.length === 1 &&
-                <GraphsContainer>
-                    {tenancyInfo.subscriptionDetails &&
-                        <>
-                            <CreditPredictionSubsComponent subsDetails={tenancyInfo.subscriptionDetails}/>
-                            <PieGraphSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
-                        </>
-                    }
-                    {
-                        tenancyInfo?.subscriptionDetails?.length > 0 &&
-                        <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
-                            subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
-                    }
+                {tenancyInfo?.tenancies?.length === 1 && tenancyInfo.subscriptionDetails &&
+                            <>
+                                <CreditPredictionSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
+                                <PieGraphSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
+                                <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
+                        subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
+                            </>
                     
-                </GraphsContainer>
-            }
-            {tenancyInfo?.tenancies?.length === 1 &&
-                <GraphsContainer>
-                    {tenancyInfo.subscriptionDetails && tenancyInfo.commitDetails &&
+                 }
+                {tenancyInfo?.tenancies?.length === 1 && tenancyInfo.subscriptionDetails && tenancyInfo.commitDetails &&
                         <>
                             <CreditPredictionChartComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
                             <PieGraphCommitComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
                         </>
-                    }                    
-                </GraphsContainer>
-            }
+                }
+            </GraphsContainer>
         </Container>
     );
 }
@@ -138,4 +127,5 @@ const DiscosOrfaos = styled.div `
 const GraphsContainer = styled.div `
     width: 95%;
     justify-content: space-between;
+    flex-wrap: wrap;
 `
