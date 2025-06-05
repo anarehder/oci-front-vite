@@ -16,7 +16,9 @@ function BlockVolumeComponent({ blockVolumeInfo }) {
   const [currentItems, setCurrentItems] = useState(blockVolumeInfo.slice(0,10));
   // console.log(filteredInstances.length);
   const sortOptions = [null, 'asc', 'desc'];
-
+  const totalCusto = filteredInstances.reduce((soma, item) => {
+    return soma + (item.custo_mes ?? 0);
+  }, 0);
   const getNextDirection = (currentDirection) => {
     const currentIndex = sortOptions.indexOf(currentDirection);
     const nextIndex = (currentIndex + 1) % sortOptions.length;
@@ -35,6 +37,7 @@ function BlockVolumeComponent({ blockVolumeInfo }) {
     if (sortConfig.direction === 'desc') return <MdOutlineArrowDropDown size={22} color="white"/>;
     return null;
   };
+
   useEffect(() => {
     // Passo 1: filtrar
     const filtered = blockVolumeInfo.filter((item) =>
@@ -45,8 +48,8 @@ function BlockVolumeComponent({ blockVolumeInfo }) {
   
     setFilteredInstances(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    // setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
-    setCurrentPage(1);
+    setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
+    // setCurrentPage(1);
   
     // Passo 2: sort
     let sorted = [...filtered];
@@ -64,8 +67,17 @@ function BlockVolumeComponent({ blockVolumeInfo }) {
     setCurrentItems(sorted.slice(startIndex, endIndex));
   }, [blockVolumeInfo, searchTerm, sortConfig, currentPage, itemsPerPage]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+
+  }, [searchTerm]);
+
   return (
     <ComponentContainer>
+      <h2>Valor total - {totalCusto.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+          })}</h2>
       <SearchBar>
         <TbFilterEdit size={30} />
         <input
@@ -126,7 +138,7 @@ const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     height: 100vh;
     margin-left: 200px;
-    margin-top: 90px;
+    margin-top: 80px;
     position: relative;
 
     flex-direction: column;
@@ -135,6 +147,11 @@ const ComponentContainer = styled.div`
     color: #021121;
     overflow-y: hidden;
     overflow-x: hidden;
+    h2{
+     height: 40px;
+      display: flex;
+      align-items: center;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -142,41 +159,42 @@ const SearchBar = styled.div`
   align-items: center;
   margin-bottom: 20px;
   position: absolute;
-  right: 50px;
+  right: 2.5%;
+  height: 40px;
   width: 250px;
   align-items: flex-end;
   gap: 10px;
 
   input {
     padding: 6px 10px;
+    font-size: 14px;
     width: 300px;
     border-radius: 4px;
     border: 1px solid #ccc;
   }
 `;
 
+const List = styled.div`
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-start;
+  height: calc(100% - 180px);
+  margin-bottom: 10px;
+  flex-direction: column;
+  width: 95%;
+  font-size: 20px;
+  overflow-y: auto;
+  scroll-y: auto;
+`;
+
 const ListHeader = styled.div`
   display: flex;
-  margin-top: 50px;
+  margin-top: 10px;
   flex-direction: column;
   gap: 5px;
   width: 95%;
   font-size: 20px;
 `
-
-const List = styled.div`
-  display: flex;
-  margin-top: 10px;
-  justify-content: flex-start;
-  height: 70%;
-  flex-direction: column;
-  // gap: 10px;
-  width: 95%;
-  font-size: 20px;
-  overflow-y: auto;
-  scroll-y: auto;
-  margin: 10px 0;
-`;
 
 const RowHeader = styled.div`
   background-color: #001F3F;
@@ -184,10 +202,11 @@ const RowHeader = styled.div`
   height: 45px;
   border-radius: 5px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  div:nth-of-type(9) {
-      margin-right:8px;
-    }
+  div:nth-of-type(9){
+    margin-right: 15px;
+  }
 `;
+
 
 const Row = styled.div`
   background: white;

@@ -65,6 +65,7 @@ const ComponentContainer = styled.div`
     position: absolute;
     justify-content: space-between;
     z-index:5;
+    height: 60px;
 `
 
 const Pagination = styled.div`
@@ -72,7 +73,6 @@ const Pagination = styled.div`
     justify-content: center;
     gap: 10px;
     scroll-x: auto;
-    height: 60px;
     width: 300px;    
 `;
 

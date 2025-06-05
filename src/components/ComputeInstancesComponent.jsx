@@ -18,6 +18,9 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   const [currentItems, setCurrentItems] = useState(computeInstancesInfo.slice(0,10));
   // console.log(filteredInstances.length);
   const sortOptions = [null, 'asc', 'desc'];
+  const totalCusto = filteredInstances.reduce((soma, item) => {
+    return soma + (item.monthly_cost ?? 0);
+  }, 0);
 
   const getNextDirection = (currentDirection) => {
     const currentIndex = sortOptions.indexOf(currentDirection);
@@ -47,8 +50,7 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
   
     setFilteredInstances(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    // setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
-    setCurrentPage(1);
+    setCurrentPage((prev) => Math.min(prev, Math.ceil(filtered.length / itemsPerPage))); // evita página inválida
   
     // Passo 2: sort
     let sorted = [...filtered];
@@ -66,9 +68,19 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
     setCurrentItems(sorted.slice(startIndex, endIndex));
   }, [computeInstancesInfo, searchTerm, sortConfig, currentPage, itemsPerPage]);
 
+  useEffect(() => {
+      setCurrentPage(1);
+  
+    }, [searchTerm]);
+
   return (
     <ComponentContainer>
+      <h2>Valor total - {totalCusto.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      })}</h2>
       <SearchBar>
+
         <TbFilterEdit size={30} />
         <input
           type="text"
@@ -115,35 +127,6 @@ function ComputeInstancesComponent({ computeInstancesInfo }) {
           </Row>
         ))}
       </List>
-      {/* <Pagination>
-        {currentPage > 2 && (
-          <PageButton onClick={() => setCurrentPage(1)}>1</PageButton>
-        )}
-
-        {currentPage > 3 && <Ellipsis>...</Ellipsis>}
-
-        {currentPage > 1 && (
-          <PageButton onClick={() => setCurrentPage(currentPage - 1)}>
-            {currentPage - 1}
-          </PageButton>
-        )}
-
-        <PageButton active>{currentPage}</PageButton>
-
-        {currentPage < totalPages && (
-          <PageButton onClick={() => setCurrentPage(currentPage + 1)}>
-            {currentPage + 1}
-          </PageButton>
-        )}
-
-        {currentPage < totalPages - 2 && <Ellipsis>...</Ellipsis>}
-
-        {currentPage < totalPages - 1 && (
-          <PageButton onClick={() => setCurrentPage(totalPages)}>
-            {totalPages}
-          </PageButton>
-        )}
-      </Pagination> */}
       <PaginationComponent total={filteredInstances.length} currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} setTotalPages={setTotalPages}/>
     </ComponentContainer>
   );
@@ -157,7 +140,7 @@ const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     height: 100vh;
     margin-left: 200px;
-    margin-top: 90px;
+    margin-top: 80px;
     position: relative;
 
     flex-direction: column;
@@ -166,6 +149,11 @@ const ComponentContainer = styled.div`
     color: #021121;
     overflow-y: hidden;
     overflow-x: hidden;
+    h2{
+     height: 40px;
+      display: flex;
+      align-items: center;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -173,7 +161,8 @@ const SearchBar = styled.div`
   align-items: center;
   margin-bottom: 20px;
   position: absolute;
-  right: 50px;
+  right: 2.5%;
+  height: 40px;
   width: 250px;
   align-items: flex-end;
   gap: 10px;
@@ -187,27 +176,27 @@ const SearchBar = styled.div`
   }
 `;
 
-const ListHeader = styled.div`
-  display: flex;
-  margin-top: 50px;
-  flex-direction: column;
-  gap: 5px;
-  width: 95%;
-  font-size: 20px;
-`
-
 const List = styled.div`
   display: flex;
   margin-top: 10px;
   justify-content: flex-start;
-  height: 70%;
+  height: calc(100% - 180px);
+  margin-bottom: 10px;
   flex-direction: column;
   width: 95%;
   font-size: 20px;
   overflow-y: auto;
   scroll-y: auto;
-  margin: 10px 0;
 `;
+
+const ListHeader = styled.div`
+  display: flex;
+  margin-top: 10px;
+  flex-direction: column;
+  gap: 5px;
+  width: 95%;
+  font-size: 20px;
+`
 
 const RowHeader = styled.div`
   background-color: #001F3F;
@@ -273,31 +262,4 @@ const EditButton = styled.button`
   cursor: pointer;
   color: #001F3F;
   font-size: 16px;
-`;
-
-
-const Pagination = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  scroll-x: auto;
-`;
-
-const PageButton = styled.button`
-  justify-content: center;
-  border: none;
-  font-size: 15px;
-  width: 10px;
-  height: 10px;
-  background-color: ${({ active }) => (active ? "#001F3F" : "#eee")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: ${({ active }) => (active ? "bold" : "normal")};
-`;
-
-const Ellipsis = styled.span`
-  padding: 4px 10px;
-  color: #666;
 `;

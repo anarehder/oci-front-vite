@@ -139,7 +139,8 @@ const SearchBar = styled.div`
   align-items: center;
   margin-bottom: 20px;
   position: absolute;
-  right: 50px;
+  right: 2.5%;
+  height: 40px;
   width: 250px;
   align-items: flex-end;
   gap: 10px;

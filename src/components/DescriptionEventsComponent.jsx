@@ -130,7 +130,7 @@ const ComponentContainer = styled.div`
     width: calc(100vw - 220px);
     height: 100vh;
     margin-left: 200px;
-    margin-top: 90px;
+    margin-top: 60px;
     position: relative;
 
     flex-direction: column;
@@ -139,6 +139,11 @@ const ComponentContainer = styled.div`
     color: #021121;
     overflow-y: hidden;
     overflow-x: hidden;
+    h2{
+     height: 40px;
+      display: flex;
+      align-items: center;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -146,7 +151,8 @@ const SearchBar = styled.div`
   align-items: center;
   margin-bottom: 20px;
   position: absolute;
-  right: 50px;
+  right: 2.5%;
+  height: 40px;
   width: 250px;
   align-items: flex-end;
   gap: 10px;
@@ -160,6 +166,19 @@ const SearchBar = styled.div`
   }
 `;
 
+const List = styled.div`
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-start;
+  height: calc(100% - 180px);
+  margin-bottom: 10px;
+  flex-direction: column;
+  width: 95%;
+  font-size: 20px;
+  overflow-y: auto;
+  scroll-y: auto;
+`;
+
 const ListHeader = styled.div`
   display: flex;
   margin-top: 50px;
@@ -169,18 +188,6 @@ const ListHeader = styled.div`
   font-size: 20px;
 `
 
-const List = styled.div`
-  display: flex;
-  margin-top: 10px;
-  max-height: 70%;
-  flex-direction: column;
-  // gap: 10px;
-  width: 95%;
-  font-size: 20px;
-  overflow-y: auto;
-  scroll-y: auto;
-  margin-top: 5px;
-`;
 
 const RowHeader = styled.div`
   background-color: #001F3F;

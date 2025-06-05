@@ -11,7 +11,9 @@ function OrphanListComponent({ sectionRef }) {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentItems, setCurrentItems] = useState(orphanList);
   const sortOptions = [null, 'asc', 'desc'];
-
+  const totalCusto = currentItems.reduce((soma, item) => {
+    return soma + (item.custo_mes ?? 0);
+  }, 0);
   const getNextDirection = (currentDirection) => {
     const currentIndex = sortOptions.indexOf(currentDirection);
     const nextIndex = (currentIndex + 1) % sortOptions.length;
@@ -53,7 +55,10 @@ function OrphanListComponent({ sectionRef }) {
 
   return (
     <ComponentContainer ref={sectionRef}>
-        <h2>ORFÃOS</h2>
+        <h2>ORFÃOS - {totalCusto.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+          })}</h2>
         <SearchBar>
         <TbFilterEdit size={30} />
         <input
@@ -118,7 +123,9 @@ const ComponentContainer = styled.div`
     overflow-y: hidden;
     overflow-x: hidden;
     h2 {
-        line-height: 30px;
+        height: 40px;
+        display: flex;
+        align-items: center;
     }
 `;
 
@@ -127,7 +134,8 @@ const SearchBar = styled.div`
   align-items: center;
   margin-bottom: 20px;
   position: absolute;
-  right: 50px;
+  right: 0;
+  height: 40px;
   width: 250px;
   align-items: flex-end;
   gap: 10px;
