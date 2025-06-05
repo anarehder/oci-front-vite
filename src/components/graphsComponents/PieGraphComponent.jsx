@@ -10,10 +10,13 @@ function PieGraphComponent({ data, nome, type }){
     plotOptions: {
       pie: {
         expandOnClick: true,
+        customScale: 0.85,
         donut: {
           size: '35%'
         },
+        offsetY: -15
       },
+      
     },
     labels: categorias.slice(0,5),
     dataLabels: {
@@ -36,17 +39,19 @@ function PieGraphComponent({ data, nome, type }){
     legend: {
       show: true, // Exibe a legenda
       position: "bottom", // Coloca a legenda embaixo
-      fontSize: '12px',
-      horizontalAlign: "center", // Centraliza os itens da legenda
-      floating: false, // Não permite que a legenda flutue
+      fontSize: '10px',
+      horizontalAlign:"left", // Centraliza os itens da legenda
+      floating: true, // Não permite que a legenda flutue
+      height: 80,
+      offsetY: 5,
       markers: {
-        size: 7,
+        size: 1,
         shape: 'line',
         strokeWidth: 1
       },
       itemMargin: {
-        horizontal:15,
-        vertical: 0
+          horizontal: -5,
+          vertical: -6
       },
     },
     tooltip: {
@@ -57,7 +62,7 @@ function PieGraphComponent({ data, nome, type }){
         enabled: true,
         position: 'topLeft',
         offsetX: 0,
-        offsetY: 100,
+        offsetY: 50,
       },
       y: {
         formatter: function (val) {
@@ -70,16 +75,11 @@ function PieGraphComponent({ data, nome, type }){
     },
     colors: ["#DC3544", "#008FFB",  "#44aa66", "#efe302", "#f78325"],
   };
-  const series = [
-    {
-        name: ['Valor'],
-        data: valores,
-    },
-];
+
   return (
     <Container>
       <Title>{nome}</Title>
-      <Chart options={chartOptions} series={valores.slice(0,5)} type="donut" height='95%' />
+      <Chart options={chartOptions} series={valores.slice(0,5)} type="donut" height='95%'/>
     </Container>
   );
 };
@@ -87,11 +87,11 @@ function PieGraphComponent({ data, nome, type }){
 export default PieGraphComponent;
 
 const Container = styled.div`
-  width: 28%;
-  height: 350px;
+  width: 30%;
+  height: 400px;
   flex-direction: column;
-  margin: 20px auto;
-  padding: 20px;
+  justify-content: flex-start;
+  margin: 10px auto;
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
@@ -110,7 +110,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 17px;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-top: 15px;
   color: #333;
 `;

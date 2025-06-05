@@ -40,10 +40,13 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
     plotOptions: {
       pie: {
         expandOnClick: true,
+        customScale: 0.85,
         donut: {
           size: '35%'
         },
+        offsetY: -15
       },
+      
     },
     labels: categorias,
     dataLabels: {
@@ -66,17 +69,19 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
     legend: {
       show: true, // Exibe a legenda
       position: "bottom", // Coloca a legenda embaixo
-      fontSize: '12px',
-      horizontalAlign: "center", // Centraliza os itens da legenda
-      floating: false, // Não permite que a legenda flutue
+      fontSize: '10px',
+      horizontalAlign:"left", // Centraliza os itens da legenda
+      floating: true, // Não permite que a legenda flutue
+      height: 50,
+      offsetY: 5,
       markers: {
-        size: 7,
+        size: 1,
         shape: 'line',
         strokeWidth: 1
       },
       itemMargin: {
-        horizontal:15,
-        vertical: 0
+          horizontal: -5,
+          vertical: -6
       },
     },
     tooltip: {
@@ -113,11 +118,11 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
 export default PieGraphCommitComponent;
 
 const Container = styled.div`
-  width: 28%;
-  height: 350px;
+  width: 30%;
+  height: 400px;
   flex-direction: column;
-  margin: 20px auto;
-  padding: 20px;
+  justify-content: flex-start;
+  margin: 10px auto;
   border-radius: 16px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
@@ -136,7 +141,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 17px;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-top: 15px;
   color: #333;
 `;
