@@ -6,6 +6,8 @@ import PieGraphCommitComponent from './graphsComponents/PieGraphCommitComponent'
 import MonthCostsGraphComponent from './graphsComponents/MonthCostsGraphComponent';
 import { useFilter } from '../contexts/FilterContext';
 import { Link } from 'react-router-dom';
+import CreditPredictionSubsComponent from './graphsComponents/CreditPredictionSubsComponent';
+import PieGraphSubsComponent from './graphsComponents/PieGraphSubsComponent';
 
 function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
     console.log(tenancyInfo.subscriptionDetails);
@@ -60,10 +62,10 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
             </GraphsContainer>
             {tenancyInfo?.tenancies?.length === 1 &&
                 <GraphsContainer>
-                    {tenancyInfo.subscriptionDetails && tenancyInfo.commitDetails &&
+                    {tenancyInfo.subscriptionDetails &&
                         <>
-                            <CreditPredictionChartComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
-                            <PieGraphCommitComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
+                            <CreditPredictionSubsComponent subsDetails={tenancyInfo.subscriptionDetails}/>
+                            <PieGraphSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
                         </>
                     }
                     {
@@ -72,6 +74,16 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                             subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
                     }
                     
+                </GraphsContainer>
+            }
+            {tenancyInfo?.tenancies?.length === 1 &&
+                <GraphsContainer>
+                    {tenancyInfo.subscriptionDetails && tenancyInfo.commitDetails &&
+                        <>
+                            <CreditPredictionChartComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
+                            <PieGraphCommitComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
+                        </>
+                    }                    
                 </GraphsContainer>
             }
         </Container>

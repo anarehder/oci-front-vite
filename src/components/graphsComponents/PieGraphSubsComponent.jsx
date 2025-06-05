@@ -2,25 +2,13 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 import dayjs from "dayjs";
 
-function PieGraphCommitComponent({ subsDetails, commitDetails }) {
+function PieGraphSubsComponent({ subsDetails }) {
 
   // const categorias = ["Crédito Utilizado", "Crédito Total"];
-  const duracaoAnosSub1 = Math.round(subsDetails[0].total_dias_contrato / 365);
-  let valorAnual = subsDetails[0].line_net_amount / duracaoAnosSub1;
+  const valorTotal = subsDetails[0].line_net_amount;
 
-  if (subsDetails.length > 1) {
-    const fimCommit = dayjs(commitDetails[0].time_ended_commit);
-    const inicioSubs = dayjs(subsDetails[1].time_start);
-    //pego quantos meses de diferenca entre o inicio da outra subs e o fim do commit
-    const diffMeses = fimCommit.diff(inicioSubs, 'month');
-    const mesesContrato = Math.floor(subsDetails[1].total_dias_contrato / 30);
-    const valorMensalSubs2 = (subsDetails[1].line_net_amount / mesesContrato);
-    const addValor = diffMeses * valorMensalSubs2;
-    valorAnual += addValor;
-  }
-
-  const valorUsado = commitDetails[0].total_used;
-  const valorRestante = valorAnual - valorUsado;
+  const valorUsado = subsDetails[0].used_amount;
+  const valorRestante = valorTotal - valorUsado;
   let categorias;
   let valores;
 
@@ -28,12 +16,11 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
     categorias = ["Crédito Utilizado", "Crédito Restante"];
     valores = [valorUsado, valorRestante];
   } else {
-    categorias = ["Crédito Commit", "Valor Excedente"];
-    valores = [valorAnual, Math.abs(valorRestante)];
+    categorias = ["Crédito Contrato", "Valor Excedente"];
+    valores = [valorTotal, Math.abs(valorRestante)];
   }
-  // const valores = [valorUsado, valorRestante];
   
-  const ultrapassouLimite = valorUsado > valorAnual;
+  const ultrapassouLimite = valorUsado > valorTotal;
   const colors = ultrapassouLimite ? ["#DC3544", "#FE2525"] : ["#DC3544", "#008FFB"];
 
   const chartOptions = {
@@ -109,13 +96,13 @@ function PieGraphCommitComponent({ subsDetails, commitDetails }) {
 
   return (
     <Container>
-      <Title>% Créditos Gastos - Commit Atual</Title>
+      <Title>% Créditos Gastos - Contrato em Uso</Title>
       <Chart options={chartOptions} series={valores} type="donut" height='95%' />
     </Container>
   );
 };
 
-export default PieGraphCommitComponent;
+export default PieGraphSubsComponent;
 
 const Container = styled.div`
   width: 30%;
