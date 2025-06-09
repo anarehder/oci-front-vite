@@ -1,7 +1,7 @@
 import ReactApexChart from 'react-apexcharts';
 
 function RadialBarComponent({value}){
-    console.log(value);
+    // console.log(value);
     const chartData = {
         series: [value.toFixed(2)],
         options: {

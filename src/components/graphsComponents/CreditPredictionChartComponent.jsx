@@ -23,7 +23,7 @@ const CreditPredictionChartComponent = ({ subsDetails, commitDetails }) => {
     const porcentagemGasta = valorAnual !==0 ? (commitDetails[0].total_used/valorAnual)*100 : 0;
     const porcentagemDias = (commitDetails[0].dias_decorridos/365) * 100;
     const valores = [porcentagemGasta.toFixed(2), porcentagemDias.toFixed(2)];
-    console.log(valorAnual, commitDetails[0].total_used, "bar")
+    // console.log(valorAnual, commitDetails[0].total_used, "bar")
     // const predictedTotalDays = used_percentage > 0 ? (100 * dias_decorridos) / used_percentage : 0;
     // const predictedEndDate = dayjs().add(predictedTotalDays - dias_decorridos, "day").format("YYYY-MM-DD");
     // const [year, month, day] = predictedEndDate.split("-");

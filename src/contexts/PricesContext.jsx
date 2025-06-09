@@ -13,7 +13,7 @@ export default function PricesProvider ({ children }) {
                 if (response.status === 200) {
                     const data = response.data;
                     setPrices(data);
-                    console.log("SALVEI O PRICES!")
+                    // console.log("SALVEI O PRICES!")
                     // console.log(data);
                 }
         } catch (error) {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 
 function MonthCostsGraphComponent({ data, subscriptionDetails }) {
-    console.log(subscriptionDetails);
+    // console.log(subscriptionDetails);
     const anosContrato = Math.round(Number(subscriptionDetails.total_dias_contrato) / 365);
     const mediaMensal = ((Number(subscriptionDetails.line_net_amount) / anosContrato) / 12);
     // console.log(anosContrato, subscriptionDetails.line_net_amount, mediaMensal);

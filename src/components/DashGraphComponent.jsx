@@ -10,7 +10,7 @@ import CreditPredictionSubsComponent from './graphsComponents/CreditPredictionSu
 import PieGraphSubsComponent from './graphsComponents/PieGraphSubsComponent';
 
 function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
-    console.log(tenancyInfo.subscriptionDetails);
+    // console.log(tenancyInfo?.commitDetails[0]);
     const { setSearchTerm } = useFilter();
     return (
         <Container>
@@ -60,19 +60,67 @@ function DashGraphComponent({tenancyInfo, scrollToSection, selectedMonth}) {
                     }))} nome={"Top 5 Máquinas Mais Caras (Custo Mensal)"} />
                 }
                 {tenancyInfo?.tenancies?.length === 1 && tenancyInfo.subscriptionDetails &&
-                            <>
-                                <CreditPredictionSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
-                                <PieGraphSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
-                                <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
-                        subscriptionDetails={tenancyInfo.subscriptionDetails[0]} />
-                            </>
-                    
-                 }
+                    <>
+                        <CreditPredictionSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
+                        <PieGraphSubsComponent subsDetails={tenancyInfo.subscriptionDetails} />
+                        <MonthCostsGraphComponent data={tenancyInfo.cost_history.slice(-6)}
+                            subscriptionDetails={tenancyInfo?.subscriptionDetails[0]} />
+                    </>
+
+                }
                 {tenancyInfo?.tenancies?.length === 1 && tenancyInfo.subscriptionDetails && tenancyInfo.commitDetails &&
-                        <>
-                            <CreditPredictionChartComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
-                            <PieGraphCommitComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
-                        </>
+                    <>
+                        <CreditPredictionChartComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
+                        <PieGraphCommitComponent subsDetails={tenancyInfo.subscriptionDetails} commitDetails={tenancyInfo.commitDetails} />
+                        <ContractDetails>
+                            <Block> <h2>Commit Atual:</h2> 
+                                <ul>
+                                <li>
+                                    <div> Início: {new Date(tenancyInfo.commitDetails[0]?.time_started_commit).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</div>
+                                    <div> Fim: {new Date(tenancyInfo.commitDetails[0]?.time_ended_commit).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</div>
+                                </li>
+                                <li>
+                                    <div> Total dias: 365</div>
+                                    <div> Dias decorridos: {tenancyInfo.commitDetails[0]?.dias_decorridos}</div>
+                                </li>
+                                <li>
+                                    <div> Valor Usado: {tenancyInfo.commitDetails[0]?.total_used.toLocaleString("pt-BR", {
+                                                    style: "currency",
+                                                    currency: "BRL"
+                                                })}</div>
+                                </li>
+                                </ul>
+                            </Block>
+                            <Block> <h2>Contratos: {tenancyInfo.subscriptionDetails?.length}</h2>
+                                {tenancyInfo.subscriptionDetails.map((d, i) => {
+                                    return (
+                                        <ul>
+                                            <li key={i}>
+                                                <div>Início: {new Date(d.time_start).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</div>
+                                                <div>Fim: {new Date(d.time_end).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</div>
+                                            </li>
+                                            <li key={i + 10}>
+                                                <div>Total dias: {d.total_dias_contrato}</div>
+                                                <div>Dias decorridos: {d.dias_decorridos}</div>
+                                            </li>
+                                            <li key={i + 100}>
+                                                <div>Valor Total: {d.line_net_amount.toLocaleString("pt-BR", {
+                                                    style: "currency",
+                                                    currency: "BRL"
+                                                })}</div>
+                                            </li>
+                                            <li key={i + 1000}>
+                                                <div> Valor Disponível: {d.available_amount.toLocaleString("pt-BR", {
+                                                    style: "currency",
+                                                    currency: "BRL"
+                                                })}</div>
+                                            </li>
+                                        </ul>
+                                    );
+                                })}
+                            </Block>
+                        </ContractDetails>                       
+                    </>
                 }
             </GraphsContainer>
         </Container>
@@ -84,7 +132,7 @@ const Container = styled.div`
     gap: 10px;
     flex-direction: column;
 `
-const BlocksContainer = styled.div `
+const BlocksContainer = styled.div`
     width: 95%;
     justify-content: space-between;
     div{
@@ -103,29 +151,72 @@ const BlocksContainer = styled.div `
     }
 `
 
-const Users = styled.div `
+const Users = styled.div`
     background-color: #017BFF;
 `
-const VMsOFF = styled.div `
+const VMsOFF = styled.div`
     background-color: #FFC207;
     :nth-child(2) {
         cursor: pointer;
     }
 `
-const VMsON = styled.div `
+const VMsON = styled.div`
     background-color: #27A745;
     :nth-child(2) {
         cursor: pointer;
     }
 `
-const DiscosOrfaos = styled.div `
+const DiscosOrfaos = styled.div`
     background-color: #DC3544;
     :nth-child(2) {
         cursor: pointer;
     }
 `
-const GraphsContainer = styled.div `
+const GraphsContainer = styled.div`
     width: 95%;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    // background-color: red;
+`
+
+const ContractDetails = styled.div`
+    max-width: 28%;
+    height: 350px;
+    margin: 20px auto;
+    justify-content: flex-start;
+    padding: 20px;
+    border-radius: 16px;
+    background-color: #f9f9f9;
+    gap: 20px;
+    
+    flex-direction: column;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+`
+
+const Block = styled.div`
+    flex-direction: column;
+    font-size: 13px;
+    margin-bottom: 3px;
+    h2{
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+    ul{
+        border-bottom: 2px solid gray;
+        width: 100%;
+        gap: 5px;
+        margin-bottom: 5px;
+        div{
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+    }
+    li{ 
+        width: 100%;
+        margin-bottom: 5px;
+        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+    }
 `

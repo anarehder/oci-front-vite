@@ -26,7 +26,7 @@ function ComputeInstancesPage() {
                     }
                 } else {
                     const tenancySelections = { tenancy1: tenancy, tenancy2: null, tenancy3: null };
-                    console.log(tenancySelections);
+                    // console.log(tenancySelections);
                     const response = await apiServiceOCI.getJoinComputeInstances(tenancySelections, user.token);
                     if (response.status === 200) {
                         setComputeInstancesInfo(response.data);
