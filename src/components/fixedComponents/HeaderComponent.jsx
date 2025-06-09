@@ -19,12 +19,21 @@ function HeaderComponent({title}) {
         { tipo: "Backup", titulo: "Backup automático falhou em VM2" },
         { tipo: "Performance", titulo: "Uso de CPU acima de 90% em VM5" }
     ]);
+
+  function getInitials(name) {
+    return name
+      .split(' ')           // separa por espaços
+      .filter(Boolean)      // remove strings vazias
+      .map(word => word[0]) // pega a primeira letra de cada palavra
+      .join('')             // junta tudo
+      .toUpperCase();       // garante que esteja em maiúsculas
+  }
     return (
         <ComponentContainer $show={show ? "exibir" : "ocultar"}>
           <LimitContainer>
           <Title>{title} <h2>{tenancy=== 'all' ? ' - Todas as Tenancies' : ` - ${tenancy}`}</h2></Title>
             <ButtonsContainer>
-              {user?.client && <UserBall> AT </UserBall>}
+              {user?.client && <UserBall> {getInitials(user.name)} </UserBall>}
                 <BellWrapper onClick={() => setOpen(!open)}>
                     <FaRegBell size={30} />
                     {ociTips.length > 0 && <RedDot />}

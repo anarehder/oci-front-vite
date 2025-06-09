@@ -10,6 +10,7 @@ import { useMenu } from '../contexts/MenuContext';
 
 function DashComponent() {
     const [user] = useContext(UserContext);
+    console.log(user);
     const { show } = useMenu();
     const { tenancy, oneTenancyInfo, allTenanciesInfo, selectedMonth, setSelectedMonth } = useTenancy();
     const sectionRef = useRef(null);
