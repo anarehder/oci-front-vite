@@ -27,7 +27,7 @@ function DashComponent() {
 
     useEffect(() => {
         if (!user, !allTenanciesInfo) return;
-    }, []);
+    }, [allTenanciesInfo, oneTenancyInfo]);
 
 
     return (

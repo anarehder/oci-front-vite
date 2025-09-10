@@ -74,7 +74,7 @@ function FixedMenuComponent() {
         const selectedValue = e.target.value;
         setTenancy(selectedValue);
     }
-
+    console.log(allTenanciesInfo);
     return (
         <ComponentContainer >
             <ShowContainer $show={show ? "exibir" : "ocultar"}>

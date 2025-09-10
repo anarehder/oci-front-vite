@@ -12,7 +12,7 @@ export default function TenancyProvider({ children }) {
     const [orphanList, setOrpahnList] = useState([]);
     const currentMonth = new Date().toISOString().slice(0, 7);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-
+    
     useEffect(() => {
         async function fetchData() {
             try {
